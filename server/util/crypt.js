@@ -10,7 +10,7 @@ class Crypt {
             const cipher = crypto.createCipheriv('aes-256-cbc', Buffer.from(ENCRYPTION_KEY), iv);
             let encrypted = cipher.update(password);
             encrypted = Buffer.concat([encrypted, cipher.final()]);
-            resolve((iv.toString('hex') + ':' + encrypted.toString('hex')));
+            resolve((`${iv.toString('hex')}:${encrypted.toString('hex')}`));
         });
     }
 
