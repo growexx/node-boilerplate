@@ -39,5 +39,7 @@ module.exports = {
     ROLE: {
         USER: 1,
         ADMIN: 4
-    }
+    },
+    AWS_REGION: 'us-east-1',
+    AWS_SECRET_NAME: 'secret'
 };
