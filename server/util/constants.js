@@ -39,5 +39,6 @@ module.exports = {
     ROLE: {
         USER: 1,
         ADMIN: 4
-    }
+    },
+    COGNITO_CUSTOM_ATTRIBUTES: ['custom:first_name', 'custom:last_name', 'custom:role', 'custom:user_name', 'custom:phone']
 };

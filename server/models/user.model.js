@@ -7,6 +7,10 @@ const mongoosePaginate = require('mongoose-paginate-v2');
 const aggregatePaginate = require('mongoose-aggregate-paginate-v2');
 
 const schema = new appMongoose.Schema({
+    cognitoId: {
+        type: String,
+        unique: true
+    },
     email: {
         type: String,
         unique: true
@@ -67,6 +71,12 @@ const schema = new appMongoose.Schema({
         type: String
     },
     requestedPhoneNumber: {
+        type: String
+    },
+    accessToken: {
+        type: String
+    },
+    refreshToken: {
         type: String
     },
     createdAt: {

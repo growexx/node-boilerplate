@@ -26,7 +26,7 @@ module.exports = {
         it: 'As a user, I should check invalid password',
         options: {
             'email': 'admin@mailinator.com',
-            'password': 'Reset1@123'
+            'password': 'Reset'
         },
         status: 0
     }]

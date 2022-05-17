@@ -1,8 +1,8 @@
-const crypt = require('../../util/crypt');
 const SignUpValidator = require('./signUpValidator');
 const UtilFunctions = require('../../util/utilFunctions');
 const Email = require('../../util/sendEmail');
 const User = require('../../models/user.model');
+const Cognito = require('../../util/cognito');
 
 /**
  * Class represents services for Sign-up.
@@ -18,18 +18,28 @@ class SignUpService {
      * @param {String} req.body.email email
      * @param {String} req.body.password password
      */
-    static async signUp (req,locale) {
-        const Validator = new SignUpValidator(req.body,locale);
+    static async signUp (req, locale) {
+        const Validator = new SignUpValidator(req.body, locale);
         Validator.validate();
 
         req.body.email = req.body.email.toLowerCase();
         const user = await SignUpService.isUserAlreadyRegister(req.body);
 
         if (!user) {
-            const hash = await crypt.enCryptPassword(req.body.password);
             const otp = UtilFunctions.generateOtp();
             const userType = req.body.userType;
-            await SignUpService.saveOrUpdateRegistrationUser(req.body, hash, otp, userType);
+            const newCognitoUser = await Cognito.addCognitoUser(req.body.email);
+            await Cognito.setCognitoUserPassword(req.body.email, req.body.password);
+            const cognitoUser = await Cognito.login({ email: req.body.email, password: req.body.password });
+            await SignUpService.saveOrUpdateRegistrationUser(
+                req.body,
+                otp,
+                userType,
+                newCognitoUser.User.Username,
+                cognitoUser.refreshToken.token,
+                cognitoUser.accessToken.jwtToken
+
+            );
             const subject = 'Lets invent the future of work';
             const template = 'emailTemplates/verificationOtpMail.html';
             const appUrl = process.env.FRONTEND_URL;
@@ -42,25 +52,29 @@ class SignUpService {
                 statusCode: 400
             };
         } else {
-            return await SignUpService.checkLogin(req.body.password, user);
+            return await SignUpService.checkLogin(req.body.email, req.body.password, user);
         }
     }
 
-    static async checkLogin (password, user) {
-        const isMatch = await crypt.comparePassword(password, user.password);
-        const otherDetails = {};
-        if (!isMatch) {
+    static async checkLogin (email, password, user) {
+        const cognitoUser = await Cognito.login({ email, password });
+        if (!cognitoUser) {
             throw {
                 message: MESSAGES.ALREADY_REGISTER,
                 statusCode: 422
             };
         } else {
-            const token = await crypt.getUserToken(user);
-            delete user.password;
+            const token = cognitoUser.idToken.jwtToken;
+            user.token = token;
             delete user.__v;
-            _.merge(user, token, otherDetails);
+            delete user.refreshToken;
+            await User.updateOne({ email }, {
+                $set: {
+                    accessToken: cognitoUser.accessToken.jwtToken,
+                    refreshToken: cognitoUser.refreshToken.token
+                }
+            });
         }
-
         return user;
     }
 
@@ -86,11 +100,13 @@ class SignUpService {
      * @param {Object} otp otp
      * @param {Integer} userType 1 = user 2 = Client
      */
-    static async saveOrUpdateRegistrationUser (reqObj, hash, otp, userType) {
-        reqObj.password = hash;
+    static async saveOrUpdateRegistrationUser (reqObj, otp, userType, cognitoId, refreshToken, accessToken) {
         reqObj.isActive = CONSTANTS.STATUS.PENDING;
         reqObj.otp = otp;
         reqObj.role = userType;
+        reqObj.cognitoId = cognitoId,
+        reqObj.refreshToken = refreshToken;
+        reqObj.accessToken = accessToken;
         await User.create(reqObj);
     }
 
@@ -110,12 +126,14 @@ class SignUpService {
         req.body.email = req.body.email.toLowerCase();
         const user = await User.findOne({ email: req.body.email }).exec();
         if (user && user.otp === req.body.otp) {
+            const updatedToken = await Cognito.generateRefreshToken(user.refreshToken);
             await User.updateOne({ _id: user._id }, {
                 $set: {
                     isActive: CONSTANTS.STATUS.ACTIVE
                 }
             });
-            return crypt.getUserToken(user);
+
+            return { 'token': updatedToken.AuthenticationResult.IdToken };
         } else {
             throw {
                 message: MESSAGES.INVALID_OTP,

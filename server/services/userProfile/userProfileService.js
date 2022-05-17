@@ -2,8 +2,8 @@ const mongoose = require('mongoose');
 const User = require('../../models/user.model');
 const UserBasicProfileValidator = require('./userProfileValidator');
 const UploadService = require('../../util/uploadService');
-const crypt = require('../../util/crypt');
 const GeneralError = require('../../util/GeneralError');
+const Cognito = require('../../util/cognito');
 
 /**
  * Class represents services for user Basic Profile.
@@ -81,15 +81,33 @@ class UserProfileService {
         const Validator = new UserBasicProfileValidator(null, locale);
         Validator.password(data.oldPassword);
         Validator.password(data.newPassword);
-        const userPassword = await User.findOne({ _id: user._id }, { _id: 0, password: 1 }).lean();
 
-        const isMatch = await crypt.comparePassword(data.oldPassword, userPassword.password);
-        if (!isMatch) {
-            throw new GeneralError(locale('PASSWORD_NOT_MATCH'), 400);
-        } else {
-            const hash = await crypt.enCryptPassword(data.newPassword);
-            await User.updateOne({ _id: user._id }, { $set: { password: hash } });
+        try {
+            await Cognito.changeCognitoUserPassword(
+                user.accessToken,
+                data.oldPassword,
+                data.newPassword
+            );
+        } catch (err) {
+            if (err.code === 'NotAuthorizedException') {
+                throw new GeneralError(locale('PASSWORD_NOT_MATCH'), 400);
+            }
+            else {
+                throw {
+                    message: err.message,
+                    statusCode: 403
+                };
+            }
         }
+
+        const updatedToken = await Cognito.generateRefreshToken(user.refreshToken);
+        await User.updateOne({ _id: user._id }, {
+            $set: {
+                accessToken: updatedToken.AuthenticationResult.AccessToken
+            }
+        });
+
+        return { 'token': updatedToken.AuthenticationResult.IdToken };
     }
 }
 

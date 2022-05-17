@@ -13,8 +13,8 @@ const HTTPStatus = require('../util/http-status');
  */
 
 
-const checkUser = (me, res, next) => {
-    User.findOne({ _id: me.id }, { password: 0, __v: 0 }).lean().then((userObj) => {
+const checkUser = (email, cognitoId, res, next) => {
+    User.findOne({ email, cognitoId }, { password: 0, __v: 0 }).lean().then((userObj) => {
         const responseObject = Utils.errorResponse();
         if (!userObj) {
             responseObject.message = res.__('ACCESS_DENIED');
@@ -38,15 +38,18 @@ const checkUser = (me, res, next) => {
 
 
 module.exports = function (req, res, next) {
-    const token = req.headers.authorization;
-    jwt.verify(token, process.env.JWT_SECRET, (err, tokenDetail) => {
-        if (err) {
-            const responseObject = Utils.errorResponse();
-            responseObject.message = res.__('ACCESS_DENIED');
-            res.status(HTTPStatus.UNAUTHORIZED).send(responseObject);
-        } else {
-            checkUser(tokenDetail, res, next);
-            return;
-        }
-    });
+    try {
+        const token = req.headers.authorization.split('Bearer ')[1];
+        const decodedJwt = jwt.decode(token, { complete: true });
+        const decodedJwtPayload = decodedJwt.payload;
+        const email = decodedJwtPayload.email;
+        const cognitoId = decodedJwtPayload.sub;
+
+        checkUser(email, cognitoId, res, next);
+        return;
+    } catch (error) {
+        const responseObject = Utils.errorResponse();
+        responseObject.message = res.__('ACCESS_DENIED');
+        res.status(HTTPStatus.UNAUTHORIZED).send(responseObject);
+    }
 };

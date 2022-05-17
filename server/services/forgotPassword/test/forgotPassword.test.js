@@ -155,8 +155,6 @@ describe('Forgot Password', () => {
                 expect(res.body.status).to.be.status;
                 assert.equal(res.statusCode, 200);
             });
-
-
     } catch (exception) {
         CONSOLE_LOGGER.error(exception);
     }

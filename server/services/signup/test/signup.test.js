@@ -4,12 +4,32 @@ const expect = chai.expect;
 const assert = chai.assert;
 const request = require('supertest');
 const TestCase = require('./testcaseSignup');
+const sinon = require('sinon');
+const Cognito = require('../../../util/cognito');
 chai.use(chaiHttp);
 const trueDataStatus = 1;
 let validRegistration;
 
 describe('Signup Account', () => {
     try {
+        let cognitoLoginStub;
+        let cognitoAddUserStub;
+        let cognitoSetUserPasswordStub;
+        let cognitoGenerateRefreshTokenStub;
+        before(async () => {
+            cognitoLoginStub = sinon.stub(Cognito, 'login');
+            cognitoAddUserStub = sinon.stub(Cognito, 'addCognitoUser');
+            cognitoSetUserPasswordStub = sinon.stub(Cognito, 'setCognitoUserPassword');
+            cognitoGenerateRefreshTokenStub = sinon.stub(Cognito, 'generateRefreshToken');
+        });
+
+        after(async ()=> {
+            cognitoLoginStub.restore();
+            cognitoAddUserStub.restore();
+            cognitoSetUserPasswordStub.restore();
+            cognitoGenerateRefreshTokenStub.restore();
+        });
+
         TestCase.registerAccount.forEach((data) => {
             it(data.it, (done) => {
                 request(process.env.BASE_URL)
@@ -23,7 +43,17 @@ describe('Signup Account', () => {
             });
         });
 
-        it('As a user I should not able to register with existing passowrd', (done) => {
+        it('As a user I should not able to register with existing password', (done) => {
+            cognitoLoginStub
+                .onFirstCall()
+                .returns({
+                    idToken: { jwtToken: 'token' },
+                    accessToken: { jwtToken: 'token' },
+                    refreshToken: { token: 'token' }
+                })
+                .onSecondCall()
+                .returns(null);
+
             const registerUser = {
                 email: 'super@mailinator.com',
                 password: '8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267d',
@@ -41,10 +71,19 @@ describe('Signup Account', () => {
         });
 
         it('As a user I should register as user', (done) => {
+            cognitoSetUserPasswordStub.returns(null);
+            cognitoAddUserStub.returns({ User: { Username: 'username' } });
+            cognitoLoginStub.returns({
+                idToken: { jwtToken: 'token' },
+                accessToken: { jwtToken: 'token' },
+                refreshToken: { token: 'token' }
+            });
+
             const registerUser = {
-                email: 'john@mailinator.com',
+                email: 'mark@mailinator.com',
                 password: '8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267e',
-                otp: 123456
+                otp: 123456,
+                userType: 1
             };
             validRegistration = registerUser;
             request(process.env.BASE_URL)
@@ -60,7 +99,7 @@ describe('Signup Account', () => {
 
         it('As a user I should validate if email is already registered but not verified', (done) => {
             const registerUser = {
-                email: 'john@mailinator.com',
+                email: 'inactive@mailinator.com',
                 password: '8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267e'
             };
             request(process.env.BASE_URL)
@@ -96,6 +135,15 @@ describe('Signup Account', () => {
 
 describe('Verify Account', () => {
     try {
+        let cognitoGenerateRefreshTokenStub;
+        before(async () => {
+            cognitoGenerateRefreshTokenStub = sinon.stub(Cognito, 'generateRefreshToken');
+        });
+
+        after(async ()=> {
+            cognitoGenerateRefreshTokenStub.restore();
+        });
+
         TestCase.verifyAccount.forEach((data) => {
             it(data.it, (done) => {
                 request(process.env.BASE_URL)
@@ -110,9 +158,11 @@ describe('Verify Account', () => {
         });
 
         it('As a user, I should verify existing user user', (done) => {
+            cognitoGenerateRefreshTokenStub.returns({ AuthenticationResult: { IdToken: 'token' } });
+
             request(process.env.BASE_URL)
                 .post('/auth/verify-account')
-                .send({ email: validRegistration.email, otp: validRegistration.otp })
+                .send({ email:  'john@mailinator.com', otp: 123456 })
                 .end((err, res) => {
                     expect(res.body.status).to.be.status;
                     assert.equal(res.body.status, trueDataStatus);

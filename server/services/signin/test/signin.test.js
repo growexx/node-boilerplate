@@ -4,11 +4,22 @@ const expect = chai.expect;
 const assert = chai.assert;
 const request = require('supertest');
 const TestCase = require('./testcaseSignin');
+const sinon = require('sinon');
+const Cognito = require('../../../util/cognito');
 chai.use(chaiHttp);
 const trueDataStatus = 1;
 
 describe('Signin Account', () => {
     try {
+        let cognitoLoginStub;
+        before(async () => {
+            cognitoLoginStub = sinon.stub(Cognito, 'login');
+        });
+
+        after(async ()=> {
+            cognitoLoginStub.restore();
+        });
+
         TestCase.signinAccount.forEach((data) => {
             it(data.it, (done) => {
                 request(process.env.BASE_URL)
@@ -55,6 +66,12 @@ describe('Signin Account', () => {
         });
 
         it('As a user, I should validate if valid password but user is not active', (done) => {
+            cognitoLoginStub.returns({
+                idToken: { jwtToken: 'token' },
+                accessToken: { jwtToken: 'token' },
+                refreshToken: { token: 'token' }
+            });
+
             const loginUser = {
                 'email': 'inactive@mailinator.com',
                 'password': '8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267e'
@@ -71,6 +88,12 @@ describe('Signin Account', () => {
         });
 
         it('As a user, I should validate and login with correct credentials', (done) => {
+            cognitoLoginStub.returns({
+                idToken: { jwtToken: 'token' },
+                accessToken: { jwtToken: 'token' },
+                refreshToken: { token: 'token' }
+            });
+
             const loginUser = {
                 'email': 'user@mailinator.com',
                 'password': '8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267e'
@@ -88,6 +111,12 @@ describe('Signin Account', () => {
         });
 
         it('As a admin, I should validate and login', (done) => {
+            cognitoLoginStub.returns({
+                idToken: { jwtToken: 'token' },
+                accessToken: { jwtToken: 'token' },
+                refreshToken: { token: 'token' }
+            });
+
             const loginUser = {
                 email: 'super@mailinator.com',
                 password: '8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267e'

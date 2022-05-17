@@ -1,6 +1,6 @@
-const crypt = require('../../util/crypt');
 const signInValidator = require('./signInValidator');
 const User = require('../../models/user.model');
+const Cognito = require('../../util/cognito');
 
 /**
  * Class represents services for signin.
@@ -28,37 +28,36 @@ class SignInService {
      * @desc This function is being used to end user login
      * @author Growexx
      * @since 01/03/2021
-     * @param {Object} userEmail userEmail
+     * @param {Object} email email
      * @param {Object} password password
      * @param {Object} res Response
      * @param {function} callback callback Handles Response data/error messages
      * @param {function} next exceptionHandler Calls exceptionHandler
      */
-    static async userLogin (userEmail, password) {
-        let user = await User.findOne({ email: userEmail }).lean();
+    static async userLogin (email, password) {
+        const user = await User.findOne({ email }).lean();
+        const cognitoUser = await Cognito.login({ email, password });
 
         // Wrong username
-        if (!user) {
+        if (!user || !cognitoUser) {
             throw {
                 message: MESSAGES.LOGIN_FAILED,
                 statusCode: 401
             };
         } else if (user.isActive) {
-            // Wrong Password
-            const isMatch = await crypt.comparePassword(password, user.password);
+            const token = cognitoUser.idToken.jwtToken;
+            user.token = token;
+            delete user.__v;
+            delete user.refreshToken;
 
-            if (!isMatch) {
-                throw {
-                    message: MESSAGES.LOGIN_FAILED,
-                    statusCode: 401
-                };
-            } else {
-                const token = await crypt.getUserToken(user);
-                delete user.password;
-                delete user.__v;
-                user = _.merge(user, token);
-                return user;
-            }
+            await User.updateOne({ email }, {
+                $set: {
+                    accessToken: cognitoUser.accessToken.jwtToken,
+                    refreshToken: cognitoUser.refreshToken.token
+                }
+            });
+
+            return user;
         } else {
             throw {
                 data: { email: user.email, role: user.role },

@@ -43,7 +43,7 @@ class Validator {
             throw new GeneralError(this.__(REQUIRED, 'Password'), 400);
         }
 
-        if (password.length !== 64) {
+        if (password.length < 8) {
             throw new GeneralError(this.__(INVALID, 'Password'), 400);
         }
     }

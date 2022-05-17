@@ -1,8 +1,8 @@
-const Crypt = require('../../util/crypt');
 const User = require('../../models/user.model');
 const Email = require('../../util/sendEmail');
 const validation = require('../../util/validation');
 const Random = require('randomstring');
+const Cognito = require('../../util/cognito');
 
 /**
  * Class represents services fo forgot/reset password .
@@ -85,31 +85,28 @@ class ForgotPasswordService {
         const Validator = new validation();
         await Validator.password(req.body.password);
 
-        const userList = await User.findOne({
+        const user = await User.findOne({
             resetToken: req.body.token,
             resetExpiryTime: { $exists: true, $ne: null }
         }).exec();
         const compareDate = MOMENT().utc().unix();
-        if (userList && userList.resetExpiryTime) {
-            if (compareDate > MOMENT(userList.resetExpiryTime).utc().unix()) {
+        if (user && user.resetExpiryTime) {
+            if (compareDate > MOMENT(user.resetExpiryTime).utc().unix()) {
                 throw {
                     message: MESSAGES.RESET_LINK_EXPIRED,
                     statusCode: 400
                 };
             } else {
+                await Cognito.setCognitoUserPassword(user.email, req.body.password);
 
-                const hash = await Crypt.enCryptPassword(req.body.password);
-                if (hash) {
-                    await User.updateOne({
-                        resetToken: req.body.token
-                    }, {
-                        $set: {
-                            password: hash,
-                            resetExpiryTime: null,
-                            resetToken: null
-                        }
-                    });
-                }
+                await User.updateOne({
+                    resetToken: req.body.token
+                }, {
+                    $set: {
+                        resetExpiryTime: null,
+                        resetToken: null
+                    }
+                });
             }
         }
     }
