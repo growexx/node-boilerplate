@@ -91,8 +91,7 @@ class UserProfileService {
         } catch (err) {
             if (err.code === 'NotAuthorizedException') {
                 throw new GeneralError(locale('PASSWORD_NOT_MATCH'), 400);
-            }
-            else {
+            } else {
                 throw {
                     message: err.message,
                     statusCode: 403

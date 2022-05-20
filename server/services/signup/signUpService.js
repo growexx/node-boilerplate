@@ -104,7 +104,7 @@ class SignUpService {
         reqObj.isActive = CONSTANTS.STATUS.PENDING;
         reqObj.otp = otp;
         reqObj.role = userType;
-        reqObj.cognitoId = cognitoId,
+        reqObj.cognitoId = cognitoId;
         reqObj.refreshToken = refreshToken;
         reqObj.accessToken = accessToken;
         await User.create(reqObj);
