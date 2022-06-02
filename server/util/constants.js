@@ -39,5 +39,11 @@ module.exports = {
     ROLE: {
         USER: 1,
         ADMIN: 4
+    },
+    FIREBASE: {
+        FCM_URL: 'https://fcm.googleapis.com/fcm/send',
+        FCM_SERVER_KEY: 'AAAAmJo2gH4:APA91bETqLG8Cvk2aXZu4x7xqsOXZlwBrzhBthYX60QthH1mX-nUgvj-2iYiV5ptxYp9QytBI-JyN_t24dc0hT1wSFrmuCUk27apjQNsrSaSGzSuX8eNpPjLJMYFEgIy478jA1WmXLJA',
+        MANAGE_NOTIFICATION_URL: 'https://fcm.googleapis.com/fcm/notification',
+        SENDER_ID: 655422292094
     }
 };

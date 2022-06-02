@@ -19,6 +19,7 @@ require('../server/services/forgotPassword/test/forgotPassword.test');
 
 // User
 require('../server/services/userProfile/test/userProfile.test');
+require('../server/services/pushNotification/test/pushNotification.test');
 
 // End Testing
 require('./end.test');

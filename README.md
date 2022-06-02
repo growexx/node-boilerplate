@@ -1,21 +1,26 @@
-***Growexx Attendance
+\*\*\*Growexx Attendance
+
 # Node boilerplate
+
 This is a nodejs boilerplate with basic user authentication and uses AWS SES for sending emails. This boilerplate has following features:
+
 - User signup along with sending verification otp
 - User signin
 - Forgot password
 - Update user profile
 
 ---
+
 ## Requirements
 
 For development, you will only need Node.js and a node global package installed in your environement.
 
 ### Node
+
 - #### Node installation on Windows
 
   Just go on [official Node.js website](https://nodejs.org/) and download the installer.
-Also, be sure to have `git` available in your PATH, `npm` might need it (You can find git [here](https://git-scm.com/)).
+  Also, be sure to have `git` available in your PATH, `npm` might need it (You can find git [here](https://git-scm.com/)).
 
 - #### Node installation on Ubuntu
 
@@ -49,15 +54,26 @@ If you need to update `npm`, you can make it using `npm`! Cool right? After runn
 
 You will need to configure AWS SES for sending emails.
 
-Create an environment file with extension ```.env```.
+Create an environment file with extension `.env`.
 
-- cp ```testing.env``` as ```YOUR_ENV.env```
+- cp `testing.env` as `YOUR_ENV.env`
 - Change DB_NAME
 - Change DB_HOST
-- If you have DB Username add ```DB_USERNAME={VALUE}``` and ```DB_PASSWORD={VALUE}``` to your env file
+- If you have DB Username add `DB_USERNAME={VALUE}` and `DB_PASSWORD={VALUE}` to your env file
 - Similarly change other fields as per your need.
 
 ## Running the project
 
-- To execute the code, run the following command ```npm start```
-- Run the command ```npm t``` for testing
+- To execute the code, run the following command `npm start`
+- Run the command `npm t` for testing
+
+## Firebase Configurations for Push Notification
+
+- Run `npm i firebase-admin`
+
+- Separate controller has been created for push notification
+- Helper function has been created in `util` for sending individual and batch notification.
+- Download `serviceAccountKey.json`: Go to Project settings > Service Accounts > Click on Generate new private key button. Once downloaded place it under `server/public/` folder.
+- Change the configurations in the `server/util/constants.js`
+- Where to find Sender ID: Go to Project settings > General > Your Apps > SDK setup and configuration > Click on config
+- Where to find Server Key: Go to Project settings > Cloud Messaging > Cloud Messaging API > Add Server Key

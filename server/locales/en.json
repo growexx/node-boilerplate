@@ -21,5 +21,11 @@
 	"SELECT_EMPLOYEE": "Select the employee first",
 	"INVALID_PORTAL_ID": "Jira portal id is invalid.",
 	"PASSWORD_NOT_MATCH": "PASSWORD_NOT_MATCH",
-	"CHANGE_PASSWORD_SUCCESS": "CHANGE_PASSWORD_SUCCESS"
+	"CHANGE_PASSWORD_SUCCESS": "CHANGE_PASSWORD_SUCCESS",
+	"DEVICE_TOKEN_UPDATED": "Device token updated successfully",
+	"DEVICE_TOKEN_VALIDATED": "Device token validated successfully",
+	"TOKEN_EXPIRED": "Push notification token is expired.",
+	"CREATE_NOTIFICATION": "Notification added to queue.",
+	"BATCH_NOTIFICATION_SENT": "Batch notification sent successfully",
+	"NO_DATA_FOUND": "No data found"
 }

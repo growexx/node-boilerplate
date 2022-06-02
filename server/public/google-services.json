@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "442350628118",
+    "project_id": "node-boilerplate-ceba3",
+    "storage_bucket": "node-boilerplate-ceba3.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:442350628118:android:82c48c5d805b36e84fb437",
+        "android_client_info": {
+          "package_name": "com.growexx.nodeboilerplate"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "442350628118-ej9l1evjqspk2m1dgeookrksssc7huip.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAg4trxvkOkHi_8G7MxzlaLNmTie3AmTbU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "442350628118-ej9l1evjqspk2m1dgeookrksssc7huip.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -53,6 +53,30 @@ const schema = new appMongoose.Schema({
     resetExpiryTime: {
         type: Date
     },
+    webDeviceToken: {
+        default: null,
+        type: String
+    },
+    iosDeviceToken: {
+        default: null,
+        type: String
+    },
+    androidDeviceToken: {
+        default: null,
+        type: String
+    },
+    webDeviceTokenTimestamp: {
+        default: null,
+        type: Date
+    },
+    iosDeviceTokenTimestamp: {
+        default: null,
+        type: Date
+    },
+    androidDeviceTokenTimestamp: {
+        default: null,
+        type: Date
+    },
     isDelete: {
         type: Number,
         default: 0,

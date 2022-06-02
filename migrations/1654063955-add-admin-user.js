@@ -7,7 +7,13 @@ module.exports = {
             role: 4,
             isActive: 1,
             firstName: 'Test',
-            lastName: 'Admin'
+            lastName: 'Admin',
+            webDeviceToken: null,
+            iosDeviceToken: null,
+            androidDeviceToken: null,
+            webDeviceTokenTimestamp: null,
+            iosDeviceTokenTimestamp: null,
+            androidDeviceTokenTimestamp: null
         });
     }
 };

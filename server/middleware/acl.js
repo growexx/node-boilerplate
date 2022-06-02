@@ -6,12 +6,24 @@ module.exports = function (req, res, next) {
         1: [
             { method: 'GET', path: '/user/details' },
             { method: 'PUT', path: '/user/picture' },
-            { method: 'DELETE', path: '/user/picture' }
+            { method: 'DELETE', path: '/user/picture' },
+            { method: 'POST', path: '/user/individual-push-notification-for-android' },
+            { method: 'POST', path: '/user/individual-push-notification-for-web' },
+            { method: 'POST', path: '/user/create-notification' },
+            { method: 'PUT', path: '/user/update-push-notification-token' },
+            { method: 'POST', path: '/user/send-batch-notification' },
+            { method: 'POST', path: '/user/validate-push-notification-token' }
         ],
         4: [
             { method: 'GET', path: '/user/details' },
             { method: 'PUT', path: '/user/picture' },
-            { method: 'DELETE', path: '/user/picture' }
+            { method: 'DELETE', path: '/user/picture' },
+            { method: 'POST', path: '/user/individual-push-notification-for-android' },
+            { method: 'POST', path: '/user/individual-push-notification-for-web' },
+            { method: 'POST', path: '/user/create-notification' },
+            { method: 'PUT', path: '/user/update-push-notification-token' },
+            { method: 'POST', path: '/user/send-batch-notification' },
+            { method: 'POST', path: '/user/validate-push-notification-token' }
         ]
     };
 

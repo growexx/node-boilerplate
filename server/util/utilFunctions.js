@@ -1,5 +1,12 @@
 const HTTPStatus = require('../util/http-status');
-
+const FirebaseConfig = require('./FirebaseConfig');
+const axios = require('axios');
+const { initializeApp, cert } = require('firebase-admin/app');
+const { getMessaging } = require('firebase-admin/messaging');
+const serviceAccount = require('../public/serviceAccountKey.json');
+initializeApp({
+    credential: cert(serviceAccount)
+});
 /**
  * This class reprasents common utilities for application
  */
@@ -68,6 +75,59 @@ class Utils {
         } else {
             return Math.floor(Math.random() * 900000) + 100000;
         }
+    }
+
+    static async sendPushNotificationToAndroidDevice (payload) {
+        const {
+            title,
+            body,
+            deviceToken
+        } = payload;
+
+        const messageObj = {
+            notification: { title, body },
+            token: deviceToken
+        };
+        await FirebaseConfig.init.getMessaging().send(messageObj);
+    }
+
+    static async sendPushNotificationToWeb (payload) {
+        const {
+            title,
+            body,
+            clickAction,
+            icon,
+            deviceToken
+        } = payload;
+
+        const messagePayload = {
+            notification: {
+                title,
+                body,
+                icon,
+                click_action: clickAction
+            },
+            to: deviceToken
+        };
+        await axios.post(CONSTANTS.FIREBASE.FCM_URL, messagePayload, {
+            headers: {
+                Authorization: `key=${CONSTANTS.FIREBASE.FCM_SERVER_KEY}`
+            }
+        });
+    }
+
+    static async sendBatchNotification (payload) {
+        const promises = [];
+        const chunkSize = 100;
+        for (let i = 0; i < payload.length; i += chunkSize) {
+            const batchOfHundredNotification = payload.slice(i, i + chunkSize);
+            promises.push(getMessaging().sendAll(batchOfHundredNotification));
+        }
+        await Promise.all(promises);
+    }
+
+    static findDifferenceBetweenDates (firstDate, secondDate, measurement) {
+        return firstDate.diff(secondDate, measurement);
     }
 }
 
