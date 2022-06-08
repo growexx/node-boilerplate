@@ -11,7 +11,7 @@ class SesTemplateController {
      * @since 26/05/2022
      * @param {Object} req Request
      * @param {Object} req.body RequestBody
-     * @param {String} req.body.templateName TemplateName
+     * @param {String} req.body.templateName templateName
      * @param {Object} res Response
      */
 
@@ -30,14 +30,13 @@ class SesTemplateController {
      * @since 26/05/2022
      * @param {Object} req Request
      * @param {Object} req.body RequestBody
-     * @param {String} req.body.templateName TemplateName
+     * @param {String} req.body.templateName templateName
      * @param {Object} res Response
      */
 
     static async getTemplate (req, res) {
         try {
             const data = await SesTemplateService.getTemplate(req, res.__);
-            console.log(data);
             Utils.sendResponse(null, data, res, MESSAGES.SUCCESS);
         } catch (error) {
             Utils.sendResponse(error, null, res, '');
@@ -49,7 +48,7 @@ class SesTemplateController {
      * @since 26/05/2022
      * @param {Object} req Request
      * @param {Object} req.body RequestBody
-     * @param {String} req.body.templateName TemplateName
+     * @param {String} req.body.templateName templateName
      * @param {Object} res Response
      */
     static async deleteTemplate (req, res) {
@@ -67,7 +66,7 @@ class SesTemplateController {
      * @since 26/05/2022
      * @param {Object} req Request
      * @param {Object} req.body RequestBody
-     * @param {String} req.body.templateName TemplateName
+     * @param {String} req.body.templateName templateName
      * @param {Object} res Response
      */
 

@@ -22,7 +22,7 @@ class SesTemplateService {
      * @since 26/05/2022
      * @param {Object} req Request
      * @param {Object} req.body RequestBody
-     * @param {String} req.body.templateName TemplateName
+     * @param {String} req.body.templateName templateName
      */
 
     static getData (err, data) {
@@ -35,8 +35,8 @@ class SesTemplateService {
     static async createTemplate (req, locale) {
         try {
             const Validator = new SesValidator(req.body, locale);
-            Validator.validatetemplatename();
-            Validator.validatesubject();
+            Validator.validateTemplateName();
+            Validator.validateSubject();
             let htmlMessage;
 
             if (req.file !== undefined) {
@@ -49,11 +49,11 @@ class SesTemplateService {
             }
 
             const subject = req.body.subject;
-            const templatename = _.camelCase(req.body.templateName);
+            const templateName = _.camelCase(req.body.templateName);
 
             var params = {
                 Template: {
-                    TemplateName: templatename,
+                    templateName,
                     HtmlPart: htmlMessage,
                     SubjectPart: subject,
                 },
@@ -81,17 +81,17 @@ class SesTemplateService {
      * @since 26/05/2022
      * @param {Object} req Request
      * @param {Object} req.body RequestBody
-     * @param {String} req.body.templateName TemplateName
+     * @param {String} req.body.templateName templateName
      */
 
     static async getTemplate (req, res) {
         const Validator = new SesValidator(req.body, res);
-        Validator.validatetemplatename();
+        Validator.validateTemplateName();
 
-        const templatename = _.camelCase(req.body.templateName);
+        const templateName = _.camelCase(req.body.templateName);
 
         var params = {
-            TemplateName: templatename,
+            templateName,
         };
 
         ses.getTemplate(params, function (err, data) {
@@ -104,16 +104,16 @@ class SesTemplateService {
      * @since 26/05/2022
      * @param {Object} req Request
      * @param {Object} req.body RequestBody
-     * @param {String} req.body.templateName TemplateName
+     * @param {String} req.body.templateName templateName
      */
     static async deleteTemplate (req, res) {
         const Validator = new SesValidator(req.body, res);
-        Validator.validatetemplatename();
+        Validator.validateTemplateName();
 
-        const templatename = _.camelCase(req.body.templateName);
+        const templateName = _.camelCase(req.body.templateName);
 
         var params = {
-            TemplateName: templatename,
+            templateName,
         };
 
         ses.deleteTemplate(params, function (err, data) {
@@ -127,23 +127,23 @@ class SesTemplateService {
      * @since 26/05/2022
      * @param {Object} req Request
      * @param {Object} req.body RequestBody
-     * @param {String} req.body.templateName TemplateName
+     * @param {String} req.body.templateName templateName
      */
 
     static async updateTemplate (req, res) {
         const Validator = new SesValidator(req.body, res);
-        Validator.validatetemplatename();
-        Validator.validatesubject();
+        Validator.validateTemplateName();
+        Validator.validateSubject();
         let htmlMessage, subject;
 
         if (req.file !== undefined) {
             htmlMessage = req.file.buffer.toString('utf8');
         }
-        const templatename = req.body.templateName;
+        const templateName = req.body.templateName;
 
         var params = {
             Template: {
-                TemplateName: templatename,
+                templateName,
                 HtmlPart: htmlMessage,
                 SubjectPart: subject,
             },
@@ -164,6 +164,6 @@ class SesTemplateService {
         }
     }
 }
-
 module.exports = SesTemplateService;
+
 

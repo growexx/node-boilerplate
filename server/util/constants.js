@@ -21,7 +21,7 @@ module.exports = {
         ALPHA_SPECIAL_CHAR_EXCEPT_NUMBER: /^[ A-Za-z_@./#&+-]*$/,
         FULL_ACCESS: /^[^<> ?//\\]+$/,
         ALPHA_NUMARIC: /^[\w@ ]+$/,
-        TEMPLATENAME: /^[ A-Za-z0-9_@./#&+-]*$/,
+        templateName: /^[ A-Za-z0-9_@./#&+-]*$/,
         SUBJECT: /^[ A-Za-z0-9_@./#&+-]*$/,
         URL: /(http(s)?:\/\/www\.)?[-a-zA-Z0-9@:%.+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%+.~#?&//=]*)/
     },

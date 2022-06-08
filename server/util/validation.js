@@ -67,16 +67,16 @@ class Validator {
     /**
      * @desc This function is being used to validate template name
      * @author Growexx
-     * @param {string} templatename TEMPLATENAME
+     * @param {string} templateName templateName
      * @since 27/05/2022
      */
-    templatename (templatename) {
-        if (!templatename) {
-            throw new GeneralError(this.__(REQUIRED, 'Templatename'), 400);
+    templateName (templateName) {
+        if (!templateName) {
+            throw new GeneralError(this.__(REQUIRED, 'templateName'), 400);
         }
 
-        if (!CONSTANTS.REGEX.TEMPLATENAME.test(templatename)) {
-            throw new GeneralError(this.__(INVALID, 'Templatename'), 400);
+        if (!CONSTANTS.REGEX.templateName.test(templateName)) {
+            throw new GeneralError(this.__(INVALID, 'templateName'), 400);
         }
     }
 

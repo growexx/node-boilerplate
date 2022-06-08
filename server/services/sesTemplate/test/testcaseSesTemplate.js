@@ -8,7 +8,7 @@ module.exports = {
         {
             it: "As a user I should check valid template name",
             options: {
-                templatename: 'myFile',
+                templateName: 'myFile',
             },
             status: 0,
         },
@@ -24,14 +24,14 @@ module.exports = {
         {
             it: "As a user I should check valid template name",
             options: {
-                templatename: 'myFile',
+                templateName: 'myFile',
             },
             status: 0,
         },
         {
             it: 'As a user I should validate if subject is not pass',
             options: {
-                templatename: "myFile",
+                templateName: "myFile",
             },
             status: 0
         },
@@ -41,7 +41,7 @@ module.exports = {
         {
             it: "As a user I should check valid template name",
             options: {
-                templatename: 'myFile',
+                templateName: 'myFile',
             },
             status: 0,
         },
@@ -53,9 +53,9 @@ module.exports = {
             status: 0,
         },
         {
-            it: 'As a user I should validate if templatename is not pass',
+            it: 'As a user I should validate if templateName is not pass',
             options: {
-                templatename: '*',
+                templateName: '*',
                 subject: 'my trial'
             },
             status: 0
@@ -63,7 +63,7 @@ module.exports = {
         {
             it: 'As a user I should validate if subject is not pass',
             options: {
-                templatename: "myFile",
+                templateName: "myFile",
                 subject: '*'
             },
             status: 0
@@ -88,7 +88,7 @@ module.exports = {
         {
             it: "As a user I should check valid template name",
             options: {
-                templatename: 'myFile',
+                templateName: 'myFile',
             },
             status: 0,
         },

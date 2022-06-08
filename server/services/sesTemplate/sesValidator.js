@@ -13,8 +13,8 @@ class SesValidator extends validation {
      * @author Growexx
      * @since 26/05/2022
      */
-    validatetemplatename () {
-        super.templatename(this.body.templateName);
+    validateTemplateName () {
+        super.templateName(this.body.templateName);
     }
 
     /**
@@ -23,7 +23,7 @@ class SesValidator extends validation {
      * @since 26/05/2022
      */
 
-    validatesubject () {
+    validateSubject () {
         super.subject(this.body.subject);
     }
 }
