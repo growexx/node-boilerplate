@@ -63,6 +63,41 @@ class Validator {
             throw new GeneralError(this.__(INVALID, field), 400);
         }
     }
+
+    /**
+     * @desc This function is being used to validate template name
+     * @author Growexx
+     * @param {string} templatename TEMPLATENAME
+     * @since 27/05/2022
+     */
+    templatename (templatename) {
+        if (!templatename) {
+            throw new GeneralError(this.__(REQUIRED, 'Templatename'), 400);
+        }
+
+        if (!CONSTANTS.REGEX.TEMPLATENAME.test(templatename)) {
+            throw new GeneralError(this.__(INVALID, 'Templatename'), 400);
+        }
+    }
+
+    /**
+     * @desc This function is being used to validate template name
+     * @author Growexx
+     * @param {string} subject SUBJECT
+     * @since 27/05/2022
+     */
+
+    subject (subject) {
+        if (!subject) {
+            throw new GeneralError(this.__(REQUIRED, 'Subject'), 400);
+        }
+
+        if (!CONSTANTS.REGEX.SUBJECT.test(subject)) {
+            throw new GeneralError(this.__(INVALID, 'Subject'), 400);
+        }
+    }
+
+
 }
 
 module.exports = Validator;
