@@ -9,7 +9,7 @@ const app = express();
 const swaggerRoutes = require('./services/swaggerRoutes');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
-const seseRoutes = require('./routes/sesRoutes');
+const sesRoutes = require('./routes/sesRoutes');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const methodOverride = require('method-override');
@@ -82,7 +82,7 @@ app.get('/', (req, res) => {
 });
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
-app.use('/template', seseRoutes);
+app.use('/template', sesRoutes);
 
 
 module.exports = app;

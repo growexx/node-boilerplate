@@ -20,7 +20,7 @@ class SesTemplateController {
             const data = await SesTemplateService.createTemplate(req, res.__);
             Utils.sendResponse(null, data, res, MESSAGES.SUCCESS);
         } catch (error) {
-            Utils.sendResponse(error, null, res, '');
+            Utils.sendResponse(error, null, res);
         }
     }
 
@@ -39,7 +39,7 @@ class SesTemplateController {
             const data = await SesTemplateService.getTemplate(req, res.__);
             Utils.sendResponse(null, data, res, MESSAGES.SUCCESS);
         } catch (error) {
-            Utils.sendResponse(error, null, res, '');
+            Utils.sendResponse(error, null, res);
         }
     }
     /**
@@ -56,7 +56,7 @@ class SesTemplateController {
             const data = await SesTemplateService.deleteTemplate(req, res.__);
             Utils.sendResponse(null, data, res, MESSAGES.SUCCESS);
         } catch (error) {
-            Utils.sendResponse(error, null, res, '');
+            Utils.sendResponse(error, null, res);
         }
     }
 
@@ -75,7 +75,7 @@ class SesTemplateController {
             const data = await SesTemplateService.updateTemplate(req, res.__);
             Utils.sendResponse(null, data, res, MESSAGES.SUCCESS);
         } catch (error) {
-            Utils.sendResponse(error, null, res, '');
+            Utils.sendResponse(error, null, res);
         }
     }
 }

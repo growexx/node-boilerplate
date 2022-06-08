@@ -1,16 +1,10 @@
-const UploadService = require('../../util/uploadService');
 const AWS = require('aws-sdk');
 const fs = require('fs');
+const { reject } = require('lodash');
 const { promisify } = require('util');
 const readFileAsync = promisify(fs.readFile);
 const ses = new AWS.SES({ region: 'us-east-1', apiVersion: '2010-12-01' });
 const SesValidator = require('./sesValidator');
-
-AWS.config.region = process.env.AWS_API_REGION;
-AWS.config.accessKeyId = process.env.AWS_API_KEY;
-AWS.config.secretAccessKey = process.env.AWS_SECRET_KEY;
-AWS.config.credentials.accessKeyId = process.env.AWS_API_KEY;
-AWS.config.credentials.secretAccessKey = process.env.AWS_SECRET_KEY;
 
 /**
  * Class represents services for Ses template.
@@ -24,13 +18,6 @@ class SesTemplateService {
      * @param {Object} req.body RequestBody
      * @param {String} req.body.templateName templateName
      */
-
-    static getData (err, data) {
-        if (err) {
-            return err;
-        }
-        return data;
-    }
 
     static async createTemplate (req, locale) {
         try {
@@ -47,21 +34,22 @@ class SesTemplateService {
                     'utf8'
                 );
             }
-
-            const subject = req.body.subject;
-            const templateName = _.camelCase(req.body.templateName);
-
-            var params = {
+            const params = {
                 Template: {
-                    templateName,
+                    TemplateName: req.body.templateName,
                     HtmlPart: htmlMessage,
-                    SubjectPart: subject,
+                    SubjectPart: req.body.subject,
                 },
             };
 
-
-            ses.createTemplate(params, function (err, data) {
-                SesTemplateService.getData(err, data);
+            return new Promise((resolve, reject) => {
+                ses.createTemplate(params, (err) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve();
+                    }
+                });
             });
         } catch (err) {
             if (err.code === 'ENOENT') {
@@ -87,15 +75,17 @@ class SesTemplateService {
     static async getTemplate (req, res) {
         const Validator = new SesValidator(req.body, res);
         Validator.validateTemplateName();
-
-        const templateName = _.camelCase(req.body.templateName);
-
-        var params = {
-            templateName,
+        const params = {
+            TemplateName:req.body.templateName,
         };
-
-        ses.getTemplate(params, function (err, data) {
-            SesTemplateService.getData(err, data);
+        return new Promise((resolve, reject) => {
+            ses.createTemplate(params, (err, data) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve({ template: data.Template });
+                }
+            });
         });
     }
     /**
@@ -109,15 +99,17 @@ class SesTemplateService {
     static async deleteTemplate (req, res) {
         const Validator = new SesValidator(req.body, res);
         Validator.validateTemplateName();
-
-        const templateName = _.camelCase(req.body.templateName);
-
-        var params = {
-            templateName,
+        const params = {
+            TemplateName: req.body.templateName,
         };
-
-        ses.deleteTemplate(params, function (err, data) {
-            SesTemplateService.getData(err, data);
+        return new Promise((resolve, reject) => {
+            ses.createTemplate(params, (err) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
         });
     }
 
@@ -134,23 +126,25 @@ class SesTemplateService {
         const Validator = new SesValidator(req.body, res);
         Validator.validateTemplateName();
         Validator.validateSubject();
-        let htmlMessage, subject;
-
+        let htmlMessage;
         if (req.file !== undefined) {
             htmlMessage = req.file.buffer.toString('utf8');
         }
-        const templateName = req.body.templateName;
-
-        var params = {
+        const params = {
             Template: {
-                templateName,
+                TemplateName:req.body.templateName,
                 HtmlPart: htmlMessage,
-                SubjectPart: subject,
+                SubjectPart: req.body.subject,
             },
         };
-
-        ses.updateTemplate(params, function (err, data) {
-            SesTemplateService.getData(err, data);
+        return new Promise((resolve, reject) => {
+            ses.createTemplate(params, (err) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve();
+                }
+            });
         });
     }
     catch (err) {
