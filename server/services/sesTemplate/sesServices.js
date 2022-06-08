@@ -53,7 +53,7 @@ class SesTemplateService {
 
             var params = {
                 Template: {
-          /* required */ TemplateName: templatename /* required */,
+                    TemplateName: templatename,
                     HtmlPart: htmlMessage,
                     SubjectPart: subject,
                 },
@@ -61,7 +61,6 @@ class SesTemplateService {
 
 
             ses.createTemplate(params, function (err, data) {
-                // an error occurred
                 SesTemplateService.getData(err, data);
             });
         } catch (err) {
@@ -92,11 +91,10 @@ class SesTemplateService {
         const templatename = _.camelCase(req.body.templateName);
 
         var params = {
-            TemplateName: templatename /* required */,
+            TemplateName: templatename,
         };
 
         ses.getTemplate(params, function (err, data) {
-            // an error occurred
             SesTemplateService.getData(err, data);
         });
     }
@@ -115,11 +113,10 @@ class SesTemplateService {
         const templatename = _.camelCase(req.body.templateName);
 
         var params = {
-            TemplateName: templatename /* required */,
+            TemplateName: templatename,
         };
 
         ses.deleteTemplate(params, function (err, data) {
-            // an error occurred
             SesTemplateService.getData(err, data);
         });
     }
@@ -146,13 +143,13 @@ class SesTemplateService {
 
         var params = {
             Template: {
-        /* required */ TemplateName: templatename /* required */,
+                TemplateName: templatename,
                 HtmlPart: htmlMessage,
                 SubjectPart: subject,
             },
         };
+
         ses.updateTemplate(params, function (err, data) {
-            // an error occurred
             SesTemplateService.getData(err, data);
         });
     }
