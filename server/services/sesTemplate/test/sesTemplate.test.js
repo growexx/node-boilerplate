@@ -8,23 +8,22 @@ const sinon = require('sinon');
 const SES = require('../../../util/ses');
 chai.use(chaiHttp);
 
-describe("Retrieving Template", () => {
+describe('Retrieving Template', () => {
     try {
         let sesGetTemplateStub;
-        
- 
+
         before(async () => {
             sesGetTemplateStub = sinon.stub(SES, 'getTemplate');
         });
- 
+
         after(async () => {
             sesGetTemplateStub.restore();
-        
         });
-        TestCase.retrievingtemplate.forEach((data) => {
+
+        TestCase.retrievingTemplate.forEach((data) => {
             it(data.it, (done) => {
                 request(process.env.BASE_URL)
-                    .get(`/template/`)
+                    .get('/template/')
                     .query(data.options)
                     .end((err, res) => {
                         expect(res.body.status).to.be.status;
@@ -33,31 +32,32 @@ describe("Retrieving Template", () => {
                     });
             });
         });
-        
-        it("As a user, I should abe to access existing template", (done) => {
-            sesGetTemplateStub.returns({Template: "template"})
+
+        it('As a user, I should abe to access existing template', (done) => {
+            sesGetTemplateStub.returns({ Template: 'template' });
 
             const template = {
-                templateName: "myFile",
+                templateName: 'myFile'
             };
 
             request(process.env.BASE_URL)
-                .get(`/template/`)
+                .get('/template/')
                 .query(template)
                 .end((err, res) => {
                     assert.equal(res.statusCode, 200);
                     done();
                 });
-            
+
         });
-        it("As a user, I should not able to access existing template", (done) => {
+
+        it('As a user, I should not able to access existing template', (done) => {
             sesGetTemplateStub.throws();
             const template = {
-                templateName: "myFile",
+                templateName: 'myFile'
             };
 
             request(process.env.BASE_URL)
-                .get(`/template/`)
+                .get('/template/')
                 .query(template)
                 .end((err, res) => {
                     assert.equal(res.statusCode, 400);
@@ -69,23 +69,22 @@ describe("Retrieving Template", () => {
     }
 });
 
-describe("Update Template", () => {
+describe('Update Template', () => {
     try {
         let sesUpdateTemplateStub;
-        
- 
-         before(async () => {
-        sesUpdateTemplateStub = sinon.stub(SES, 'updateTemplate');
- });
- 
+
+        before(async () => {
+            sesUpdateTemplateStub = sinon.stub(SES, 'updateTemplate');
+        });
+
         after(async ()=> {
             sesUpdateTemplateStub.restore();
-        
- });
-        TestCase.updatetemplate.forEach((data) => {
+        });
+
+        TestCase.updateTemplate.forEach((data) => {
             it(data.it, (done) => {
                 request(process.env.BASE_URL)
-                    .put(`/template/`)
+                    .put('/template/')
                     .send(data.options)
                     .end((err, res) => {
                         expect(res.body.status).to.be.status;
@@ -95,30 +94,31 @@ describe("Update Template", () => {
             });
         });
 
-        it("As a user, I should abe to access existing template", (done) => {
-            sesUpdateTemplateStub.returns()
+        it('As a user, I should abe to access existing template', (done) => {
+            sesUpdateTemplateStub.returns();
 
             const template = {
-                templateName: "myFile",
-                subject: "abc",
+                templateName: 'myFile',
+                subject: 'abc'
             };
 
             request(process.env.BASE_URL)
-                .put(`/template/`)
+                .put('/template/')
                 .send(template)
                 .end((err, res) => {
                     assert.equal(res.statusCode, 200);
                     done();
                 });
         });
-        it("As a user, I should not able to access existing template", (done) => {
+
+        it('As a user, I should not able to access existing template', (done) => {
             sesUpdateTemplateStub.throws();
             const template = {
-                templateName: "myFile",
+                templateName: 'myFile'
             };
 
             request(process.env.BASE_URL)
-                .put(`/template/`)
+                .put('/template/')
                 .query(template)
                 .end((err, res) => {
                     assert.equal(res.statusCode, 400);
@@ -130,23 +130,22 @@ describe("Update Template", () => {
     }
 });
 
-describe("Create Template", () => {
+describe('Create Template', () => {
     try {
         let sesCreateTemplateStub;
-        
- 
-         before(async () => {
-        sesCreateTemplateStub = sinon.stub(SES, 'createTemplate');
- });
- 
+
+        before(async () => {
+            sesCreateTemplateStub = sinon.stub(SES, 'createTemplate');
+        });
+
         after(async ()=> {
             sesCreateTemplateStub.restore();
-        
- });
-        TestCase.createtemplate.forEach((data) => {
-            it("Template Created ", (done) => {
+        });
+
+        TestCase.createTemplate.forEach((data) => {
+            it('Template Created ', (done) => {
                 request(process.env.BASE_URL)
-                    .post(`/template/`)
+                    .post('/template/')
                     .send(data.options)
                     .end((err, res) => {
                         expect(res.body.status).to.be.status;
@@ -156,30 +155,31 @@ describe("Create Template", () => {
             });
         });
 
-        it("As a user, I should able to create template", (done) => {
-            sesCreateTemplateStub.returns()
+        it('As a user, I should able to create template', (done) => {
+            sesCreateTemplateStub.returns();
             const template = {
-                templateName: "myFile",
-                subject: "abc",
+                templateName: 'myFile',
+                subject: 'abc'
             };
 
             request(process.env.BASE_URL)
-                .post("/template/")
+                .post('/template/')
                 .send(template)
                 .end((err, res) => {
                     assert.equal(res.statusCode, 200);
                     done();
                 });
         });
-        it("As a user, I should not able to create template", (done) => {
-            sesCreateTemplateStub.throws()
+
+        it('As a user, I should not able to create template', (done) => {
+            sesCreateTemplateStub.throws();
             const template = {
-                templateName: "myFile",
-                subject: "abc",
+                templateName: 'myFile',
+                subject: 'abc'
             };
 
             request(process.env.BASE_URL)
-                .post("/template/")
+                .post('/template/')
                 .send(template)
                 .end((err, res) => {
                     assert.equal(res.statusCode, 400);
@@ -191,23 +191,22 @@ describe("Create Template", () => {
     }
 });
 
-describe("Delete Template", () => {
+describe('Delete Template', () => {
     try {
         let sesDeleteTemplateStub;
-        
- 
-         before(async () => {
-        sesDeleteTemplateStub = sinon.stub(SES, 'deleteTemplate');
- });
- 
+
+        before(async () => {
+            sesDeleteTemplateStub = sinon.stub(SES, 'deleteTemplate');
+        });
+
         after(async ()=> {
-        sesDeleteTemplateStub.restore();
-        
- });
-        TestCase.deletetemplate.forEach((data) => {
+            sesDeleteTemplateStub.restore();
+        });
+
+        TestCase.deleteTemplate.forEach((data) => {
             it(data.it, (done) => {
                 request(process.env.BASE_URL)
-                    .delete(`/template/`)
+                    .delete('/template/')
                     .query(data.options)
                     .end((err, res) => {
                         expect(res.body.status).to.be.status;
@@ -217,29 +216,30 @@ describe("Delete Template", () => {
             });
         });
 
-        it("As a user, I should able to delete existing template", (done) => {
-            sesDeleteTemplateStub.returns()
+        it('As a user, I should able to delete existing template', (done) => {
+            sesDeleteTemplateStub.returns();
             sesDeleteTemplateStub.returns();
             const template = {
-                templateName: "myFile",
+                templateName: 'myFile'
             };
 
             request(process.env.BASE_URL)
-                .delete(`/template/`)
+                .delete('/template/')
                 .query(template)
                 .end((err, res) => {
                     assert.equal(res.statusCode, 200);
                     done();
                 });
         });
-        it("As a user, I should not able to delete existing template", (done) => {
+
+        it('As a user, I should not able to delete existing template', (done) => {
             sesDeleteTemplateStub.throws();
             const template = {
-                templateName: "myFile",
+                templateName: 'myFile'
             };
 
             request(process.env.BASE_URL)
-                .delete(`/template/`)
+                .delete('/template/')
                 .query(template)
                 .end((err, res) => {
                     assert.equal(res.statusCode, 400);

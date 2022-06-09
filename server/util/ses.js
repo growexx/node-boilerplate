@@ -2,7 +2,7 @@
 const AWS = require('aws-sdk');
 const ses = new AWS.SES({ region: 'us-east-1', apiVersion: '2010-12-01' });
 
-class SES{
+class SES {
     static async createTemplate (params) {
         return new Promise((resolve, reject) => {
             ses.createTemplate(params, (err) => {

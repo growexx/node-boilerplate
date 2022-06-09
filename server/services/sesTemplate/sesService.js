@@ -26,29 +26,27 @@ class SesTemplateService {
 
             if (req.file !== undefined) {
                 htmlMessage = req.file.buffer.toString('utf8');
-            } else {
-                if (process.env.NODE_ENV !== 'testing') {
-                    htmlMessage = await readFileAsync(
-                        `emailTemplates/${_.camelCase(req.body.templateName)}`,
-                        'utf8'
-                    );
-                }
+            } else if (process.env.NODE_ENV !== 'testing') {
+                htmlMessage = await readFileAsync(
+                    `emailTemplates/${_.camelCase(req.body.templateName)}`,
+                    'utf8'
+                );
             }
             const params = {
                 Template: {
                     TemplateName: req.body.templateName,
                     HtmlPart: htmlMessage,
-                    SubjectPart: req.body.subject,
-                },
+                    SubjectPart: req.body.subject
+                }
             };
             await SES.createTemplate(params);
-            
+
 
         } catch (err) {
             if (err.code === 'ENOENT') {
                 throw {
                     message: MESSAGES.FILE_NOT_FOUND,
-                    statusCode: 400,
+                    statusCode: 400
                 };
             } else {
                 throw err;
@@ -69,7 +67,7 @@ class SesTemplateService {
         const Validator = new SesValidator(req.query, res);
         Validator.validateTemplateName();
         const params = {
-            TemplateName:req.query.templateName,
+            TemplateName: req.query.templateName
         };
         const getTemplateData = await SES.getTemplate(params);
         return { template: getTemplateData.Template };
@@ -86,7 +84,7 @@ class SesTemplateService {
         const Validator = new SesValidator(req.query, res);
         Validator.validateTemplateName();
         const params = {
-            TemplateName: req.query.templateName,
+            TemplateName: req.query.templateName
         };
         await SES.deleteTemplate(params);
     }
@@ -110,10 +108,10 @@ class SesTemplateService {
         }
         const params = {
             Template: {
-                TemplateName:req.body.templateName,
+                TemplateName: req.body.templateName,
                 HtmlPart: htmlMessage,
-                SubjectPart: req.body.subject,
-            },
+                SubjectPart: req.body.subject
+            }
         };
         await SES.updateTemplate(params);
     }
@@ -121,7 +119,7 @@ class SesTemplateService {
         if (err.code === 'ENOENT') {
             throw {
                 message: MESSAGES.FILE_NOT_FOUND,
-                statusCode: 400,
+                statusCode: 400
             };
         } else {
             throw err;

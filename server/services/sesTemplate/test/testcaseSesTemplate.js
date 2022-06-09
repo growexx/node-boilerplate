@@ -1,56 +1,53 @@
 module.exports = {
-    retrievingtemplate: [
+    retrievingTemplate: [
         {
-            it: "As a user, I should check template name in request.",
+            it: 'As a user, I should check template name in request.',
             options: {},
-            status: 0,
+            status: 0
         },
         {
-            it: "As a user I should check valid template name",
+            it: 'As a user I should check valid template name',
             options: {
-                templateName: 'myFile',
+                templateName: 'myFile'
             },
-            status: 0,
-        },
-
+            status: 0
+        }
     ],
-
-    updatetemplate: [
+    updateTemplate: [
         {
-            it: "As a user, I should check template name in request.",
+            it: 'As a user, I should check template name in request.',
             options: {},
-            status: 0,
+            status: 0
         },
         {
-            it: "As a user I should check valid template name",
+            it: 'As a user I should check valid template name',
             options: {
-                templateName: 'myFile',
+                templateName: 'myFile'
             },
-            status: 0,
+            status: 0
         },
         {
             it: 'As a user I should validate if subject is not pass',
             options: {
-                templateName: "myFile",
+                templateName: 'myFile'
+            },
+            status: 0
+        }
+    ],
+    createTemplate: [
+        {
+            it: 'As a user I should check valid template name',
+            options: {
+                templateName: 'myFile'
             },
             status: 0
         },
-
-    ],
-    createtemplate: [
         {
-            it: "As a user I should check valid template name",
+            it: 'As a user, I should check template name in request.',
             options: {
-                templateName: 'myFile',
+                subject: 'my trial'
             },
-            status: 0,
-        },
-        {
-            it: "As a user, I should check template name in request.",
-            options: {
-                subject: 'my trial',
-            },
-            status: 0,
+            status: 0
         },
         {
             it: 'As a user I should validate if templateName is not pass',
@@ -63,34 +60,32 @@ module.exports = {
         {
             it: 'As a user I should validate if subject is not pass',
             options: {
-                templateName: "myFile",
+                templateName: 'myFile',
                 subject: '*'
             },
             status: 0
 
         },
         {
-            it: "As a user I should check valid suject name",
+            it: 'As a user I should check valid suject name',
             options: {
-                subject: 'my trial',
+                subject: 'my trial'
             },
-            status: 0,
-        },
-
+            status: 0
+        }
     ],
-
-    deletetemplate: [
+    deleteTemplate: [
         {
-            it: "As a user, I should check template name in request.",
+            it: 'As a user, I should check template name in request.',
             options: {},
-            status: 0,
+            status: 0
         },
         {
-            it: "As a user I should check valid template name",
+            it: 'As a user I should check valid template name',
             options: {
-                templateName: '*',
+                templateName: '*'
             },
-            status: 0,
-        },
-    ],
+            status: 0
+        }
+    ]
 };
