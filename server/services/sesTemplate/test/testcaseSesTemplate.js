@@ -88,7 +88,7 @@ module.exports = {
         {
             it: "As a user I should check valid template name",
             options: {
-                templateName: 'myFile',
+                templateName: '*',
             },
             status: 0,
         },

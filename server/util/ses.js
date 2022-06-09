@@ -20,7 +20,7 @@ class SES{
                 if (err) {
                     reject(err);
                 } else {
-                    resolve({ template: data.Template });
+                    resolve(data);
                 }
             });
         });

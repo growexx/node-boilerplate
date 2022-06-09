@@ -1,9 +1,6 @@
-
-const AWS = require('aws-sdk');
 const fs = require('fs');
 const { promisify } = require('util');
 const readFileAsync = promisify(fs.readFile);
-const ses = new AWS.SES({ region: 'us-east-1', apiVersion: '2010-12-01' });
 const SesValidator = require('./sesValidator');
 const SES = require('../../util/ses');
 
@@ -30,10 +27,12 @@ class SesTemplateService {
             if (req.file !== undefined) {
                 htmlMessage = req.file.buffer.toString('utf8');
             } else {
-                htmlMessage = await readFileAsync(
-                    `emailTemplates/${_.camelCase(req.body.templateName)}`,
-                    'utf8'
-                );
+                if (process.env.NODE_ENV !== 'testing') {
+                    htmlMessage = await readFileAsync(
+                        `emailTemplates/${_.camelCase(req.body.templateName)}`,
+                        'utf8'
+                    );
+                }
             }
             const params = {
                 Template: {
@@ -42,8 +41,8 @@ class SesTemplateService {
                     SubjectPart: req.body.subject,
                 },
             };
-
             await SES.createTemplate(params);
+            
 
         } catch (err) {
             if (err.code === 'ENOENT') {
@@ -72,7 +71,8 @@ class SesTemplateService {
         const params = {
             TemplateName:req.query.templateName,
         };
-        await SES.getTemplate(params);
+        const getTemplateData = await SES.getTemplate(params);
+        return { template: getTemplateData.Template };
     }
     /**
      * @desc This function is being used to delete template

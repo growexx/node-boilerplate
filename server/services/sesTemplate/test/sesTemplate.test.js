@@ -5,8 +5,7 @@ const assert = chai.assert;
 const request = require('supertest');
 const TestCase = require('./testcaseSesTemplate');
 const sinon = require('sinon');
-const AWS = require('aws-sdk');
-const ses = new AWS.SES({ apiVersion: '2010-12-01' ,region: 'us-east-1'});
+const SES = require('../../../util/ses');
 chai.use(chaiHttp);
 
 describe("Retrieving Template", () => {
@@ -15,7 +14,7 @@ describe("Retrieving Template", () => {
         
  
         before(async () => {
-            sesGetTemplateStub = sinon.stub(ses, 'getTemplate');
+            sesGetTemplateStub = sinon.stub(SES, 'getTemplate');
         });
  
         after(async () => {
@@ -36,6 +35,8 @@ describe("Retrieving Template", () => {
         });
         
         it("As a user, I should abe to access existing template", (done) => {
+            sesGetTemplateStub.returns({Template: "template"})
+
             const template = {
                 templateName: "myFile",
             };
@@ -50,6 +51,7 @@ describe("Retrieving Template", () => {
             
         });
         it("As a user, I should not able to access existing template", (done) => {
+            sesGetTemplateStub.throws();
             const template = {
                 templateName: "myFile",
             };
@@ -73,7 +75,7 @@ describe("Update Template", () => {
         
  
          before(async () => {
-        sesUpdateTemplateStub = sinon.stub(ses, 'getTemplate');
+        sesUpdateTemplateStub = sinon.stub(SES, 'updateTemplate');
  });
  
         after(async ()=> {
@@ -94,6 +96,8 @@ describe("Update Template", () => {
         });
 
         it("As a user, I should abe to access existing template", (done) => {
+            sesUpdateTemplateStub.returns()
+
             const template = {
                 templateName: "myFile",
                 subject: "abc",
@@ -108,12 +112,13 @@ describe("Update Template", () => {
                 });
         });
         it("As a user, I should not able to access existing template", (done) => {
+            sesUpdateTemplateStub.throws();
             const template = {
                 templateName: "myFile",
             };
 
             request(process.env.BASE_URL)
-                .get(`/template/`)
+                .put(`/template/`)
                 .query(template)
                 .end((err, res) => {
                     assert.equal(res.statusCode, 400);
@@ -124,13 +129,14 @@ describe("Update Template", () => {
         CONSOLE_LOGGER.error(exception);
     }
 });
+
 describe("Create Template", () => {
     try {
         let sesCreateTemplateStub;
         
  
          before(async () => {
-        sesCreateTemplateStub = sinon.stub(ses, 'getTemplate');
+        sesCreateTemplateStub = sinon.stub(SES, 'createTemplate');
  });
  
         after(async ()=> {
@@ -151,6 +157,7 @@ describe("Create Template", () => {
         });
 
         it("As a user, I should able to create template", (done) => {
+            sesCreateTemplateStub.returns()
             const template = {
                 templateName: "myFile",
                 subject: "abc",
@@ -165,6 +172,7 @@ describe("Create Template", () => {
                 });
         });
         it("As a user, I should not able to create template", (done) => {
+            sesCreateTemplateStub.throws()
             const template = {
                 templateName: "myFile",
                 subject: "abc",
@@ -182,13 +190,14 @@ describe("Create Template", () => {
         CONSOLE_LOGGER.error(exception);
     }
 });
+
 describe("Delete Template", () => {
     try {
         let sesDeleteTemplateStub;
         
  
          before(async () => {
-        sesDeleteTemplateStub = sinon.stub(ses, 'deleteTemplate');
+        sesDeleteTemplateStub = sinon.stub(SES, 'deleteTemplate');
  });
  
         after(async ()=> {
@@ -209,6 +218,7 @@ describe("Delete Template", () => {
         });
 
         it("As a user, I should able to delete existing template", (done) => {
+            sesDeleteTemplateStub.returns()
             sesDeleteTemplateStub.returns();
             const template = {
                 templateName: "myFile",
@@ -218,13 +228,12 @@ describe("Delete Template", () => {
                 .delete(`/template/`)
                 .query(template)
                 .end((err, res) => {
-                    console.log(res.body,"TESTING");
                     assert.equal(res.statusCode, 200);
                     done();
                 });
         });
         it("As a user, I should not able to delete existing template", (done) => {
-            sesDeleteTemplateStub.returns();
+            sesDeleteTemplateStub.throws();
             const template = {
                 templateName: "myFile",
             };
@@ -233,7 +242,6 @@ describe("Delete Template", () => {
                 .delete(`/template/`)
                 .query(template)
                 .end((err, res) => {
-                    console.log(res.body,"TESTING");
                     assert.equal(res.statusCode, 400);
                     done();
                 });
