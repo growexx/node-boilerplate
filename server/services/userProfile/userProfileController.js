@@ -40,6 +40,38 @@ class UserProfileController {
     }
 
     /**
+     * @desc This function is being used to upload file to ftp server
+     * @author Growexx
+     * @since 07/06/2022
+     * @param {Object} req Request
+     * @param {Object} req.body RequestBody
+     */
+     static async ftpFileUpload (req, res) {
+        try {
+            const data = await UserProfileService.ftpFileUpload(req, res.locals.user);
+            Utils.sendResponse(null, data, res, res.__('SUCCESS'));
+        } catch (error) {
+            Utils.sendResponse(error, null, res, error.message);
+        }
+    }
+
+    /**
+     * @desc This function is being used to download file from ftp server
+     * @author Growexx
+     * @since 07/06/2022
+     * @param {Object} req Request
+     * @param {Object} req.body RequestBody
+     */
+     static async ftpFileDownload (req, res) {
+        try {
+            const data = await UserProfileService.ftpFileDownload(req, res.locals.user);
+            Utils.sendResponse(null, data, res, res.__('SUCCESS'));
+        } catch (error) {
+            Utils.sendResponse(error, null, res, error.message);
+        }
+    }
+
+    /**
      * @desc This function is being used to delete user profile picture
      * @author Growexx
      * @since 01/03/2021

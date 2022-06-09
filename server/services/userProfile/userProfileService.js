@@ -4,6 +4,11 @@ const UserBasicProfileValidator = require('./userProfileValidator');
 const UploadService = require('../../util/uploadService');
 const crypt = require('../../util/crypt');
 const GeneralError = require('../../util/GeneralError');
+var SftpUpload = require('sftp-upload');
+const message = require('../../locales/en');
+var Client = require('ftp');
+var fs = require('fs');
+var c = new Client();
 
 /**
  * Class represents services for user Basic Profile.
@@ -47,6 +52,72 @@ class UserProfileService {
         });
 
         return updateData;
+    }
+
+    /**
+     * @desc This function is being used to upload file to ftp server
+     * @author Growexx
+     * @since 07/06/2022
+     * @param {Object} req Request
+     * @param {Object} req.body RequestBody
+     * @param {Object} res Response
+     */
+    static async ftpFileUpload (req, user) {
+        try {
+            await UserProfileService.ftpConnection();
+            c.on('ready', function () {
+                c.put(req.body.localFilePath, req.body.remoteFilePath, function (err) {
+                    if (err) throw err;
+                    c.end();
+                });
+            });
+        } catch(err) {
+            throw {
+                message: message.ERROR_MSG,
+                statusCode: 400
+            };
+        }
+    }
+
+    /**
+     * @desc This function is being used to download file from ftp server
+     * @author Growexx
+     * @since 07/06/2022
+     * @param {Object} req Request
+     * @param {Object} req.body RequestBody
+     * @param {Object} res Response
+     */
+    static async ftpFileDownload (req, user) {
+        try {
+            await UserProfileService.ftpConnection();
+            c.on('ready', function () {
+                c.get(req.body.remoteFilePath, function (err, stream) {
+                    if (err) throw err;
+                    stream.once('close', function () { c.end(); });
+                    stream.pipe(fs.createWriteStream(req.body.localFilePath));
+                });
+            });
+        } catch(err) {
+            throw {
+                message: message.ERROR_MSG,
+                statusCode: 400
+            };
+        }
+    }
+
+    /**
+     * @desc This function is being used to connect ftp server
+     * @author Growexx
+     * @since 07/06/2022
+     * @param {Object} req Request
+     * @param {Object} req.body RequestBody
+     * @param {Object} res Response
+     */
+    static async ftpConnection () {
+        c.connect({
+            user: process.env.FTP_USER,
+            password: process.env.FTP_PASSWORD
+        });
     }
 
     /**
