@@ -1,13 +1,27 @@
-const chai = require("chai");
-const chaiHttp = require("chai-http");
+const chai = require('chai');
+const chaiHttp = require('chai-http');
 const expect = chai.expect;
 const assert = chai.assert;
-const request = require("supertest");
-const TestCase = require("./testcaseSesTemplate");
+const request = require('supertest');
+const TestCase = require('./testcaseSesTemplate');
+const sinon = require('sinon');
+const AWS = require('aws-sdk');
+const ses = new AWS.SES({ apiVersion: '2010-12-01' ,region: 'us-east-1'});
 chai.use(chaiHttp);
 
 describe("Retrieving Template", () => {
     try {
+        let sesGetTemplateStub;
+        
+ 
+        before(async () => {
+            sesGetTemplateStub = sinon.stub(ses, 'getTemplate');
+        });
+ 
+        after(async () => {
+            sesGetTemplateStub.restore();
+        
+        });
         TestCase.retrievingtemplate.forEach((data) => {
             it(data.it, (done) => {
                 request(process.env.BASE_URL)
@@ -20,8 +34,22 @@ describe("Retrieving Template", () => {
                     });
             });
         });
+        
+        it("As a user, I should abe to access existing template", (done) => {
+            const template = {
+                templateName: "myFile",
+            };
 
-        it("As a user, I should verify existing template", (done) => {
+            request(process.env.BASE_URL)
+                .get(`/template/`)
+                .query(template)
+                .end((err, res) => {
+                    assert.equal(res.statusCode, 200);
+                    done();
+                });
+            
+        });
+        it("As a user, I should not able to access existing template", (done) => {
             const template = {
                 templateName: "myFile",
             };
@@ -41,6 +69,17 @@ describe("Retrieving Template", () => {
 
 describe("Update Template", () => {
     try {
+        let sesUpdateTemplateStub;
+        
+ 
+         before(async () => {
+        sesUpdateTemplateStub = sinon.stub(ses, 'getTemplate');
+ });
+ 
+        after(async ()=> {
+            sesUpdateTemplateStub.restore();
+        
+ });
         TestCase.updatetemplate.forEach((data) => {
             it(data.it, (done) => {
                 request(process.env.BASE_URL)
@@ -54,7 +93,7 @@ describe("Update Template", () => {
             });
         });
 
-        it("As a user, I should verify existing template", (done) => {
+        it("As a user, I should abe to access existing template", (done) => {
             const template = {
                 templateName: "myFile",
                 subject: "abc",
@@ -68,12 +107,36 @@ describe("Update Template", () => {
                     done();
                 });
         });
+        it("As a user, I should not able to access existing template", (done) => {
+            const template = {
+                templateName: "myFile",
+            };
+
+            request(process.env.BASE_URL)
+                .get(`/template/`)
+                .query(template)
+                .end((err, res) => {
+                    assert.equal(res.statusCode, 400);
+                    done();
+                });
+        });
     } catch (exception) {
         CONSOLE_LOGGER.error(exception);
     }
 });
 describe("Create Template", () => {
     try {
+        let sesCreateTemplateStub;
+        
+ 
+         before(async () => {
+        sesCreateTemplateStub = sinon.stub(ses, 'getTemplate');
+ });
+ 
+        after(async ()=> {
+            sesCreateTemplateStub.restore();
+        
+ });
         TestCase.createtemplate.forEach((data) => {
             it("Template Created ", (done) => {
                 request(process.env.BASE_URL)
@@ -97,6 +160,20 @@ describe("Create Template", () => {
                 .post("/template/")
                 .send(template)
                 .end((err, res) => {
+                    assert.equal(res.statusCode, 200);
+                    done();
+                });
+        });
+        it("As a user, I should not able to create template", (done) => {
+            const template = {
+                templateName: "myFile",
+                subject: "abc",
+            };
+
+            request(process.env.BASE_URL)
+                .post("/template/")
+                .send(template)
+                .end((err, res) => {
                     assert.equal(res.statusCode, 400);
                     done();
                 });
@@ -107,6 +184,17 @@ describe("Create Template", () => {
 });
 describe("Delete Template", () => {
     try {
+        let sesDeleteTemplateStub;
+        
+ 
+         before(async () => {
+        sesDeleteTemplateStub = sinon.stub(ses, 'deleteTemplate');
+ });
+ 
+        after(async ()=> {
+        sesDeleteTemplateStub.restore();
+        
+ });
         TestCase.deletetemplate.forEach((data) => {
             it(data.it, (done) => {
                 request(process.env.BASE_URL)
@@ -120,7 +208,8 @@ describe("Delete Template", () => {
             });
         });
 
-        it("As a user, I should verify existing template", (done) => {
+        it("As a user, I should able to delete existing template", (done) => {
+            sesDeleteTemplateStub.returns();
             const template = {
                 templateName: "myFile",
             };
@@ -129,6 +218,22 @@ describe("Delete Template", () => {
                 .delete(`/template/`)
                 .query(template)
                 .end((err, res) => {
+                    console.log(res.body,"TESTING");
+                    assert.equal(res.statusCode, 200);
+                    done();
+                });
+        });
+        it("As a user, I should not able to delete existing template", (done) => {
+            sesDeleteTemplateStub.returns();
+            const template = {
+                templateName: "myFile",
+            };
+
+            request(process.env.BASE_URL)
+                .delete(`/template/`)
+                .query(template)
+                .end((err, res) => {
+                    console.log(res.body,"TESTING");
                     assert.equal(res.statusCode, 400);
                     done();
                 });

@@ -1,7 +1,11 @@
+
 const AWS = require('aws-sdk');
+const fs = require('fs');
+const { promisify } = require('util');
 const readFileAsync = promisify(fs.readFile);
 const ses = new AWS.SES({ region: 'us-east-1', apiVersion: '2010-12-01' });
 const SesValidator = require('./sesValidator');
+const SES = require('../../util/ses');
 
 /**
  * Class represents services for Ses template.
@@ -39,15 +43,8 @@ class SesTemplateService {
                 },
             };
 
-            return new Promise((resolve, reject) => {
-                ses.createTemplate(params, (err) => {
-                    if (err) {
-                        reject(err);
-                    } else {
-                        resolve();
-                    }
-                });
-            });
+            await SES.createTemplate(params);
+
         } catch (err) {
             if (err.code === 'ENOENT') {
                 throw {
@@ -70,20 +67,12 @@ class SesTemplateService {
      */
 
     static async getTemplate (req, res) {
-        const Validator = new SesValidator(req.body, res);
+        const Validator = new SesValidator(req.query, res);
         Validator.validateTemplateName();
         const params = {
-            TemplateName:req.body.templateName,
+            TemplateName:req.query.templateName,
         };
-        return new Promise((resolve, reject) => {
-            ses.getTemplate(params, (err, data) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve({ template: data.Template });
-                }
-            });
-        });
+        await SES.getTemplate(params);
     }
     /**
      * @desc This function is being used to delete template
@@ -94,20 +83,12 @@ class SesTemplateService {
      * @param {String} req.body.templateName templateName
      */
     static async deleteTemplate (req, res) {
-        const Validator = new SesValidator(req.body, res);
+        const Validator = new SesValidator(req.query, res);
         Validator.validateTemplateName();
         const params = {
-            TemplateName: req.body.templateName,
+            TemplateName: req.query.templateName,
         };
-        return new Promise((resolve, reject) => {
-            ses.deleteTemplate(params, (err) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve();
-                }
-            });
-        });
+        await SES.deleteTemplate(params);
     }
 
     /**
@@ -134,15 +115,7 @@ class SesTemplateService {
                 SubjectPart: req.body.subject,
             },
         };
-        return new Promise((resolve, reject) => {
-            ses.updateTemplate(params, (err) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve();
-                }
-            });
-        });
+        await SES.updateTemplate(params);
     }
     catch (err) {
         if (err.code === 'ENOENT') {
