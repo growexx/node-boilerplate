@@ -1,4 +1,4 @@
-const SesTemplateService = require('./sesServices');
+const SesTemplateService = require('./sesService');
 const Utils = require('../../util/utilFunctions');
 
 /**
