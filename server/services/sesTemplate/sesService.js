@@ -40,8 +40,6 @@ class SesTemplateService {
                 }
             };
             await SES.createTemplate(params);
-
-
         } catch (err) {
             if (err.code === 'ENOENT') {
                 throw {
