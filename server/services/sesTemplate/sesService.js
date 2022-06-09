@@ -76,7 +76,7 @@ class SesTemplateService {
             TemplateName:req.body.templateName,
         };
         return new Promise((resolve, reject) => {
-            ses.createTemplate(params, (err, data) => {
+            ses.getTemplate(params, (err, data) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -100,7 +100,7 @@ class SesTemplateService {
             TemplateName: req.body.templateName,
         };
         return new Promise((resolve, reject) => {
-            ses.createTemplate(params, (err) => {
+            ses.deleteTemplate(params, (err) => {
                 if (err) {
                     reject(err);
                 } else {
@@ -135,7 +135,7 @@ class SesTemplateService {
             },
         };
         return new Promise((resolve, reject) => {
-            ses.createTemplate(params, (err) => {
+            ses.updateTemplate(params, (err) => {
                 if (err) {
                     reject(err);
                 } else {
