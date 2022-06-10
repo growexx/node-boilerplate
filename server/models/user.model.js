@@ -69,6 +69,13 @@ const schema = new appMongoose.Schema({
     requestedPhoneNumber: {
         type: String
     },
+    failedLoginAttempts: {
+        type: Number,
+        default: 0
+    },
+    blockEndsAt: {
+        type: Date
+    },
     createdAt: {
         type: Date,
         default: Date.now

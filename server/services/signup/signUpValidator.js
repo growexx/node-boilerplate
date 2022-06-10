@@ -3,7 +3,7 @@ const validation = require('../../util/validation');
  * Class represents validations for signup.
  */
 class SignUpValidator extends validation {
-    constructor (body,locale) {
+    constructor (body, locale) {
         super(locale);
         this.body = body;
     }

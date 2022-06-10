@@ -39,5 +39,7 @@ module.exports = {
     ROLE: {
         USER: 1,
         ADMIN: 4
-    }
+    },
+    MAX_FAILED_LOGIN_ATTEMPTS: 3,
+    BLOCK_DURATION_DAYS: '1'
 };
