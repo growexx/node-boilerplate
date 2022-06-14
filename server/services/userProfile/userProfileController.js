@@ -48,7 +48,7 @@ class UserProfileController {
      */
      static async ftpFileUpload (req, res) {
         try {
-            const data = await UserProfileService.ftpFileUpload(req, res.locals.user);
+            const data = await UserProfileService.ftpFileUpload(req);
             Utils.sendResponse(null, data, res, res.__('SUCCESS'));
         } catch (error) {
             Utils.sendResponse(error, null, res, error.message);
@@ -64,7 +64,7 @@ class UserProfileController {
      */
      static async ftpFileDownload (req, res) {
         try {
-            const data = await UserProfileService.ftpFileDownload(req, res.locals.user);
+            const data = await UserProfileService.ftpFileDownload(req);
             Utils.sendResponse(null, data, res, res.__('SUCCESS'));
         } catch (error) {
             Utils.sendResponse(error, null, res, error.message);
