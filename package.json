@@ -27,8 +27,6 @@
     "dotenv": "^8.2.0",
     "express": "^4.15.3",
     "ftp": "^0.3.10",
-    "ftp-client": "^0.2.2",
-    "ftps": "^1.2.0",
     "helmet": "^3.21.3",
     "i18n": "^0.8.3",
     "jsonwebtoken": "^8.2.1",
@@ -44,7 +42,6 @@
     "nodemailer": "^6.5.0",
     "nodemon": "^2.0.16",
     "randomstring": "^1.1.5",
-    "sftp-upload": "^1.0.4",
     "swagger-ui-express": "^4.1.6"
   },
   "devDependencies": {
