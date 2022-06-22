@@ -18,4 +18,7 @@ router.post('/forgot-password', ForgotPasswordController.forgotPassword);
 router.post('/verify-token', ForgotPasswordController.verifyToken);
 router.post('/reset-password', ForgotPasswordController.resetPassword);
 
+router.post('/signup-mfa', SignUpController.signUpMFA);
+router.post('/verify-mfa', SignUpController.verifyMFA);
+
 module.exports = router;

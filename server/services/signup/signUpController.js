@@ -62,6 +62,24 @@ class SignUpController {
             Utils.sendResponse(error, null, res, '');
         }
     }
+
+    static async signUpMFA (req, res) {
+        try {
+            const data = await SignUpService.signUpMFA(req, res);
+            Utils.sendResponse(null, data, res, MESSAGES.REGISTER_SUCCESS);
+        } catch (error) {
+            Utils.sendResponse(error, null, res, '');
+        }
+    } 
+    
+    static async verifyMFA (req, res) {
+        try {
+            const data = await SignUpService.verifyMFA(req, res);
+            Utils.sendResponse(null, data, res, '');
+        } catch (error) {
+            Utils.sendResponse(error, null, res, '');
+        }
+    }
 }
 
 module.exports = SignUpController;
