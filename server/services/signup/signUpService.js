@@ -193,7 +193,7 @@ class SignUpService {
             });
             await newVerification.save();
     
-            const filePath = "http://localhost:3000";
+            const filePath = "http://localhost:3000/verify-mfa";
             const subject = 'Verify Your Email',
                 template = `<p>Verify your email to complete the signup.</p><p>This link expires in 1 hour.</p>
                 <p>Click <a href=${filePath + "/" + id + "/" + uniqueString}>here</a> to proceed.</p>`;
