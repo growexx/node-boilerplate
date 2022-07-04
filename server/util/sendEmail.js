@@ -4,7 +4,7 @@ const { promisify } = require('util');
 const Constants = require('./constants');
 const readFileAsync = promisify(fs.readFile);
 const ses = new AWS.SES({ apiVersion: '2010-12-01' });
-const MailComposer = require('nodemailer/lib/mail-composer');
+const MailComposer = require('nodemailer');
 
 class EmailService {
 
@@ -68,6 +68,40 @@ class EmailService {
                 ses.sendRawEmail(params).promise();
             });
         }
+    }
+
+    static async sendVerificationEmail (email, subject, template) {    
+        var smtpConfig = {
+            service: 'Gmail',
+            auth: {
+                user: process.env.SENDER_EMAIL,
+                pass: process.env.EMAIL_PASSWORD
+            }
+        };
+        var transporter = MailComposer.createTransport(smtpConfig);
+        var mailOptions = {
+            from: `Payal Patel <${process.env.SENDER_EMAIL}>`,
+            to: email,
+            subject: subject,
+            html: template,
+            context: {
+                Data: 'Send successfull Message!!!'
+            }
+        };
+        const sendMailPromise = new Promise((resolve, reject) => {
+            try {
+                transporter.sendMail(mailOptions, (error, response) => {
+                    if (error) {
+                        reject(error);
+                    } else {
+                        resolve(true);
+                    }
+                });
+            } catch(err) {
+                reject(err.message);
+            }
+        }); 
+        return sendMailPromise;
     }
 }
 

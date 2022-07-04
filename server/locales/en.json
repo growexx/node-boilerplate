@@ -21,5 +21,9 @@
 	"SELECT_EMPLOYEE": "Select the employee first",
 	"INVALID_PORTAL_ID": "Jira portal id is invalid.",
 	"PASSWORD_NOT_MATCH": "PASSWORD_NOT_MATCH",
-	"CHANGE_PASSWORD_SUCCESS": "CHANGE_PASSWORD_SUCCESS"
+	"CHANGE_PASSWORD_SUCCESS": "CHANGE_PASSWORD_SUCCESS",
+	"USER_MFA_VERIFY_PENDING": "Please activate your user by verify email and OTP that has sent.",
+	"USER_MFA_VERIFY_SUCCESS": "User verified successfully",
+	"ENTER_VALID_OTP": "Please enter valid OTP",
+	"EMAIL_LINK_EXPIRED": "Link is expired"
 }

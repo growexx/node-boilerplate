@@ -17,6 +17,34 @@ class Validator {
     }
 
     /**
+     * @desc This function is being used to validate mongoId of user
+     * @author Growexx
+     * @param {ObjectId} id User Id of Activity
+     * @since 17/06/2022
+    */
+    mongoId(id, field) {
+        if (!id) {
+            throw new GeneralError(this.__(REQUIRED, field), 400);
+        }
+
+        if (!mongoose.Types.ObjectId(id)) {
+            throw new GeneralError(this.__(INVALID, field), 400);
+        }
+    }
+
+    /**
+     * @desc This function is being used to validate phone number
+     * @author Growexx
+     * @param {Number} phoneNo Number
+     * @since 17/01/2022
+     */
+    phoneNo(phoneNo) {
+        if (!phoneNo) {
+            throw new GeneralError(this.__(REQUIRED, 'Phone Number'), 400);
+        }
+    }
+
+    /**
      * @desc This function is being used to validate email address
      * @author Growexx
      * @since 01/03/2021
