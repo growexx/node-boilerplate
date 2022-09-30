@@ -6,7 +6,8 @@
   "scripts": {
     "prestart": "NODE_ENV=local node_modules/migrate-mongo/bin/migrate-mongo.js up",
     "start": "NODE_ENV=local nodemon .",
-    "build": "webpack --config=Scripts/config/webpack.prod.js",
+    "prebuild": "npm install",
+    "build": "npm run build",
     "test": "NODE_ENV=testing nyc mocha test/alltests.js --exit",
     "jsdoc": "./node_modules/.bin/jsdoc server/* -r  --destination jsdocs/jsdocs",
     "commit": "git-cz"
