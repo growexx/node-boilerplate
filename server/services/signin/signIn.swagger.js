@@ -1,6 +1,6 @@
 /**
  * @openapi
- * auth/signin:
+ * /auth/signin:
  *      post:
  *          tags: [Authentication]
  *          summary: Log in via email or username

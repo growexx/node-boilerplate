@@ -1,6 +1,6 @@
 /**
  * @openapi
- * auth/signup:
+ * /auth/signup:
  *      post:
  *          tags: [Authentication]
  *          summary: User SignUp

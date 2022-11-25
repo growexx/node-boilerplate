@@ -3,8 +3,7 @@
  * /user/details:
  *      get:
  *          security:
- *              allOf:
- *                  - $ref: '#/components/security'
+ *              - bearerAuth: []
  *          tags: [User]
  *          summary: 'User Details'
  *          responses:
@@ -39,8 +38,7 @@
  * /user/picture:
  *      put:
  *          security:
- *              allOf:
- *                  - $ref: '#/components/schemas/security'
+ *              - bearerAuth: []
  *          tags: [User]
  *          summary: Upload Profile Picture
  *          parameters:
@@ -78,8 +76,7 @@
  *
  *      delete:
  *          security:
- *              allOf:
- *                  - $ref: '#/components/schemas/security'
+ *              - bearerAuth: []
  *          tags: [User]
  *          summary: Delete Profile Picture
  *          responses:
@@ -115,8 +112,7 @@
  * /user/password:
  *      put:
  *          security:
- *              allOf:
- *                  - $ref: '#/components/schemas/security'
+ *              - bearerAuth: []
  *          tags: [User]
  *          summary: Change User Password
  *          requestBody:

@@ -3,6 +3,7 @@
  * components:
  *      securitySchemes:
  *          bearerAuth:
+ *              name: Authorization
  *              type: apiKey
  *              in: header
  *              bearerFormat: JWT
