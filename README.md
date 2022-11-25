@@ -61,3 +61,7 @@ Create an environment file with extension ```.env```.
 
 - To execute the code, run the following command ```npm start```
 - Run the command ```npm t``` for testing
+
+## AWS SES 
+
+- You can perform the CRUD operations on AWS SES template.
