@@ -1,6 +1,6 @@
 /**
  * @openapi
- * auth/forgot-password:
+ * /auth/forgot-password:
  *      post:
  *          tags: [Authentication]
  *          summary: Forgot Password
@@ -34,7 +34,7 @@
 
 /**
  * @openapi
- * auth/verify-token:
+ * /auth/verify-token:
  *      post:
  *          tags: [Authentication]
  *          summary: Verify reset password token
@@ -68,7 +68,7 @@
 
 /**
  * @openapi
- * auth/reset-password:
+ * /auth/reset-password:
  *      post:
  *          tags: [Authentication]
  *          summary: Change Password

@@ -40,7 +40,7 @@
 
 /**
  * @openapi
- * auth/verify-account:
+ * /auth/verify-account:
  *      post:
  *          tags: [Authentication]
  *          summary: User name verification
@@ -74,7 +74,7 @@
 
 /**
  * @openapi
- * auth/resend-otp:
+ * /auth/resend-otp:
  *      post:
  *          tags: [Authentication]
  *          summary: To resend OTP
