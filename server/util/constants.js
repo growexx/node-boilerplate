@@ -39,5 +39,26 @@ module.exports = {
     ROLE: {
         USER: 1,
         ADMIN: 4
-    }
+    },
+    AVAILABLE_FIELD_NAMES: [
+        'merchant id',
+        'seq',
+        'seq#',
+        'amount',
+        'app#',
+        'change',
+        'op#',
+        'tran id',
+        'tran id#',
+        'trans id',
+        'trans id#',
+        'total',
+        'subtotal',
+        'tax',
+        'total tax',
+        'name',
+        'total number of items sold',
+        'total number of items sold =',
+        'total number of items sold='
+    ]
 };

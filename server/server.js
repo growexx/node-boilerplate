@@ -9,6 +9,7 @@ const app = express();
 const swaggerRoutes = require('./services/swaggerRoutes');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
+const ocrRoutes = require('./routes/ocrRoutes');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const methodOverride = require('method-override');
@@ -81,5 +82,6 @@ app.get('/', (req, res) => {
 });
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
+app.use('/ocr', ocrRoutes);
 
 module.exports = app;
