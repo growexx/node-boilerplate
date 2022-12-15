@@ -17,8 +17,14 @@ require('../server/services/signup/test/signup.test');
 require('../server/services/signin/test/signin.test');
 require('../server/services/forgotPassword/test/forgotPassword.test');
 
+
+// AWS SES
+require('../server/services/sesTemplate/test/sesTemplate.test');
+
 // User
 require('../server/services/userProfile/test/userProfile.test');
+
+
 
 // End Testing
 require('./end.test');

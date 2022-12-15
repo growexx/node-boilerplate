@@ -6,10 +6,13 @@ const compression = require('compression');
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const app = express();
-const swaggerRoutes = require('./services/swaggerRoutes');
+const swaggerUi = require('swagger-ui-express');
+const swaggerDoc = require('swagger-jsdoc');
+const swaggerDef = require('./public/swagger.json');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const ocrRoutes = require('./routes/ocrRoutes');
+const sesRoutes = require('./routes/sesRoutes');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const methodOverride = require('method-override');
@@ -70,8 +73,10 @@ app.use(cors({
 
 app.use(morgan('dev'));
 app.use(methodOverride());
+
+const spec = swaggerDoc(swaggerDef);
 if (process.env.NODE_ENV !== 'production') {
-    app.use('/', swaggerRoutes);
+    app.use('/api-docs/', swaggerUi.serve, swaggerUi.setup(spec));
 }
 // Landing Page
 app.get('/', (req, res) => {
@@ -83,5 +88,7 @@ app.get('/', (req, res) => {
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/ocr', ocrRoutes);
+app.use('/template', sesRoutes);
+
 
 module.exports = app;
