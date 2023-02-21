@@ -5,12 +5,12 @@ const mongoCredetials = process.env.DB_USERNAME ?
     `${process.env.DB_USERNAME}:${encodeURIComponent(process.env.DB_PASSWORD)}@` : '';
 const dbUrl = `mongodb://${mongoCredetials}${mongoHost}`;
 const options = {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-    bufferCommands: true,
-    bufferMaxEntries: 0,
-    useFindAndModify: false,
-    useCreateIndex: true,
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
+  bufferCommands: true,
+  bufferMaxEntries: 0,
+  useFindAndModify: false,
+  useCreateIndex: true,
     poolSize: 10
 };
 class Connection {
@@ -21,8 +21,8 @@ class Connection {
     }).catch((err) => {
       CONSOLE_LOGGER.info('DB Connection err',err);
       CONSOLE_LOGGER.info('MongoDB connection unsuccessful, retry after 0.5 seconds.');
-      setTimeout(Connection.connectToDB, 500);
-    });
+        setTimeout(Connection.connectToDB, 500);
+      });
     return mongoose.connection.readyState;
   }
 
