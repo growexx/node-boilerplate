@@ -1,3 +1,4 @@
+const mongoose = require('mongoose');
 const GeneralError = require('../util/GeneralError');
 const REQUIRED = 'FIELD_REQUIRED';
 const INVALID = 'FIELD_NOT_VALID';
@@ -97,7 +98,17 @@ class Validator {
         }
     }
 
-
+    /**
+     * @desc This function is being used to validate mongo id
+     * @author Growexx
+     * @param {string} id id
+     * @since 17/03/2023
+     */
+    checkValidMongoId (id, field = 'Id') {
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            throw new GeneralError(this.__(INVALID, field), 400);
+        }
+    }
 }
 
 module.exports = Validator;

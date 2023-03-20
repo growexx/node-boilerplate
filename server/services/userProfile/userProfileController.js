@@ -46,7 +46,7 @@ class UserProfileController {
      * @param {Object} req Request
      * @param {Object} req.body RequestBody
      */
-     static async ftpFileUpload (req, res) {
+    static async ftpFileUpload (req, res) {
         try {
             const data = await UserProfileService.ftpFileUpload(req);
             Utils.sendResponse(null, data, res, res.__('SUCCESS'));
@@ -62,7 +62,7 @@ class UserProfileController {
      * @param {Object} req Request
      * @param {Object} req.body RequestBody
      */
-     static async ftpFileDownload (req, res) {
+    static async ftpFileDownload (req, res) {
         try {
             const data = await UserProfileService.ftpFileDownload(req);
             Utils.sendResponse(null, data, res, res.__('SUCCESS'));

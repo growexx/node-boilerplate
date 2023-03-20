@@ -24,6 +24,9 @@ require('../server/services/sesTemplate/test/sesTemplate.test');
 // User
 require('../server/services/userProfile/test/userProfile.test');
 
+// User Feedback
+require('../server/services/userFeedback/test/userFeedback.test');
+
 
 
 // End Testing

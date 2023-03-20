@@ -18,8 +18,8 @@ class SignUpService {
      * @param {String} req.body.email email
      * @param {String} req.body.password password
      */
-    static async signUp (req,locale) {
-        const Validator = new SignUpValidator(req.body,locale);
+    static async signUp (req, locale) {
+        const Validator = new SignUpValidator(req.body, locale);
         Validator.validate();
 
         req.body.email = req.body.email.toLowerCase();

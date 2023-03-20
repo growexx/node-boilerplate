@@ -6,7 +6,12 @@ module.exports = function (req, res, next) {
         1: [
             { method: 'GET', path: '/user/details' },
             { method: 'PUT', path: '/user/picture' },
-            { method: 'DELETE', path: '/user/picture' }
+            { method: 'DELETE', path: '/user/picture' },
+            { method: 'POST', path: '/user/feedback' },
+            { method: 'GET', path: `/user/feedback/${req.params.id}` },
+            { method: 'DELETE', path: `/user/feedback/${req.params.id}` },
+            { method: 'PATCH', path: `/user/feedback/${req.params.id}` },
+            { method: 'GET', path: '/user/feedback/list' }
         ],
         4: [
             { method: 'GET', path: '/user/details' },

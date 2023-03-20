@@ -31,6 +31,8 @@ class SesTemplateService {
                     `emailTemplates/${_.camelCase(req.body.templateName)}`,
                     'utf8'
                 );
+            } else {
+                htmlMessage = '';
             }
             const params = {
                 Template: {

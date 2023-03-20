@@ -24,5 +24,7 @@
 	"CHANGE_PASSWORD_SUCCESS": "CHANGE_PASSWORD_SUCCESS",
 	"FILE_NOT_FOUND":"File not found",
 	"TEMPLATE_NAME_REQUIRED": "Template name is required",
-	"TEMPLATE_SUBJECT_REQUIRED": "Template subject is required"
+	"TEMPLATE_SUBJECT_REQUIRED": "Template subject is required",
+	"FEEDBACK_SUCCESS": "Thanks for your valuable feedback.",
+	"FEEDBACK_NOT_FOUND":"Feedback not found"
 }

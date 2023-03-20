@@ -5,7 +5,7 @@ dotenv.config({ path: env + '.env' });
 
 let dbUrl = `mongodb://${process.env.DB_HOST}/${process.env.DB_NAME}`;
 if (process.env.DB_USERNAME) {
-    dbUrl = `mongodb://${process.env.DB_USERNAME}:${encodeURIComponent(process.env.DB_PASSWORD)}@${process.env.DB_HOST}/${process.env.DB_NAME}`;
+    dbUrl = `mongodb+srv://${process.env.DB_USERNAME}:${encodeURIComponent(process.env.DB_PASSWORD)}@${process.env.DB_HOST}/${process.env.DB_NAME}`;
 }
 
 const config = {

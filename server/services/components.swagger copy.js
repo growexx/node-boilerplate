@@ -401,23 +401,16 @@
  *          listFeedback:
  *              type: object
  *              properties:
- *                  page:
- *                      $ref: '#/components/userProperties/properties/page'
- *                  limit:
- *                      $ref: '#/components/userProperties/properties/limit'
- *                  sortBy:
- *                      $ref: '#/components/userProperties/properties/sortBy'
- *                  sort:
- *                      $ref: '#/components/userProperties/properties/sort'
- *                  isPaginate:
- *                      $ref: '#/components/userProperties/properties/isPaginate'
- *
+ *                  id:
+ *                      $ref: '#/components/userProperties/properties/id'
+ *                  id:
+ *                      $ref: '#/components/userProperties/properties/id'
+ *                  id:
+ *                      $ref: '#/components/userProperties/properties/id'
+ *                  id:
+ *                      $ref: '#/components/userProperties/properties/id'
  *              example:
- *                  page: 1
- *                  limit: 10
- *                  sortBy: 'createdAt'
- *                  sort: 1
- *                  isPaginate: false
+ *                  id: '6413f8f1c273693bebffb620'
  *
  *          successListUserFeedback:
  *              type: object
@@ -427,60 +420,16 @@
  *                  message:
  *                      $ref: '#/components/errorProperties/properties/message'
  *                  data:
- *                      type: array
  *                      $ref: '#/components/userProperties/properties/data'
  *              example:
  *                  status: 1
  *                  message: Success.
- *                  data:
- *                          title: Sam
- *                          description: Jones
- *                          createdAt: '2023-03-17T05:21:53.104Z'
- *                          updatedAt: '2023-03-17T05:21:53.104Z'
- *
- *
- *          deleteFeedback:
- *              type: string
- *              required:
- *                  - id
- *              properties:
- *                  id:
- *                      $ref: '#/components/userProperties/properties/id'
- *              example:
- *                  id: '6413f8f1c273693bebffb620'
- *
- *          successDeleteUserFeedback:
- *              type: object
- *              properties:
- *                  status:
- *                      $ref: '#/components/userProperties/properties/status'
- *                  message:
- *                      $ref: '#/components/errorProperties/properties/message'
- *              example:
- *                  status: 1
- *                  message: Success.
- *
- *
- *          inActiveFeedback:
- *              type: string
- *              required:
- *                  - id
- *              properties:
- *                  id:
- *                      $ref: '#/components/userProperties/properties/id'
- *              example:
- *                  id: '6413f8f1c273693bebffb620'
- *
- *          successInactiveUserFeedback:
- *              type: object
- *              properties:
- *                  status:
- *                      $ref: '#/components/userProperties/properties/status'
- *                  message:
- *                      $ref: '#/components/errorProperties/properties/message'
- *              example:
- *                  status: 1
- *                  message: Success.
+ *                  data: [
+ *                      title: Sam
+ *                      description: Jones
+ *                      createdAt: '2023-03-17T05:21:53.104Z'
+ *                      updatedAt: '2023-03-17T05:21:53.104Z'
+ *                  ]
  *
  */
 

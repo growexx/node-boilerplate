@@ -17,7 +17,7 @@ module.exports = {
         FIRSTNAME: /^[a-zA-Z0-9,'~._^ -]*$/,
         SURNAME: /^[a-zA-Z0-9,'~._^ -]*$/,
         ALPHA_ONLY: /^[a-zA-Z']*$/,
-        ALPHA_SPECIAL_CHAR: /^[ A-Za-z0-9_@./#&+-]*$/,
+        ALPHA_SPECIAL_CHAR: /^[ A-Za-z0-9_@./#,!&+-]*$/,
         ALPHA_SPECIAL_CHAR_EXCEPT_NUMBER: /^[ A-Za-z_@./#&+-]*$/,
         FULL_ACCESS: /^[^<> ?//\\]+$/,
         ALPHA_NUMARIC: /^[\w@ ]+$/,
