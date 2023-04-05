@@ -23,7 +23,7 @@ describe('Signup Account', () => {
             });
         });
 
-        it('As a user I should not able to register with existing passowrd', (done) => {
+        it('As a user I should validate if email is already registered and password is incorrect.', (done) => {
             const registerUser = {
                 email: 'super@mailinator.com',
                 password: '8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267d',
