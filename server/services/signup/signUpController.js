@@ -27,6 +27,21 @@ class SignUpController {
     }
 
     /**
+     * @desc This function is being used to signUp user
+     * @author Growexx
+     * @since 27/03/2021
+     * @param {Object} req Request
+     * @param {Object} req.body RequestBody
+     * @param {String} req.body.email email
+     * @param {String} req.body.password password
+     * @param {Object} res Response
+     */
+    static async socialSignUp (req, res) {
+        const data = await SignUpService.socialSignUp(req, res.__);
+        Utils.sendResponse(null, data, res, MESSAGES.REGISTER_SUCCESS);
+    }
+
+    /**
      * @desc This function is being used to verify user account
      * @author Growexx
      * @since 27/03/2021

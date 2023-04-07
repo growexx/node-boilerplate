@@ -18,8 +18,8 @@ class SignUpService {
      * @param {String} req.body.email email
      * @param {String} req.body.password password
      */
-    static async signUp (req,locale) {
-        const Validator = new SignUpValidator(req.body,locale);
+    static async signUp (req, locale) {
+        const Validator = new SignUpValidator(req.body, locale);
         Validator.validate();
 
         req.body.email = req.body.email.toLowerCase();
@@ -44,6 +44,49 @@ class SignUpService {
         } else {
             return await SignUpService.checkLogin(req.body.password, user);
         }
+    }
+
+    /**
+     * @desc This function is being used to add user from social account signup
+     * @author Growexx
+     * @since 05/04/2023
+     * @param {Object} req Request
+     */
+    static async socialSignUp (req) {
+        const { id, email, firstName, lastName, picture, token, platform } = req.body;
+        let user = await User.findOne( {
+            email
+        });
+        if (user) {
+            await User.updateOne({
+                email
+            },
+            {
+                socialId: id,
+                socialToken: token,
+                socialPlatform: platform
+            });
+            user = await User.findOne({
+                email
+            });
+        } else {
+            user = await User.create({
+                email,
+                firstName,
+                lastName,
+                isActive: CONSTANTS.STATUS.ACTIVE,
+                role: CONSTANTS.ROLE.USER,
+                profilePicture: picture,
+                socialId: id,
+                socialToken: token,
+                socialPlatform: platform
+            });
+        }
+        const loginToken = await crypt.getUserToken(user);
+        delete user.password;
+        delete user.__v;
+        _.merge(user, loginToken, {});
+        return user;
     }
 
     static async checkLogin (password, user) {

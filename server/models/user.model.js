@@ -69,6 +69,15 @@ const schema = new appMongoose.Schema({
     requestedPhoneNumber: {
         type: String
     },
+    socialPlatform: {
+        type: String
+    },
+    socialId: {
+        type: String
+    },
+    socialToken: {
+        type: String
+    },
     createdAt: {
         type: Date,
         default: Date.now

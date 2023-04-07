@@ -4,6 +4,9 @@ const expect = chai.expect;
 const assert = chai.assert;
 const request = require('supertest');
 const TestCase = require('./testcaseSignup');
+const sinon = require('sinon');
+const axios = require('axios');
+const constants = require('../../../util/constants');
 chai.use(chaiHttp);
 const trueDataStatus = 1;
 let validRegistration;
@@ -94,6 +97,159 @@ describe('Signup Account', () => {
     }
 });
 
+describe('Signup Account with facebook account', () => {
+    let axiosGetStub;
+    const token = 'facebookToken';
+    beforeEach(() => {
+        axiosGetStub = sinon.stub(axios, 'get');
+    });
+
+    afterEach(() => {
+        axiosGetStub.restore();
+    });
+
+    try {
+        it('As a user I should register as user', (done) => {
+            const response = {
+                data: {
+                    id: 'id',
+                    email: 'example@example.com',
+                    first_name: 'fakeFirstName',
+                    last_name: 'fakeLastName',
+                    picture: {
+                        data: {
+                            url: 'fakePictureUrl'
+                        }
+                    }
+                }
+            };
+            axiosGetStub.withArgs(`${constants.FACEBOOK_AUTH_URL}${token}`).resolves(response);
+            const payload = {
+                platform: 'facebook',
+                token
+            };
+            request(process.env.BASE_URL)
+                .post('/auth/social-signup')
+                .send(payload)
+                .end((err, res) => {
+                    expect(res.body.status).to.be.status;
+                    assert.equal(res.statusCode, 200);
+                    done();
+                });
+        });
+
+        it('As a user I should login if i am already register with email', (done) => {
+            const response = {
+                data: {
+                    id: 'id',
+                    email: 'example@example.com',
+                    first_name: 'fakeFirstName',
+                    last_name: 'fakeLastName',
+                    picture: {
+                        data: {
+                            url: 'fakePictureUrl'
+                        }
+                    }
+                }
+            };
+            axiosGetStub.withArgs(`${constants.FACEBOOK_AUTH_URL}${token}`).resolves(response);
+            const payload = {
+                platform: 'facebook',
+                token
+            };
+            request(process.env.BASE_URL)
+                .post('/auth/social-signup')
+                .send(payload)
+                .end((err, res) => {
+                    expect(res.body.status).to.be.status;
+                    assert.equal(res.statusCode, 200);
+                    done();
+                });
+        });
+
+        it('As a user I should not register as user if facebook token is invalid', (done) => {
+            axiosGetStub.withArgs(`${constants.FACEBOOK_AUTH_URL}${token}`).rejects(new Error('Invalid Token'));
+            const payload = {
+                platform: 'facebook',
+                token
+            };
+            request(process.env.BASE_URL)
+                .post('/auth/social-signup')
+                .send(payload)
+                .end((err, res) => {
+                    expect(res.body.status).to.be.status;
+                    assert.equal(res.statusCode, 401);
+                    done();
+                });
+        });
+    } catch (exception) {
+        CONSOLE_LOGGER.error(exception);
+    }
+});
+
+describe('Signup Account with apple and google account', () => {
+    try {
+        it('As a user I should register as user from google account', (done) => {
+            const payload = {
+                platform: 'google',
+                token: 'token',
+                firstName: 'test',
+                lastName: 'user',
+                email: 'test@google.com',
+                picture: 'url',
+                id: 'id'
+            };
+            request(process.env.BASE_URL)
+                .post('/auth/social-signup')
+                .send(payload)
+                .end((err, res) => {
+                    expect(res.body.status).to.be.status;
+                    assert.equal(res.statusCode, 200);
+                    done();
+                });
+        });
+        it('As a user I should register as user from apple account', (done) => {
+            const payload = {
+                platform: 'apple',
+                token: 'token',
+                firstName: 'test',
+                lastName: 'user',
+                email: 'test@apple.com',
+                picture: 'url',
+                id: 'id'
+            };
+            request(process.env.BASE_URL)
+                .post('/auth/social-signup')
+                .send(payload)
+                .end((err, res) => {
+                    expect(res.body.status).to.be.status;
+                    assert.equal(res.statusCode, 200);
+                    done();
+                });
+        });
+        it('As a user I should not register as user if platform is invalid', (done) => {
+            const payload = {
+                platform: 'microsoft',
+                token: 'token',
+                firstName: 'test',
+                lastName: 'user',
+                email: 'test@microsoft.com',
+                picture: 'url',
+                id: 'id'
+            };
+            request(process.env.BASE_URL)
+                .post('/auth/social-signup')
+                .send(payload)
+                .end((err, res) => {
+                    expect(res.body.status).to.be.status;
+                    assert.equal(res.statusCode, 401);
+                    done();
+                });
+        });
+    } catch (exception) {
+        CONSOLE_LOGGER.error(exception);
+    }
+});
 describe('Verify Account', () => {
     try {
         TestCase.verifyAccount.forEach((data) => {

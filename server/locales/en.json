@@ -28,5 +28,6 @@
 	"FORGOT_PASSWORD_LINK_SENT_SUCCESS":"An email has been sent. Please follow instructions on it.",
     "LINK_IS_VALID":"Link is not valid.",
     "RESET_PASSWORD_SUCCESS":"Your password has been reset successfully.",
-	"SIGNIN_SUCCESS":"User successfully logged in."
+	"SIGNIN_SUCCESS":"User successfully logged in.",
+	"INVALID_SOCIAL_ACCOUNT": "Platform is invalid. Please try with a correct platform."
 }
