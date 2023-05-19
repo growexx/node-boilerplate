@@ -12,6 +12,10 @@ const swaggerDef = require('./public/swagger.json');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
 const sesRoutes = require('./routes/sesRoutes');
+
+const githubRoutes = require('./routes/githubRoutes');
+const sonarRoutes = require('./routes/sonarRoutes');
+
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const methodOverride = require('method-override');
@@ -87,6 +91,7 @@ app.get('/', (req, res) => {
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/template', sesRoutes);
-
+app.use('/github', githubRoutes);
+app.use('/sonar', sonarRoutes);
 
 module.exports = app;

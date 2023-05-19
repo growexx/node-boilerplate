@@ -342,5 +342,15 @@
  *              example:
  *                  status: true
  *                  message: CHANGE_PASSWORD_SUCCESS
+ *
+ *          successRepositoryDetails:
+ *              type: object
+ *              properties:
+ *                  status:
+ *                      $ref: '#/components/userProperties/properties/status'
+ *                  message:
+ *                      $ref: '#/components/errorProperties/properties/message'
+ *                  data:
+ *                      $ref: '#/components/userProperties/properties/data'
  */
 
