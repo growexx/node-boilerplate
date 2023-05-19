@@ -49,10 +49,10 @@
  *          parameters:
  *                   - in: query
  *                     name: page
- *                     # description: pass the page number into which display the 100 results per page
+ *                     description: pass the page number into which display the 100 results per page
  *                   - in: query
  *                     name: repo
- *                     # description: pass the repository name
+ *                     description: pass the repository name
  *          responses:
  *              200:
  *                  description: Get all the PR of specific repository
@@ -91,10 +91,10 @@
  *          parameters:
  *                   - in: query
  *                     name: repo
- *                     # description: pass the repository name
+ *                     description: pass the repository name
  *                   - in: query
  *                     name: pullnumber
- *                     # description: pass the particular pull request number
+ *                     description: pass the particular pull request number
  *          responses:
  *              200:
  *                  description: Get all the comments of a Particular Pull Request
@@ -173,19 +173,19 @@
  *          parameters:
  *                   - in: query
  *                     name: startDate
- *                     # description: pass the start date
+ *                     description: pass the start date
  *                   - in: query
  *                     name: endDate
- *                     # description: pass the end date
+ *                     description: pass the end date
  *                   - in: query
  *                     name: repo
- *                     # description: pass the repo
+ *                     description: pass the repo
  *                   - in: query
  *                     name: author
- *                     # description: pass the author
+ *                     description: pass the author
  *                   - in: query
  *                     name: page
- *                     # description: pass the page
+ *                     description: pass the page
  *          responses:
  *              200:
  *                  description: Get/Search all Pull Request from date range
