@@ -81,5 +81,37 @@ class GetSonarController {
             Utils.sendResponse(error, null, res, '');
         }
     }
+
+    /**
+     * @desc This function is being used to get all the code coverage from sonarqube
+     * @author Growexx
+     * @since 19/05/2023
+     * @param {Object} req Request
+     * @param {Object} req.body RequestBody
+     * @param {function} res Response
+     */
+    static async getCodeCoverage (req, res) {
+        try {
+            const response = await axios.get('https://quality.growexx.com/api/measures/component', {
+                auth: {
+                    username: req.query.username,
+                    password: ''
+                },
+                params: {
+                    'component': req.query.component,
+                    'metricKeys': 'coverage'
+                }
+            });
+            const codeCoverage = [];
+            codeCoverage.push({
+                projectName: response.data.component.name,
+                qualifier: response.data.component.qualifier,
+                codeCoverage: response.data.component.measures
+            });
+            Utils.sendResponse(null, codeCoverage, res, res.__('SUCCESS'));
+        } catch (error) {
+            Utils.sendResponse(error, null, res, '');
+        }
+    }
 }
 module.exports = GetSonarController;
