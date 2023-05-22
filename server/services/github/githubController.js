@@ -59,7 +59,7 @@ class GetGithubController {
                 repo: req.query.repo,
                 sort: 'created',
                 direction: 'desc',
-                state: 'closed',
+                state: 'all',
                 page: req.query.page,
                 per_page: 100,
                 headers: {
@@ -76,6 +76,43 @@ class GetGithubController {
                 });
             }
             Utils.sendResponse(null, allPRs, res, res.__('SUCCESS'));
+        } catch (error) {
+            Utils.sendResponse(error, null, res, '');
+        }
+    }
+
+    /**
+   * @desc This function is being used to get all the Pull Request from Rejected state
+   * @author Growexx
+   * @since 12/05/2023
+   * @param {Object} req Request
+   * @param {Object} req.body RequestBody
+   * @param {function} res Response
+   */
+    static async getRejectedPR (req, res) {
+        try {
+            const pullRequests = await octokit.request('GET /repos/{owner}/{repo}/pulls', {
+                owner: 'growexx',
+                repo: req.query.repo,
+                sort: 'created',
+                direction: 'desc',
+                state: 'open',
+                page: req.query.page,
+                per_page: 100,
+                headers: {
+                    'X-GitHub-Api-Version': '2022-11-28'
+                }
+            });
+            const allRejectedPRs = [];
+            for (const pr of pullRequests.data) {
+                allRejectedPRs.push({
+                    id: pr.id,
+                    nodeId: pr.node_id,
+                    prRaisedBy: pr.user.login,
+                    prTitle: pr.title
+                });
+            }
+            Utils.sendResponse(null, allRejectedPRs, res, res.__('SUCCESS'));
         } catch (error) {
             Utils.sendResponse(error, null, res, '');
         }

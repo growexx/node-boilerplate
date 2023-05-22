@@ -82,6 +82,48 @@
 
 /**
  * @openapi
+ * /github/rejectedpr:
+ *      get:
+ *          security:
+ *              - bearerAuth: []
+ *          tags: [Github]
+ *          summary: 'Get all the Pull Request from Rejected state'
+ *          parameters:
+ *                   - in: query
+ *                     name: page
+ *                     description: pass the page number into which display the 100 results per page
+ *                   - in: query
+ *                     name: repo
+ *                     description: pass the repository name
+ *          responses:
+ *              200:
+ *                  description: Get all the Pull Request from Rejected state
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/successRepositoryDetails'
+ *              400:
+ *                  description: Invalid Request
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/errorBadRequest'
+ *              401:
+ *                  description: Unauthorized Access
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/unauthorisedAccess'
+ *              500:
+ *                  description: Internal Server Error
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/unexpectedError'
+ */
+
+/**
+ * @openapi
  * /github/particularprcomments:
  *      get:
  *          security:

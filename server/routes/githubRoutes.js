@@ -3,6 +3,7 @@ const githubController = require('../services/github/githubController');
 
 router.get('/repositories', githubController.getRepositories);
 router.get('/repositorypr', githubController.getRepositoryPR);
+router.get('/rejectedpr', githubController.getRejectedPR);
 router.get('/particularprcomments', githubController.getParticularPRComments);
 router.get('/commentsfromrepository', githubController.getCommentsFromRepository);
 
