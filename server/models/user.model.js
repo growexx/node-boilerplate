@@ -17,12 +17,15 @@ const schema = new appMongoose.Schema({
     firstName: {
         type: String,
         min: 2,
-        max: 30
+        max: 30,
+        // remove all leading and trailing space from field value
+        trim: true
     },
     lastName: {
         type: String,
         min: 2,
-        max: 30
+        max: 30,
+        trim: true
     },
     countryCode: {
         type: String
