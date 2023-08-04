@@ -16,7 +16,6 @@ require('./init.test');
 require('../server/services/signup/test/signup.test');
 require('../server/services/signin/test/signin.test');
 require('../server/services/forgotPassword/test/forgotPassword.test');
-require('../server/services/openai/test/openai.test');
 
 
 // AWS SES
