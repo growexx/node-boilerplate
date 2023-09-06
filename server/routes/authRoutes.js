@@ -8,6 +8,7 @@ const router = require('express').Router();
 const SignUpController = require('../services/signup/signUpController');
 const SignInController = require('../services/signin/signInController');
 const ForgotPasswordController = require('../services/forgotPassword/forgotPasswordController');
+const AnkiAlgoController = require('../services/ankiAlgo/ankiAlgoController');
 
 // Auth Routes
 router.post('/signup', SignUpController.signUp);
@@ -17,5 +18,9 @@ router.post('/signin', SignInController.login);
 router.post('/forgot-password', ForgotPasswordController.forgotPassword);
 router.post('/verify-token', ForgotPasswordController.verifyToken);
 router.post('/reset-password', ForgotPasswordController.resetPassword);
+router.get('/next', AnkiAlgoController.review);
+router.get('/list-review', AnkiAlgoController.listReview);
+router.post('/review', AnkiAlgoController.flashcards);
+router.post('/addFlashcards', AnkiAlgoController.addFlashcards);
 
 module.exports = router;

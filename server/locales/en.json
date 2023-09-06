@@ -22,11 +22,13 @@
 	"INVALID_PORTAL_ID": "Jira portal id is invalid.",
 	"PASSWORD_NOT_MATCH": "PASSWORD_NOT_MATCH",
 	"CHANGE_PASSWORD_SUCCESS": "CHANGE_PASSWORD_SUCCESS",
-	"FILE_NOT_FOUND":"File not found",
+	"FILE_NOT_FOUND": "File not found",
 	"TEMPLATE_NAME_REQUIRED": "Template name is required",
 	"TEMPLATE_SUBJECT_REQUIRED": "Template subject is required",
-	"FORGOT_PASSWORD_LINK_SENT_SUCCESS":"An email has been sent. Please follow instructions on it.",
-    "LINK_IS_VALID":"Link is not valid.",
-    "RESET_PASSWORD_SUCCESS":"Your password has been reset successfully.",
-	"SIGNIN_SUCCESS":"User successfully logged in."
+	"FORGOT_PASSWORD_LINK_SENT_SUCCESS": "An email has been sent. Please follow instructions on it.",
+	"LINK_IS_VALID": "Link is not valid.",
+	"RESET_PASSWORD_SUCCESS": "Your password has been reset successfully.",
+	"SIGNIN_SUCCESS": "User successfully logged in.",
+	"Review recorded successfully.": "Review recorded successfully.",
+	"Flashcard not found.": "Flashcard not found."
 }
