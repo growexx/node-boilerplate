@@ -42,8 +42,8 @@ module.exports = {
     },
     FIREBASE: {
         FCM_URL: 'https://fcm.googleapis.com/fcm/send',
-        FCM_SERVER_KEY: 'AAAAmJo2gH4:APA91bETqLG8Cvk2aXZu4x7xqsOXZlwBrzhBthYX60QthH1mX-nUgvj-2iYiV5ptxYp9QytBI-JyN_t24dc0hT1wSFrmuCUk27apjQNsrSaSGzSuX8eNpPjLJMYFEgIy478jA1WmXLJA',
+        FCM_SERVER_KEY: 'AAAAdZ1b5u8:APA91bGjjySaWELLM7VG4fH-900RHyoS_nhr12bsbbxDyKa3SyqaXPtV_qJlTCi0fnXKEmS56J8WOebHG-_2akbF5W5RJDSSZhnJ1SiyIY_xrXoDUlwu74relpNn3FKsY9FBqMF2AoFG',
         MANAGE_NOTIFICATION_URL: 'https://fcm.googleapis.com/fcm/notification',
-        SENDER_ID: 655422292094
+        SENDER_ID: 505151219439
     }
 };

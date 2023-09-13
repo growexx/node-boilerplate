@@ -17,7 +17,7 @@ class SignInService {
      * @param {Object} locale Locale passed from request
      * @param {Object} res Response
      */
-    static async signIn (req, locale) {
+    static async signIn(req, locale) {
         const Validator = new signInValidator(req.body, locale);
         Validator.validate();
         const email = req.body.email.toLowerCase();
@@ -34,7 +34,7 @@ class SignInService {
      * @param {function} callback callback Handles Response data/error messages
      * @param {function} next exceptionHandler Calls exceptionHandler
      */
-    static async userLogin (userEmail, password) {
+    static async userLogin(userEmail, password) {
         let user = await User.findOne({ email: userEmail }).lean();
 
         // Wrong username

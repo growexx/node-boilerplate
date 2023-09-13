@@ -77,7 +77,7 @@ class Utils {
         }
     }
 
-    static async sendPushNotificationToAndroidDevice (payload) {
+    static async sendPushNotificationToAndroidDevice (payload) { 
         const {
             title,
             body,

@@ -27,7 +27,7 @@
     "cors": "^2.8.3",
     "dotenv": "^8.2.0",
     "express": "^4.15.3",
-    "firebase-admin": "^10.2.0",
+    "firebase-admin": "^11.10.1",
     "helmet": "^3.21.3",
     "i18n": "^0.8.3",
     "jsonwebtoken": "^8.2.1",
