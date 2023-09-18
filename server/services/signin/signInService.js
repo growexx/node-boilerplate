@@ -53,7 +53,7 @@ class SignInService {
                 if (failedLoginAttempts >= CONSTANTS.MAX_FAILED_LOGIN_ATTEMPTS ) {
                     const blockEndsAt = MOMENT(Date.now()).isBefore(MOMENT(user.blockEndsAt))
                         ? user.blockEndsAt
-                        : MOMENT().add(CONSTANTS.BLOCK_DURATION_DAYS, 'day').utc();
+                        : new Date(MOMENT().add(CONSTANTS.BLOCK_DURATION_DAYS, 'day').utc());
 
                     await User.updateOne({
                         email: userEmail
@@ -65,7 +65,7 @@ class SignInService {
                     });
 
                     throw {
-                        message: locale(MESSAGES.BLOCKED_USER, MOMENT(user.blockEndsAt).format('MM/DD/YYYY HH:mm')),
+                        message: locale(MESSAGES.BLOCKED_USER, MOMENT(blockEndsAt).format('MM/DD/YYYY HH:mm')),
                         statusCode: 401
                     };
                 } else {
