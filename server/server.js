@@ -14,14 +14,14 @@ const userRoutes = require('./routes/userRoutes');
 const sesRoutes = require('./routes/sesRoutes');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-// const redis = require('redis');
+const redis = require('redis');
 const methodOverride = require('method-override');
 const i18n = require('i18n');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const Connection = require('./connection');
 
-// let redisClient = redis.createClient();
+let redisClient = redis.createClient();
 
 // Global Variables
 global.DB_CONNECTION = require('mongoose');
@@ -76,58 +76,53 @@ app.use(cors({
 app.use(morgan('dev'));
 app.use(methodOverride());
 
-// app.set('trust proxy', true);
-// (async () => {
-//     redisClient = redis.createClient();
-//     redisClient.on('error', (error) => console.error(`Error : ${error}`));
-//     await redisClient.connect();
-//     console.log('Redis server Connected');
-// })();
-// app.use(async (req, res, next) => {
-//     if (process.env.NODE_ENV !== 'testing') {
-//         try {
-//             const key = req.ip;
-//             // redisClient.del(key);
+app.set('trust proxy', true);
+(async () => {
+    redisClient = redis.createClient();
+    redisClient.on('error', (error) => console.error(`Error : ${error}`));
+    await redisClient.connect();
+    console.log('Redis server Connected');
+})();
+app.use(async (req, res, next) => {
+        try {
+            const key = req.ip;
 
-//             const isExist = await redisClient.get(key);
-//             // console.log(isExist);
+            const isExist = await redisClient.get(key);
 
-//             if (isExist) {
-//                 const existingData = JSON.parse(isExist);
-//                 const currentTime = MOMENT().unix();
-//                 const difference = (currentTime - existingData.time) / 60;
-//                 if (difference >= 1) {
-//                     const body = {
-//                         count: 1,
-//                         time: MOMENT().unix()
-//                     };
-//                     redisClient.set(key, JSON.stringify(body));
-//                     next();
-//                 }
-//                 if (difference < 1) {
-//                     if (existingData.count > 5) {
-//                         return res.json({ 'error': 1, 'message': 'throttled limit exceeded...' });
-//                     }
-//                     existingData.count++;
-//                     redisClient.set(key, JSON.stringify(existingData));
-//                     next();
-//                 }
-//             } else {
-//                 const data = {
-//                     count: 1,
-//                     time: MOMENT().unix()
-//                 };
-//                 await redisClient.set(key, JSON.stringify(data));
-//             }
+            if (isExist) {
+                const existingData = JSON.parse(isExist);
+                const currentTime = MOMENT().unix();
+                const difference = (currentTime - existingData.time) / 60;
+                if (difference >= 1) {
+                    const body = {
+                        count: 1,
+                        time: MOMENT().unix()
+                    };
+                    redisClient.set(key, JSON.stringify(body));
+                    return next();
+                }
+                if (difference < 1) {
+                    if (existingData.count >= 1000) {
+                        return res.json({ 'error': 1, 'message': 'throttled limit exceeded...' });
+                    }
+                    existingData.count++;
+                    redisClient.set(key, JSON.stringify(existingData));
+                    return next();
+                }
+            } else {
+                const data = {
+                    count: 1,
+                    time: MOMENT().unix()
+                };
+                await redisClient.set(key, JSON.stringify(data));
+            }
 
-//             next();
-//         } catch (err) {
-//             // next();
-//         }
-//     }
-//     next();
+            next();
+        } catch (err) {
+            // next();
+        }
 
-// });
+});
 
 const spec = swaggerDoc(swaggerDef);
 if (process.env.NODE_ENV !== 'production') {
