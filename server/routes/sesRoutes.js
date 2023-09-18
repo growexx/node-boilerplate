@@ -7,12 +7,13 @@
 const SesTemplateController = require('../services/sesTemplate/sesController');
 const router = require('express').Router();
 const UploadMiddleWare = require('../middleware/upload');
+const DbMiddleware = require('../middleware/serverless');
 
 
 
-router.post('/', UploadMiddleWare.single('templateFile'), SesTemplateController.createTemplate);
-router.get('/', SesTemplateController.getTemplate);
-router.delete('/', SesTemplateController.deleteTemplate);
-router.put('/', UploadMiddleWare.single('templateFile'), SesTemplateController.updateTemplate);
+router.post('/', DbMiddleware, UploadMiddleWare.single('templateFile'), SesTemplateController.createTemplate);
+router.get('/', DbMiddleware, SesTemplateController.getTemplate);
+router.delete('/', DbMiddleware, SesTemplateController.deleteTemplate);
+router.put('/', DbMiddleware, UploadMiddleWare.single('templateFile'), SesTemplateController.updateTemplate);
 
 module.exports = router;
