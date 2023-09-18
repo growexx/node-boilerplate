@@ -83,46 +83,45 @@ app.set('trust proxy', true);
     await redisClient.connect();
     console.log('Redis server Connected');
 })();
+
 app.use(async (req, res, next) => {
-        try {
-            const key = req.ip;
+    try {
+        const key = req.ip;
+        const isExist = await redisClient.get(key);
 
-            const isExist = await redisClient.get(key);
-
-            if (isExist) {
-                const existingData = JSON.parse(isExist);
-                const currentTime = MOMENT().unix();
-                const difference = (currentTime - existingData.time) / 60;
-                if (difference >= 1) {
-                    const body = {
-                        count: 1,
-                        time: MOMENT().unix()
-                    };
-                    redisClient.set(key, JSON.stringify(body));
-                    return next();
-                }
-                if (difference < 1) {
-                    if (existingData.count >= 1000) {
-                        return res.json({ 'error': 1, 'message': 'throttled limit exceeded...' });
-                    }
-                    existingData.count++;
-                    redisClient.set(key, JSON.stringify(existingData));
-                    return next();
-                }
-            } else {
-                const data = {
-                    count: 1,
-                    time: MOMENT().unix()
-                };
-                await redisClient.set(key, JSON.stringify(data));
-            }
-
-            next();
-        } catch (err) {
-            // next();
+        if (!isExist) {
+            const data = {
+                count: 1,
+                time: MOMENT().unix()
+            };
+            await redisClient.set(key, JSON.stringify(data));
+            return next();
         }
 
+        const existingData = JSON.parse(isExist);
+        const currentTime = MOMENT().unix();
+        const difference = (currentTime - existingData.time) / 60;
+
+        if (difference >= 1) {
+            const body = {
+                count: 1,
+                time: MOMENT().unix()
+            };
+            await redisClient.set(key, JSON.stringify(body));
+            return next();
+        } else {
+            if (existingData.count >= process.env.RATE_LIMIT) {
+                return res.json({ 'error': 1, 'message': 'throttled limit exceeded...' });
+            }
+            existingData.count++;
+            await redisClient.set(key, JSON.stringify(existingData));
+            return next();
+        }
+    } catch (err) {
+        return err;
+    }
 });
+
 
 const spec = swaggerDoc(swaggerDef);
 if (process.env.NODE_ENV !== 'production') {
