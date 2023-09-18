@@ -14,11 +14,14 @@ const userRoutes = require('./routes/userRoutes');
 const sesRoutes = require('./routes/sesRoutes');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+// const redis = require('redis');
 const methodOverride = require('method-override');
 const i18n = require('i18n');
 const morgan = require('morgan');
 const helmet = require('helmet');
 const Connection = require('./connection');
+
+// let redisClient = redis.createClient();
 
 // Global Variables
 global.DB_CONNECTION = require('mongoose');
@@ -48,7 +51,7 @@ i18n.configure({
     directory: `${__dirname}/locales`,
     extension: '.json',
     prefix: '',
-    logDebugFn (msg) {
+    logDebugFn(msg) {
         if (process.env.LOCAL === 'true') {
             CONSOLE_LOGGER.debug(`i18n::${CONSTANTS.LOG_LEVEL}`, msg);
         }
@@ -72,6 +75,59 @@ app.use(cors({
 
 app.use(morgan('dev'));
 app.use(methodOverride());
+
+// app.set('trust proxy', true);
+// (async () => {
+//     redisClient = redis.createClient();
+//     redisClient.on('error', (error) => console.error(`Error : ${error}`));
+//     await redisClient.connect();
+//     console.log('Redis server Connected');
+// })();
+// app.use(async (req, res, next) => {
+//     if (process.env.NODE_ENV !== 'testing') {
+//         try {
+//             const key = req.ip;
+//             // redisClient.del(key);
+
+//             const isExist = await redisClient.get(key);
+//             // console.log(isExist);
+
+//             if (isExist) {
+//                 const existingData = JSON.parse(isExist);
+//                 const currentTime = MOMENT().unix();
+//                 const difference = (currentTime - existingData.time) / 60;
+//                 if (difference >= 1) {
+//                     const body = {
+//                         count: 1,
+//                         time: MOMENT().unix()
+//                     };
+//                     redisClient.set(key, JSON.stringify(body));
+//                     next();
+//                 }
+//                 if (difference < 1) {
+//                     if (existingData.count > 5) {
+//                         return res.json({ 'error': 1, 'message': 'throttled limit exceeded...' });
+//                     }
+//                     existingData.count++;
+//                     redisClient.set(key, JSON.stringify(existingData));
+//                     next();
+//                 }
+//             } else {
+//                 const data = {
+//                     count: 1,
+//                     time: MOMENT().unix()
+//                 };
+//                 await redisClient.set(key, JSON.stringify(data));
+//             }
+
+//             next();
+//         } catch (err) {
+//             // next();
+//         }
+//     }
+//     next();
+
+// });
 
 const spec = swaggerDoc(swaggerDef);
 if (process.env.NODE_ENV !== 'production') {
