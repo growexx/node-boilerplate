@@ -1,4 +1,4 @@
-const mongoose = require('mongoose');
+const { Types } = require('mongoose');
 const User = require('../../models/user.model');
 const UserBasicProfileValidator = require('./userProfileValidator');
 const UploadService = require('../../util/uploadService');
@@ -21,7 +21,7 @@ class UserProfileService {
      * @param {Object} res Response
      * @param {function} next exceptionHandler
      */
-    static async getUserDetails (user) {
+    static async getUserDetails(user) {
         return user;
     }
 
@@ -33,7 +33,7 @@ class UserProfileService {
      * @param {Object} req.body RequestBody
      * @param {Object} res Response
      */
-    static async updateProfilePicture (req, user) {
+    static async updateProfilePicture(req, user) {
         const fileName = `${process.env.NODE_ENV}-proflie-pictures/${user._id}`;
         const Validator = new UserBasicProfileValidator(req.file);
         await Validator.validationProfilePicture();
@@ -43,7 +43,7 @@ class UserProfileService {
             profilePicture: filePath
         };
         await User.updateOne({
-            _id: mongoose.Types.ObjectId(user._id)
+            _id: new Types.ObjectId(user._id)
         }, {
             $set: updateData
         });
@@ -57,7 +57,7 @@ class UserProfileService {
      * @since 07/06/2022
      * @param {Object} res Response
      */
-     static async ftpConnection () {
+    static async ftpConnection() {
         var config = {
             host: process.env.FTP_HOST,
             port: parseInt(process.env.FTP_PORT),
@@ -68,23 +68,23 @@ class UserProfileService {
         const connectionPromise = new Promise((resolve, reject) => {
             try {
                 c.connect(config);
-                c.on('error', function(err) {
+                c.on('error', function (err) {
                     console.log('Error here', err);
                     reject(err);
                 });
-                c.on('ready', function() {
+                c.on('ready', function () {
                     var isConnected = c.connected;
-                    if(isConnected) {
+                    if (isConnected) {
                         resolve(c);
                     } else {
                         reject(false);
                     }
                 });
-            } catch(err) {
+            } catch (err) {
                 reject(err.message);
             }
         });
-        return connectionPromise; 
+        return connectionPromise;
     }
 
     /**
@@ -93,7 +93,7 @@ class UserProfileService {
      * @since 07/06/2022
      * @param {Object} req Request
      */
-    static async ftpFileUpload (req) {
+    static async ftpFileUpload(req) {
         let clientConn = await UserProfileService.ftpConnection();
         const ftpUploadPromise = new Promise((resolve, reject) => {
             clientConn.put(req.body.localFilePath, req.body.remoteFilePath, function (err) {
@@ -110,7 +110,7 @@ class UserProfileService {
      * @since 07/06/2022
      * @param {Object} req Request
      */
-    static async ftpFileDownload (req) {
+    static async ftpFileDownload(req) {
         let clientConn = await UserProfileService.ftpConnection();
         const ftpDownloadPromise = new Promise((resolve, reject) => {
             clientConn.get(req.body.remoteFilePath, function (err, stream) {
@@ -134,11 +134,11 @@ class UserProfileService {
      * @param {Object} req.body RequestBody
      * @param {Object} res Response
      */
-    static async deleteProfilePicture (user) {
+    static async deleteProfilePicture(user) {
         const fileName = `${process.env.NODE_ENV}-proflie-pictures/${user._id}`;
         await UploadService.deleteObject(fileName);
         await User.updateOne({
-            _id: mongoose.Types.ObjectId(user._id)
+            _id: new Types.ObjectId(user._id)
         }, {
             $set: {
                 profilePicture: ''
@@ -154,7 +154,7 @@ class UserProfileService {
      * @param {Object} req.body RequestBody
      * @param {Object} res Response
      */
-    static async changePassword (data, user, locale) {
+    static async changePassword(data, user, locale) {
         const Validator = new UserBasicProfileValidator(null, locale);
         Validator.password(data.oldPassword);
         Validator.password(data.newPassword);
