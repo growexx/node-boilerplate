@@ -23,6 +23,7 @@
     "@semantic-release/npm": "^7.0.10",
     "@semantic-release/release-notes-generator": "^9.0.2",
     "aws-sdk": "^2.1134.0",
+    "axios": "^1.5.0",
     "body-parser": "^1.17.2",
     "compression": "^1.7.4",
     "config": "^3.3.7",

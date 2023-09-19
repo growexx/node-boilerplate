@@ -9,6 +9,9 @@ swaggerJson = require('../services/forgotPassword/forgotPasswordSwagger')(swagge
 // User
 swaggerJson = require('../services/userProfile/userProfileSwagger')(swaggerJson);
 
+// Paypal
+swaggerJson = require('../services/paypal/paypalSwagger')(swaggerJson);
+
 const baseURL = process.env.BASE_URL.split('://');
 swaggerJson.host = baseURL[1];
 swaggerJson.info.description = `HostName / URL : ${swaggerJson.host}`;

@@ -11,6 +11,7 @@ const swaggerDoc = require('swagger-jsdoc');
 const swaggerDef = require('./public/swagger');
 const authRoutes = require('./routes/authRoutes');
 const userRoutes = require('./routes/userRoutes');
+const paypalRoutes = require('./routes/paypalRoutes');
 const sesRoutes = require('./routes/sesRoutes');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -87,6 +88,7 @@ app.get('/', (req, res) => {
 app.use('/auth', authRoutes);
 app.use('/user', userRoutes);
 app.use('/template', sesRoutes);
+app.use('/paypal', paypalRoutes);
 
 
 module.exports = app;

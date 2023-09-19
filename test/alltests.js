@@ -25,6 +25,8 @@ require('../server/services/sesTemplate/test/sesTemplate.test');
 // User
 require('../server/services/userProfile/test/userProfile.test');
 
+// Paypal
+require('../server/services/paypal/test/paypal.test')
 
 
 // End Testing
