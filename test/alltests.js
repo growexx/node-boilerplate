@@ -25,7 +25,9 @@ require('../server/services/sesTemplate/test/sesTemplate.test');
 // User
 require('../server/services/userProfile/test/userProfile.test');
 
+// Socket
 
+require('../server/util/test/socket.test');
 
 // End Testing
 require('./end.test');
