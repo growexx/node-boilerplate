@@ -4,12 +4,23 @@ const expect = chai.expect;
 const assert = chai.assert;
 const request = require('supertest');
 const TestCase = require('./testcaseSignup');
+const sinon = require('sinon');
+const SMSService = require('../../../util/sendSMS');
 chai.use(chaiHttp);
 const trueDataStatus = 1;
 let validRegistration;
 
 describe('Signup Account', () => {
     try {
+        let smsStub;
+        before(async () => {
+            smsStub = sinon.stub(SMSService, 'sendSMS');
+        });
+
+        after(async ()=> {
+            smsStub.restore();
+        });
+
         TestCase.registerAccount.forEach((data) => {
             it(data.it, (done) => {
                 request(process.env.BASE_URL)
@@ -64,7 +75,9 @@ describe('Signup Account', () => {
             const registerUser = {
                 email: 'john@mailinator.com',
                 password: '8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267e',
-                otp: 123456
+                phoneNumber: '0123456789',
+                otpMobile: 123456,
+                otp: 123456,
             };
             validRegistration = registerUser;
             request(process.env.BASE_URL)
@@ -146,6 +159,38 @@ describe('Verify Account', () => {
     }
 });
 
+describe('Verify Mobile', () => {
+    try {
+        TestCase.verifyMobile.forEach((data) => {
+            it(data.it, (done) => {
+                request(process.env.BASE_URL)
+                    .post('/auth/verify-account/mobile')
+                    .send(data.options)
+                    .end((err, res) => {
+                        expect(res.body.status).to.be.status;
+                        assert.equal(res.body.status, data.status);
+                        done();
+                    });
+            });
+        });
+
+        it('As a user, I should verify existing user with mobile', (done) => {
+            request(process.env.BASE_URL)
+                .post('/auth/verify-account/mobile')
+                .send({ mobile: validRegistration.phoneNumber, otp: validRegistration.otpMobile.toString() })
+                .end((err, res) => {
+                    expect(res.body.status).to.be.status;
+                    assert.equal(res.body.status, trueDataStatus);
+                    assert.equal(res.statusCode, 200);
+                    done();
+                });
+        });
+
+    } catch (exception) {
+        CONSOLE_LOGGER.error(exception);
+    }
+});
+
 describe('Resend OTP', () => {
     try {
         TestCase.resendOTP.forEach((data) => {
@@ -165,6 +210,45 @@ describe('Resend OTP', () => {
             request(process.env.BASE_URL)
                 .post('/auth/resend-otp')
                 .send({ email: validRegistration.email })
+                .end((err, res) => {
+                    expect(res.body.status).to.be.status;
+                    assert.equal(res.body.status, trueDataStatus);
+                    assert.equal(res.statusCode, 200);
+                    done();
+                });
+        });
+    } catch (exception) {
+        CONSOLE_LOGGER.error(exception);
+    }
+});
+
+describe('Resend Mobile OTP', () => {
+    try {
+        let smsStub;
+        before(async () => {
+            smsStub = sinon.stub(SMSService, 'sendSMS');
+        });
+
+        after(async ()=> {
+            smsStub.restore();
+        });
+        TestCase.resendMobileOTP.forEach((data) => {
+            it(data.it, (done) => {
+                request(process.env.BASE_URL)
+                    .post('/auth/resend-otp/mobile')
+                    .send(data.options)
+                    .end((err, res) => {
+                        expect(res.body.status).to.be.status;
+                        assert.equal(res.body.status, data.status);
+                        done();
+                    });
+            });
+        });
+
+        it('As a user, I should send resend OTP to user', (done) => {
+            request(process.env.BASE_URL)
+                .post('/auth/resend-otp/mobile')
+                .send({ mobile: validRegistration.phoneNumber })
                 .end((err, res) => {
                     expect(res.body.status).to.be.status;
                     assert.equal(res.body.status, trueDataStatus);

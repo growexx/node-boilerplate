@@ -23,7 +23,8 @@ module.exports = {
         ALPHA_NUMARIC: /^[\w@ ]+$/,
         templateName: /^[ A-Za-z0-9_@./#&+-]*$/,
         SUBJECT: /^[ A-Za-z0-9_@./#&+-]*$/,
-        URL: /(http(s)?:\/\/www\.)?[-a-zA-Z0-9@:%.+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%+.~#?&//=]*)/
+        URL: /(http(s)?:\/\/www\.)?[-a-zA-Z0-9@:%.+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%+.~#?&//=]*)/,
+        MOBILE: /^([+]\d{1,2})?\d{10}$/
     },
     OTPLENGTH: 6,
     STATUS: {

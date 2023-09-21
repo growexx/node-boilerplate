@@ -25,6 +25,9 @@ require('../server/services/sesTemplate/test/sesTemplate.test');
 // User
 require('../server/services/userProfile/test/userProfile.test');
 
+// utils
+require('../server/util/test/sendSMS.test');
+
 
 
 // End Testing

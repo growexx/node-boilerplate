@@ -43,6 +43,10 @@ const schema = new appMongoose.Schema({
         type: Number,
         default: 0
     },
+    otpMobile: {
+        type: Number,
+        default: 0
+    },
     phoneOtp: {
         type: Number,
         default: 0

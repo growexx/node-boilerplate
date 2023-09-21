@@ -13,7 +13,9 @@ const OpenaiController = require('../services/openai/openaiController');
 // Auth Routes
 router.post('/signup', SignUpController.signUp);
 router.post('/verify-account', SignUpController.verifyAccount);
+router.post('/verify-account/mobile', SignUpController.verifyMobile);
 router.post('/resend-otp', SignUpController.resendOTP);
+router.post('/resend-otp/mobile', SignUpController.resendMobileOTP);
 router.post('/signin', SignInController.login);
 router.post('/forgot-password', ForgotPasswordController.forgotPassword);
 router.post('/verify-token', ForgotPasswordController.verifyToken);

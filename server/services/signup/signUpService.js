@@ -1,7 +1,9 @@
 const crypt = require('../../util/crypt');
 const SignUpValidator = require('./signUpValidator');
 const UtilFunctions = require('../../util/utilFunctions');
+const SmsService = require('../../util/sendSMS');
 const Email = require('../../util/sendEmail');
+const Validator = require('../../util/validation');
 const User = require('../../models/user.model');
 
 /**
@@ -28,12 +30,15 @@ class SignUpService {
         if (!user) {
             const hash = await crypt.enCryptPassword(req.body.password);
             const otp = UtilFunctions.generateOtp();
+            const otpMobile = UtilFunctions.generateOtp();
             const userType = req.body.userType;
-            await SignUpService.saveOrUpdateRegistrationUser(req.body, hash, otp, userType);
+            await SignUpService.saveOrUpdateRegistrationUser(req.body, hash, otp, otpMobile, userType);
             const subject = 'Lets invent the future of work';
             const template = 'emailTemplates/verificationOtpMail.html';
             const appUrl = process.env.FRONTEND_URL;
             const templateVariables = { appUrl, otp };
+            const msg = `OTP is: ${otpMobile}.\n Use this to verify your mobile.`;
+            await SmsService.sendSMS(req.body.mobile, msg);
             await Email.prepareAndSendEmail([req.body.email], subject, template, templateVariables);
             return { email: req.body.email, role: userType };
         } else if (!user.isActive) {
@@ -86,11 +91,12 @@ class SignUpService {
      * @param {Object} otp otp
      * @param {Integer} userType 1 = user 2 = Client
      */
-    static async saveOrUpdateRegistrationUser (reqObj, hash, otp, userType) {
+    static async saveOrUpdateRegistrationUser (reqObj, hash, otp, otpMobile, userType) {
         reqObj.password = hash;
         reqObj.isActive = CONSTANTS.STATUS.PENDING;
         reqObj.otp = otp;
         reqObj.role = userType;
+        reqObj.otpMobile = otpMobile;
         await User.create(reqObj);
     }
 
@@ -125,6 +131,36 @@ class SignUpService {
     }
 
     /**
+     * @desc This function is being used to verify user account
+     * @author Growexx
+     * @since 21/09/2023
+     * @param {Object} req Request
+     * @param {Object} req.body RequestBody
+     * @param {Object} req.body.email email
+     * @param {Object} req.body.otp otp
+     */
+    static async verifyMobile (req, locale) {
+        const validator = new Validator(locale);
+        validator.mobile(req.body.mobile);
+        validator.otp(req.body.otp);
+        const user = await User.findOne({ phoneNumber: req.body.mobile });
+        if (user && user.otpMobile === _.toInteger(req.body.otp)) {
+            await User.updateOne({ _id: user._id },
+                { $set:
+                   {
+                     otpMobile: null
+                   }
+                });
+            return crypt.getUserToken(user);
+        } else {
+            throw {
+                message: MESSAGES.INVALID_OTP,
+                statusCode: 400
+            };
+        }
+    }
+
+    /**
      * @desc This function is being used to resent OTP in case of email not received
      * @author Growexx
      * @since 27/03/2021
@@ -145,6 +181,32 @@ class SignUpService {
             const templateVariables = { appUrl, otp: user.otp };
             await Email.prepareAndSendEmail([user.email], subject, template, templateVariables);
             return { email: req.body.email };
+        } else {
+            throw {
+                message: MESSAGES.USER_NOT_FOUND,
+                statusCode: 400
+            };
+        }
+    }
+
+    /**
+     * @desc This function is being used to resent OTP in case of SMS not received
+     * @author Growexx
+     * @since 21/09/2023
+     * @param {Object} req Request
+     * @param {Object} req.body RequestBody
+     * @param {Object} req.body.mobile mobile
+     */
+    static async resentMobileOTP (req, locale) {
+        const Validator = new SignUpValidator(req.body, locale);
+        Validator.mobile(req.body.mobile);
+        const { mobile } = req.body;
+        const user = await User.findOne({ phoneNumber: mobile });
+        if (user) {
+            const otp = user.otpMobile;
+            const msg = `OTP is: ${otp}.\n Use this to verify your mobile.`;
+            await SmsService.sendSMS(req.body.mobile, msg);
+            return { mobile: req.body.mobile };
         } else {
             throw {
                 message: MESSAGES.USER_NOT_FOUND,

@@ -93,6 +93,53 @@ module.exports = {
         },
         status: 0
     }],
+    verifyMobile: [{
+        it: 'As a user, I should check blank mobile.',
+        options: {
+            mobile: '',
+            otp: 123456
+        },
+        status: 0
+    },
+    {
+        it: 'As a user, I should check mobile in request.',
+        options: {
+            otp: 0
+        },
+        status: 0
+    },
+    {
+        it: 'As a user, I should check blank otp in request.',
+        options: {
+            mobile: '+111234567890',
+            otp: 0
+        },
+        status: 0
+    },
+    {
+        it: 'As a user, I should check blank otp in request as string.',
+        options: {
+            mobile: '+111234567890',
+            otp: ''
+        },
+        status: 0
+    },
+    {
+        it: 'As a user, I should check otp length.',
+        options: {
+            mobile: '+111234567890',
+            otp: 12345
+        },
+        status: 0
+    },
+    {
+        it: 'As a user, I should check invalid otp entered.',
+        options: {
+            mobile: '+11123456789',
+            otp: 123457
+        },
+        status: 0
+    }],
     resendOTP: [{
         it: 'As a user, I should check blank email.',
         options: {
@@ -112,6 +159,27 @@ module.exports = {
         options: {
             email: 'abc@gmai.com',
             otp: 0
+        },
+        status: 0
+    }],
+    resendMobileOTP: [{
+        it: 'As a user, I should check blank mobile.',
+        options: {
+            mobile: ''
+        },
+        status: 0
+    },
+    {
+        it: 'As a user, I should check mobile in request.',
+        options: {
+
+        },
+        status: 0
+    },
+    {
+        it: 'As a user, I should check not mobile available.',
+        options: {
+            mobile: '+11111111111'
         },
         status: 0
     }]

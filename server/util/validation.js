@@ -97,7 +97,20 @@ class Validator {
         }
     }
 
-
+    /**
+     * @desc This function is being used to check mobile
+     * @author Growexx
+     * @since 24/04/2023
+     * @param {string} mobile mobile
+     */
+    mobile (mobile, key = 'mobile') {
+        if (!mobile) {
+            throw new GeneralError(this.__(REQUIRED, key), 400);
+        }
+        if (!CONSTANTS.REGEX.MOBILE.test(mobile)) {
+            throw new GeneralError(this.__(INVALID, key), 400);
+        }
+    }
 }
 
 module.exports = Validator;

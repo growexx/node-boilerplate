@@ -8,7 +8,8 @@ module.exports = {
         isActive: 1,
         opt: 123456,
         firstName: 'user',
-        lastName: 'last'
+        lastName: 'last',
+        phoneNumber: '1234567890'
     },
     {
         _id: mongoose.Types.ObjectId('5f083c352a7908662c334535'),
@@ -16,7 +17,8 @@ module.exports = {
         employeeId: 2,
         role: 1,
         isActive: 0,
-        opt: 123456
+        opt: 123456,
+        phoneNumber: '1234567890'
     },
     {
         _id: mongoose.Types.ObjectId('5f5f2cd2f1472c3303b6b861'),
@@ -25,6 +27,7 @@ module.exports = {
         role: 4,
         isActive: 1,
         firstName: 'Test',
-        lastName: 'Admin'
+        lastName: 'Admin',
+        phoneNumber: '1234567890'
     }]
 };
