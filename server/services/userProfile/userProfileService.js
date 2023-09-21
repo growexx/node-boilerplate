@@ -64,8 +64,8 @@ class UserProfileService {
             user: process.env.FTP_USER,
             password: process.env.FTP_PASSWORD
         };
-        let c = new Client();
-        const connectionPromise = new Promise((resolve, reject) => {
+        const c = new Client();
+        return new Promise((resolve, reject) => {
             try {
                 c.connect(config);
                 c.on('error', function (err) {
@@ -84,7 +84,6 @@ class UserProfileService {
                 reject(err.message);
             }
         });
-        return connectionPromise;
     }
 
     /**
@@ -94,14 +93,15 @@ class UserProfileService {
      * @param {Object} req Request
      */
     static async ftpFileUpload(req) {
-        let clientConn = await UserProfileService.ftpConnection();
-        const ftpUploadPromise = new Promise((resolve, reject) => {
+        const clientConn = await UserProfileService.ftpConnection();
+        return new Promise((resolve, reject) => {
             clientConn.put(req.body.localFilePath, req.body.remoteFilePath, function (err) {
-                if (err) reject(err.message);
+                if (err) {
+                    reject(err.message);
+                }
                 resolve(clientConn.end());
             });
         });
-        return ftpUploadPromise;
     }
 
     /**
@@ -111,8 +111,8 @@ class UserProfileService {
      * @param {Object} req Request
      */
     static async ftpFileDownload(req) {
-        let clientConn = await UserProfileService.ftpConnection();
-        const ftpDownloadPromise = new Promise((resolve, reject) => {
+        const clientConn = await UserProfileService.ftpConnection();
+        return new Promise((resolve, reject) => {
             clientConn.get(req.body.remoteFilePath, function (err, stream) {
                 if (err) {
                     reject(err.message);
@@ -123,7 +123,6 @@ class UserProfileService {
                 }
             });
         });
-        return ftpDownloadPromise;
     }
 
     /**
