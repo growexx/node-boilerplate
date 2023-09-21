@@ -7,7 +7,7 @@ const INVALID = 'FIELD_NOT_VALID';
  * @name alidator
  */
 class Validator {
-    constructor (locale) {
+    constructor(locale) {
         this.NOT_VALID = INVALID;
         this.REQUIRED = REQUIRED;
 
@@ -16,21 +16,6 @@ class Validator {
         }
     }
 
-    /**
-     * @desc This function is being used to validate mongoId of user
-     * @author Growexx
-     * @param {ObjectId} id User Id of Activity
-     * @since 17/06/2022
-    */
-    mongoId(id, field) {
-        if (!id) {
-            throw new GeneralError(this.__(REQUIRED, field), 400);
-        }
-
-        if (!mongoose.Types.ObjectId(id)) {
-            throw new GeneralError(this.__(INVALID, field), 400);
-        }
-    }
 
     /**
      * @desc This function is being used to validate phone number
@@ -50,7 +35,7 @@ class Validator {
      * @since 01/03/2021
      * @param {string} email Email
      */
-    email (email) {
+    email(email) {
         if (!email) {
             throw new GeneralError(this.__(REQUIRED, 'Email'), 400);
         }
@@ -66,7 +51,7 @@ class Validator {
      * @since 01/03/2021
      * @param {string} password Password
      */
-    password (password) {
+    password(password) {
         if (!password) {
             throw new GeneralError(this.__(REQUIRED, 'Password'), 400);
         }
@@ -82,7 +67,7 @@ class Validator {
      * @param {string} id id
      * @since 27/03/2021
      */
-    otp (otp, field = 'OTP') {
+    otp(otp, field = 'OTP') {
         if (!otp) {
             throw new GeneralError(this.__(REQUIRED, field), 400);
         }

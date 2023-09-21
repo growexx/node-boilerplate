@@ -8,7 +8,7 @@ const MailComposer = require('nodemailer');
 
 class EmailService {
 
-    static async prepareAndSendEmail (email, subject, template, templateVariables) {
+    static async prepareAndSendEmail(email, subject, template, templateVariables) {
         if (process.env.NODE_ENV !== 'testing') {
             let htmlMessage = await readFileAsync(template, 'utf8');
             templateVariables.year = MOMENT().year();
@@ -39,7 +39,7 @@ class EmailService {
         }
     }
 
-    static async prepareAndSendEmailWithAttachment (email, subject, template, templateVariables, attachments) {
+    static async prepareAndSendEmailWithAttachment(email, subject, template, templateVariables, attachments) {
         if (process.env.NODE_ENV !== 'testing') {
             let htmlMessage = await readFileAsync(template, 'utf8');
             templateVariables.year = MOMENT().year();
@@ -70,7 +70,7 @@ class EmailService {
         }
     }
 
-    static async sendVerificationEmail (email, subject, template) {    
+    static async sendVerificationEmail(email, subject, template) {
         var smtpConfig = {
             service: 'Gmail',
             auth: {
@@ -80,28 +80,27 @@ class EmailService {
         };
         var transporter = MailComposer.createTransport(smtpConfig);
         var mailOptions = {
-            from: `Payal Patel <${process.env.SENDER_EMAIL}>`,
+            subject,
             to: email,
-            subject: subject,
+            from: `Payal Patel <${process.env.SENDER_EMAIL}>`,
             html: template,
             context: {
                 Data: 'Send successful Message!!!'
             }
         };
-        const sendMailPromise = new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             try {
-                transporter.sendMail(mailOptions, (error, response) => {
+                transporter.sendMail(mailOptions, (error) => {
                     if (error) {
                         reject(error);
                     } else {
                         resolve(true);
                     }
                 });
-            } catch(err) {
+            } catch (err) {
                 reject(err.message);
             }
-        }); 
-        return sendMailPromise;
+        });
     }
 }
 

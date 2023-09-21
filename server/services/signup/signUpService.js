@@ -4,8 +4,8 @@ const UtilFunctions = require('../../util/utilFunctions');
 const Email = require('../../util/sendEmail');
 const User = require('../../models/user.model');
 const UserVerification = require('../../models/userVerification.model');
-const { v4: uuidv4 } = require("uuid");
-const Speakeasy = require("speakeasy");
+const { v4: uuidv4 } = require('uuid');
+const Speakeasy = require('speakeasy');
 
 /**
  * Class represents services for Sign-up.
@@ -184,18 +184,18 @@ class SignUpService {
 
             const token = await SignUpService.getTokenForSMS();
             const newVerification = new UserVerification({
+                uniqueString,
                 userid: id,
-                uniqueString: uniqueString,
                 otp: token,
                 createdAt: Date.now(),
                 expiresAt: Date.now() + 3600000
             });
             await newVerification.save();
 
-            const filePath = "http://localhost:3000/verify-mfa";
+            const filePath = 'http://localhost:3000/verify-mfa';
             const subject = 'Verify Your Email',
                 template = `<p>Verify your email to complete the signup.</p><p>This link expires in 1 hour.</p>
-                <p>Click <a href=${filePath + "/" + id + "/" + uniqueString}>here</a> to proceed.</p>`;
+                <p>Click <a href=${filePath + '/' + id + '/' + uniqueString}>here</a> to proceed.</p>`;
 
             const isMailSent = await Email.sendVerificationEmail(
                 [req.body.email],
@@ -204,9 +204,9 @@ class SignUpService {
             );
             const isSMSSent = await SignUpService.sendVerificationSMS(id, token);
 
-            if(isMailSent && isSMSSent) {
+            if (isMailSent && isSMSSent) {
                 return {
-                    data: "Email and SMS sent successfully."
+                    data: 'Email and SMS sent successfully.'
                 }
             }
         } else if (!user.isActive) {
@@ -226,12 +226,11 @@ class SignUpService {
      */
     static async getTokenForSMS() {
         const secret = Speakeasy.generateSecret({ length: 20 });
-        const token = Speakeasy.totp({
+        return Speakeasy.totp({
             secret: secret.base32,
             encoding: 'base32',
             window: 1,
         });
-        return token;
     }
 
     /**
@@ -243,7 +242,7 @@ class SignUpService {
      */
     static async sendVerificationSMS(userId, token) {
         const userDetails = await User.findOne({ _id: userId }).exec();
-        const sendSMSPromise = new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             try {
                 const accountSid = process.env.TWILIO_ACCOUNT_ID;
                 const authToken = process.env.TWILIO_AUTH_TOKEN;
@@ -254,7 +253,7 @@ class SignUpService {
                         to: userDetails.phoneNumber,
                         from: process.env.TWILIO_PHONE_NUMBER
                     })
-                    .then(message => {
+                    .then(() => {
                         resolve(true);
                     })
                     .catch(err => {
@@ -264,7 +263,6 @@ class SignUpService {
                 reject(err.message);
             }
         });
-        return sendSMSPromise;
     }
 
     /**
@@ -277,12 +275,11 @@ class SignUpService {
      * @param {String} req.body.uniqueString uniqueString
      * @param {String} req.body.otp otp
      */
-    static async verifyMFA(req, res) {
-        const userId = req.body.userId;
-        const uniqueString = req.body.uniqueString;
+    static async verifyMFA(req) {
+        const { userId, uniqueString } = req.body;
         const otp = req.body.otp;
         const userVerificationDetails = await UserVerification.findOne({ userid: userId }).exec();
-        const verifyPromise = new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             try {
                 if (otp == null) {
                     reject({ data: MESSAGES.ENTER_VALID_OTP });
@@ -295,22 +292,22 @@ class SignUpService {
                                 User.deleteOne({
                                     _id: userId
                                 })
-                                    .then((msg) => {
+                                    .then(() => {
                                         resolve(MESSAGES.EMAIL_LINK_EXPIRED);
-                                    })
+                                    });
                             });
                     } else if ((userVerificationDetails.otp === otp) && (userVerificationDetails.uniqueString === uniqueString)) {
                         User.updateOne({ _id: userId }, { isActive: CONSTANTS.STATUS.ACTIVE })
                             .then(() => {
                                 UserVerification.deleteOne({ userid: userId })
-                                    .then((msg) => {
+                                    .then(() => {
                                         resolve(MESSAGES.USER_MFA_VERIFY_SUCCESS);
                                     })
-                                    .catch(err => {
+                                    .catch(() => {
                                         reject({ data: MESSAGES.ERROR_MSG });
-                                    })
+                                    });
                             })
-                            .catch(err => {
+                            .catch(() => {
                                 reject({ data: MESSAGES.ERROR_MSG });
                             })
                     } else {
@@ -321,7 +318,6 @@ class SignUpService {
                 reject({ data: MESSAGES.USER_NOT_FOUND });
             }
         });
-        return verifyPromise;
     }
 }
 
