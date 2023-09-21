@@ -61,3 +61,23 @@ Create an environment file with extension ```.env```.
 
 - To execute the code, run the following command ```npm start```
 - Run the command ```npm t``` for testing
+
+
+## Twilio Verification OTP
+
+- Go to Twilio and add below credentials in env
+```TWILIO_ACCOUNT_ID```
+
+```TWILIO_AUTH_TOKEN```
+
+Phone number from which you want to send is stored in  ```TWILIO_PHONE_NUMBER```
+
+
+## Send mail using Nodemailer
+
+Add your Gmail SMTP username and password in above variables
+
+```SENDER_EMAIL```
+
+```EMAIL_PASSWORD```
+

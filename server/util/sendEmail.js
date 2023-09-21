@@ -85,7 +85,7 @@ class EmailService {
             subject: subject,
             html: template,
             context: {
-                Data: 'Send successfull Message!!!'
+                Data: 'Send successful Message!!!'
             }
         };
         const sendMailPromise = new Promise((resolve, reject) => {
