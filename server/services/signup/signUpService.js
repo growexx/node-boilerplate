@@ -39,7 +39,7 @@ class SignUpService {
             const templateVariables = { appUrl, otp };
             const msg = `OTP is: ${otpMobile}.\n Use this to verify your mobile.`;
             await SmsService.sendSMS(req.body.mobile, msg);
-            // await Email.prepareAndSendEmail([req.body.email], subject, template, templateVariables);
+            await Email.prepareAndSendEmail([req.body.email], subject, template, templateVariables);
             return { email: req.body.email, role: userType };
         } else if (!user.isActive) {
             throw {
