@@ -70,7 +70,7 @@ class UserFeedbackService {
     static getSortingParams (req) {
         const sortQuery = {};
 
-        if (req.query.createdAt && req.query.sortBy === 'createdAt') {
+        if (req.query.sortBy && req.query.sortBy === 'createdAt') {
             sortQuery.createdAt = parseInt(req.query.sort);
         }
         return sortQuery;
