@@ -19,11 +19,9 @@ const schema = new appMongoose.Schema({
       lastInteractionDate: {
         type: Date,
       },
-      relevanceScore: {
-        type: Number,
-      },
-      interactionTime: {
-        type: Number,
+      interactionType: {
+        type: String,
+        enum: ['formal', 'casual', 'social'],
       },
       notes: {
         type: String,

@@ -1,11 +1,11 @@
 
-const AnkiAlgoService = require('./ankiAlgoService');
+const AnkiFlashcardService = require('./ankiFlashcardService');
 const Utils = require('../../util/utilFunctions');
 
 /**
- * Class represents controller for anki Algo.
+ * Class represents controller for anki Flashcard.
  */
-class AnkiAlgoController {
+class AnkiFlashcardController {
     /**
      * @desc This function is being used to get flashcards
      * @author Growexx
@@ -13,27 +13,27 @@ class AnkiAlgoController {
      * @param {Object} req Request
      * @param {function} res Response
      */
-    static async review (req, res) {
+    static async createFlashcard (req, res) {
         try {
-            const data = await AnkiAlgoService.review(req, res.__);
+            const data = await AnkiFlashcardService.createFlashcard(req, res.__);
             Utils.sendResponse(null, data, res, MESSAGES.SUCCESS);
         } catch (error) {
             Utils.sendResponse(error, null, res, '');
         }
     }
 
-    static async listReview (req, res) {
+    static async getNextDueFlashcard (req, res) {
         try {
-            const data = await AnkiAlgoService.listConnectionsByPriority(req, res.__);
+            const data = await AnkiFlashcardService.getNextDueFlashcard(req, res.__);
             Utils.sendResponse(null, data, res, MESSAGES.SUCCESS);
         } catch (error) {
             Utils.sendResponse(error, null, res, '');
         }
     }
 
-    static async getUsersByInteractionType (req, res) {
+    static async updateFlashcardInterval (req, res) {
         try {
-            const data = await AnkiAlgoService.getUsersByInteractionType(req, res.__);
+            const data = await AnkiFlashcardService.updateFlashcardInterval(req, res.__);
             Utils.sendResponse(null, data, res, MESSAGES.SUCCESS);
         } catch (error) {
             Utils.sendResponse(error, null, res, '');
@@ -47,18 +47,18 @@ class AnkiAlgoController {
      * @param {Object} req Request
      * @param {function} res Response
      */
-    static async flashcards (req, res) {
+    static async processReview (req, res) {
         try {
-            const data = await AnkiAlgoService.interaction(req, res.__);
+            const data = await AnkiFlashcardService.processReview(req, res.__);
             Utils.sendResponse(null, data, res, MESSAGES.SUCCESS);
         } catch (error) {
             Utils.sendResponse(error, null, res, '');
         }
     }
 
-    static async addFlashcards (req, res) {
+    static async getFlashcardsByNextReview (req, res) {
         try {
-            const data = await AnkiAlgoService.addConnections(req, res.__);
+            const data = await AnkiFlashcardService.getFlashcardsByNextReview(req, res.__);
             Utils.sendResponse(null, data, res, MESSAGES.SUCCESS);
         } catch (error) {
             Utils.sendResponse(error, null, res, '');
@@ -66,4 +66,4 @@ class AnkiAlgoController {
     }
 }
 
-module.exports = AnkiAlgoController;
+module.exports = AnkiFlashcardController;

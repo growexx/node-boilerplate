@@ -33,13 +33,13 @@ class AnkiAlgoService {
 
     static async listConnectionsByPriority() {
       const connections = await LinkedInConnection.find({}).lean();
-  
+
       connections.sort((a, b) => {
         const priorityScoreA = this.calculatePriorityScore(a);
         const priorityScoreB = this.calculatePriorityScore(b);
         return priorityScoreB - priorityScoreA;
       });
-  
+
       return connections;
     }
 
@@ -52,25 +52,32 @@ class AnkiAlgoService {
      * @param {function} next exceptionHandler Calls exceptionHandler
      */
     static async interaction (req, res) {
-      const { id, interactionTime } = req.body;
+      const { id } = req.body;
       const connection = await LinkedInConnection.findById(id);
       if (!connection) {
         throw ('Flashcard not found.');
       }
-      this.updateInteraction(connection, interactionTime);
+      this.updateInteraction(connection);
       await connection.save();
       return 'Review recorded successfully.';
     }
 
-    static updateInteraction(connection, interactionTime) {
-      connection.interactionTime = interactionTime;
+    static updateInteraction(connection) {
       connection.lastInteractionDate = new Date();
       connection.priorityScore = this.calculatePriorityScore(connection);
     }
 
     static calculatePriorityScore(connection) {
-      const daysSinceLastInteraction = Math.floor((new Date() - connection.lastInteractionDate) / (1000 * 60 * 60 * 24));
-      return (connection.interactionTime * 0.2) + (connection.relevanceScore * 0.3) - (daysSinceLastInteraction * 0.5);
+      const interactionTypePriorities = {
+        casual: 0.5,
+        social: 0.3,
+        formal: 0.2,
+      };
+      const interactionTypeWeight = interactionTypePriorities[connection.interactionType] || 0;
+      const daysSinceLastInteraction = Math.floor((new Date() - new Date(connection.lastInteractionDate)) / (1000 * 60 * 60 * 24));
+      const daysWeighted = Math.pow(daysSinceLastInteraction + 1, 1.5);
+
+      return interactionTypeWeight * daysWeighted;
     }
 
     static formatNextReviewTime(timestamp) {
@@ -87,9 +94,45 @@ class AnkiAlgoService {
     }
 
     static async addConnections (req, res){
-      const {name, title, company, lastInteractionDate, relevanceScore, interactionTime, notes} = req.body;
-      const data = {name, title, company, lastInteractionDate, relevanceScore, interactionTime, notes}
-      return await LinkedInConnection.create(data)
+      const connections  = req.body;
+
+      if (!Array.isArray(connections) || connections.length === 0) {
+        throw new Error('Invalid input. Expected an array of connections.');
+      }
+      for (const connection of connections) {
+        connection.priorityScore = this.calculatePriorityScore(connection);
+      }
+
+      const result = await LinkedInConnection.insertMany(connections);
+
+      return result;
+    }
+
+    static async getUsersByInteractionType (req, res) {
+      const connections = await LinkedInConnection.find({}).lean();
+
+      const groupedConnections = connections.reduce((result, connection) => {
+        const { interactionType } = connection;
+
+        if (!result[interactionType]) {
+          result[interactionType] = [];
+        }
+
+        result[interactionType].push(connection);
+        return result;
+      }, {});
+
+      for (const interactionType in groupedConnections) {
+        if (groupedConnections.hasOwnProperty(interactionType)) {
+          const connectionsInGroup = groupedConnections[interactionType];
+          connectionsInGroup.sort((a, b) => {
+            const priorityScoreA = this.calculatePriorityScore(a);
+            const priorityScoreB = this.calculatePriorityScore(b);
+            return priorityScoreB - priorityScoreA;
+          });
+        }
+      }
+      return groupedConnections;
     }
 }
 
