@@ -26,7 +26,7 @@ describe('Generate text', () => {
                 },
             };
             const mockError = new Error('Error calling api');
-            const createChatCompletionStub = sinon.stub(Openai, 'createChatCompletion').throws(mockError);
+            const createChatCompletionStub = sinon.stub(Openai.chat.completions, 'create').throws(mockError);
             request(process.env.BASE_URL)
                 .post('/auth/text-generator')
                 .send(prompt)
@@ -53,7 +53,7 @@ describe('Generate text', () => {
                     ],
                 },
             };
-            const createChatCompletionStub = sinon.stub(Openai, 'createChatCompletion').returns(response);
+            const createChatCompletionStub = sinon.stub(Openai.chat.completions, 'create').returns(response);
             request(process.env.BASE_URL)
                 .post('/auth/text-generator')
                 .send(prompt)

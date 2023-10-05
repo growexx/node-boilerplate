@@ -25,7 +25,7 @@ class OpenaiService {
           },
         ],
       };
-      const response = await openai.createChatCompletion(data);
+      const response = await openai.chat.completions.create(data);
       return response.data.choices[0].message.content;
     } catch (error) {
       console.error('Error calling OpenAI API:', error);
