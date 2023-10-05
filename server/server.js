@@ -51,7 +51,7 @@ i18n.configure({
     directory: `${__dirname}/locales`,
     extension: '.json',
     prefix: '',
-    logDebugFn(msg) {
+    logDebugFn (msg) {
         if (process.env.LOCAL === 'true') {
             CONSOLE_LOGGER.debug(`i18n::${CONSTANTS.LOG_LEVEL}`, msg);
         }
@@ -79,8 +79,8 @@ app.use(methodOverride());
 app.set('trust proxy', true);
 (async () => {
     redisClient = redis.createClient();
-    redisClient.on('error', (error) => console.error(`Error : ${error}`));
     await redisClient.connect();
+    redisClient.on('error', (error) => console.error(`Error : ${error}`));
     console.log('Redis server Connected');
 })();
 
