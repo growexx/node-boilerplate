@@ -80,6 +80,90 @@
  *                  email: developer@mailinator.com
  *                  password: 8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267e
  *
+ *          PushNotificationAndroid:
+ *              type: object
+ *              required:
+ *                  - title
+ *                  - body
+ *                  - deviceToken
+ *              properties:
+ *                  title:
+ *                      type: string
+ *                      description: Notification Title
+ *                  body:
+ *                      type: string
+ *                      description: Notification Body
+ *                  deviceToken:
+ *                      type: string
+ *                      description: Device Token
+ *              example:
+ *                  title: welcome
+ *                  body: welcome to the application
+ *                  deviceToken: device token
+ *
+ *          CreateNotification:
+ *              type: object
+ *              required:
+ *                  - userId
+ *                  - title
+ *                  - body
+ *                  - click_action
+ *                  - icon
+ *              properties:
+ *                  userId:
+ *                      type: string
+ *                      description: User Id
+ *                  title:
+ *                      type: string
+ *                      description: Notification Title
+ *                  body:
+ *                      type: string
+ *                      description: Notification Body
+ *                  click_action:
+ *                      type: string
+ *                      description: Notification Navigation
+ *                  icon:
+ *                      type: string
+ *                      description: Notification Icon
+ *              example:
+ *                  userId: xxxxxx
+ *                  title: welcome
+ *                  body: welcome to the application
+ *                  click_action: product page
+ *                  icon: logo
+ *
+ * 
+ *          BatchNotificationReq:
+ *              type: object
+ *              required:
+ *                  
+ *              properties:
+ *                  
+ *              example:
+ *                  
+ *
+ *          UpdateNotificationTokenReq:
+ *              type: object
+ *              required:
+ *                  - deviceType
+ *              properties:
+ *                  deviceType:
+ *                      type: string
+ *                      description: Device Type
+ *              example:
+ *                  deviceType: ios
+ *
+ *          ValidateTokenReq:
+ *              type: object
+ *              required:
+ *                  - deviceType
+ *              properties:
+ *                  deviceType:
+ *                      type: string
+ *                      description: Device Type
+ *              example:
+ *                  deviceType: ios
+ *
  *          AgencySignUp:
  *              type: object
  *              required:
@@ -301,6 +385,77 @@
  *                      username: researcher@mailinator.com
  *                      role: research
  *                      token: TOKEN
+
+ *          successNotificationAndroid:
+ *              type: object
+ *              properties:
+ *                  status:
+ *                      $ref: '#/components/userProperties/properties/status'
+ *                  message:
+ *                      $ref: '#/components/errorProperties/properties/message'
+ *                  data:
+ *                      $ref: '#/components/userProperties/properties/data'
+ *              example:
+ *                  status: true
+ *                  message: Push notification sent successfully
+ *                  data:
+
+ *          createNotification:
+ *              type: object
+ *              properties:
+ *                  status:
+ *                      $ref: '#/components/userProperties/properties/status'
+ *                  message:
+ *                      $ref: '#/components/errorProperties/properties/message'
+ *                  data:
+ *                      $ref: '#/components/userProperties/properties/data'
+ *              example:
+ *                  status: true
+ *                  message: Notification Create Successfully
+ *                  data:
+ *
+ *          batchNotification:
+ *              type: object
+ *              properties:
+ *                  status:
+ *                      $ref: '#/components/userProperties/properties/status'
+ *                  message:
+ *                      $ref: '#/components/errorProperties/properties/message'
+ *                  data:
+ *                      $ref: '#/components/userProperties/properties/data'
+ *              example:
+ *                  status: true
+ *                  message: Notification Sent Successfully
+ *                  data:
+ *                     
+ *          UpdateNotificationToken:
+ *              type: object
+ *              properties:
+ *                  status:
+ *                      $ref: '#/components/userProperties/properties/status'
+ *                  message:
+ *                      $ref: '#/components/errorProperties/properties/message'
+ *                  data:
+ *                      $ref: '#/components/userProperties/properties/data'
+ *              example:
+ *                  status: true
+ *                  message: Notification Token Updated Successfully
+ *                  data:
+ * 
+ *          ValidateToken:
+ *              type: object
+ *              properties:
+ *                  status:
+ *                      $ref: '#/components/userProperties/properties/status'
+ *                  message:
+ *                      $ref: '#/components/errorProperties/properties/message'
+ *                  data:
+ *                      $ref: '#/components/userProperties/properties/data'
+ *              example:
+ *                  status: true
+ *                  message: Token Validate Successfully
+ *                  data:
+ *                     
  *
  *          successUploadProfilePicture:
  *              allOf:
@@ -343,4 +498,3 @@
  *                  status: true
  *                  message: Password changed successfully
  */
-
