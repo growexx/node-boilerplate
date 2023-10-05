@@ -16,10 +16,17 @@ require('./init.test');
 require('../server/services/signup/test/signup.test');
 require('../server/services/signin/test/signin.test');
 require('../server/services/forgotPassword/test/forgotPassword.test');
+require('../server/services/openai/test/openai.test');
+
+
+// AWS SES
+require('../server/services/sesTemplate/test/sesTemplate.test');
 
 // User
 require('../server/services/userProfile/test/userProfile.test');
 require('../server/services/pushNotification/test/pushNotification.test');
+
+
 
 // End Testing
 require('./end.test');

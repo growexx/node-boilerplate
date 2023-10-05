@@ -77,3 +77,9 @@ Create an environment file with extension `.env`.
 - Change the configurations in the `server/util/constants.js`
 - Where to find Sender ID: Go to Project settings > General > Your Apps > SDK setup and configuration > Click on config
 - Where to find Server Key: Go to Project settings > Cloud Messaging > Cloud Messaging API > Add Server Key
+- To execute the code, run the following command `npm start`
+- Run the command `npm t` for testing
+
+## AWS SES
+
+- You can perform the CRUD operations on AWS SES template.

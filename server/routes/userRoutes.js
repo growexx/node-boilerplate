@@ -9,6 +9,8 @@ router.get('/details', AuthMiddleWare, ACLMiddleWare, userProfileController.getU
 router.put('/picture', AuthMiddleWare, ACLMiddleWare, UploadMiddleWare.single('photo'), userProfileController.updateProfilePicture);
 router.delete('/picture', AuthMiddleWare, ACLMiddleWare, userProfileController.deleteProfilePicture);
 router.put('/password', AuthMiddleWare, userProfileController.changePassword);
+router.post('/ftp/upload', userProfileController.ftpFileUpload);
+router.post('/ftp/download', userProfileController.ftpFileDownload);
 
 // Android Push Notification
 router.post(
