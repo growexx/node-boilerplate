@@ -231,7 +231,7 @@
  *              type: object
  *              required:
  *                  - token
- *                  - asswor
+ *                  - password
  *              properties:
  *                  token:
  *                      $ref: '#/components/userProperties/properties/token'
@@ -239,7 +239,7 @@
  *                      $ref: '#/components/userProperties/properties/asswor'
  *              example:
  *                  token: 4hoR8EAXYEbT
- *                  asswor: SHA256 encripted password
+ *                  password: SHA256 encrypted password
  *
  *          passwordInvalid:
  *              allOf:
@@ -341,6 +341,6 @@
  *                      $ref: '#/components/errorProperties/properties/message'
  *              example:
  *                  status: true
- *                  message: CHANGE_PASSWORD_SUCCESS
+ *                  message: Password changed successfully
  */
 
