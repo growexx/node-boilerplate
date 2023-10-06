@@ -81,3 +81,6 @@ Add your Gmail SMTP username and password in above variables
 
 ```EMAIL_PASSWORD```
 
+## AWS SES 
+
+- You can perform the CRUD operations on AWS SES template.
