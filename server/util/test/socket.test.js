@@ -58,6 +58,21 @@ describe('Socket events', () => {
             done();
         });
 
+        it('should disconnect with client', (done)=>{
+            client.onmessage = (e) => {
+                const message = JSON.parse(e.data);
+                if (message.action === 'connected' ) {
+                    client.send(JSON.stringify({ authBody }));
+                    client.send(JSON.stringify({ action: 'disconnectUser' }));
+                    done();
+                }
+                else if (message.action === 'disconnectUser') {
+                    client.send(JSON.stringify({ action: 'disconnectUser' }));
+                    done();
+                }
+            };
+        });
+
         it('should successfully register a new user', (done)=>{
             client.onmessage = (e) => {
                 const message = JSON.parse(e.data);
