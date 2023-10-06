@@ -8,7 +8,7 @@ const MailComposer = require('nodemailer');
 
 class EmailService {
 
-    static async prepareAndSendEmail(email, subject, template, templateVariables) {
+    static async prepareAndSendEmail (email, subject, template, templateVariables) {
         if (process.env.NODE_ENV !== 'testing') {
             let htmlMessage = await readFileAsync(template, 'utf8');
             templateVariables.year = MOMENT().year();
@@ -39,7 +39,7 @@ class EmailService {
         }
     }
 
-    static async prepareAndSendEmailWithAttachment(email, subject, template, templateVariables, attachments) {
+    static async prepareAndSendEmailWithAttachment (email, subject, template, templateVariables, attachments) {
         if (process.env.NODE_ENV !== 'testing') {
             let htmlMessage = await readFileAsync(template, 'utf8');
             templateVariables.year = MOMENT().year();
@@ -70,7 +70,7 @@ class EmailService {
         }
     }
 
-    static async sendVerificationEmail(email, subject, template) {
+    static async sendVerificationEmail (email, subject, template) {
         var smtpConfig = {
             service: 'Gmail',
             auth: {
@@ -82,7 +82,7 @@ class EmailService {
         var mailOptions = {
             subject,
             to: email,
-            from: `Payal Patel <${process.env.SENDER_EMAIL}>`,
+            from: `${process.env.SENDER_NAME} <${process.env.SENDER_EMAIL}>`,
             html: template,
             context: {
                 Data: 'Send successful Message!!!'

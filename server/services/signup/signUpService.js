@@ -21,7 +21,7 @@ class SignUpService {
      * @param {String} req.body.email email
      * @param {String} req.body.password password
      */
-    static async signUp(req, locale) {
+    static async signUp (req, locale) {
         const Validator = new SignUpValidator(req.body, locale);
         Validator.validate();
 
@@ -49,7 +49,7 @@ class SignUpService {
         }
     }
 
-    static async checkLogin(password, user) {
+    static async checkLogin (password, user) {
         const isMatch = await crypt.comparePassword(password, user.password);
         const otherDetails = {};
         if (!isMatch) {
@@ -73,7 +73,7 @@ class SignUpService {
      * @since 27/03/2021
      * @param {Object} reqObj reqObj
      */
-    static async isUserAlreadyRegister(reqObj) {
+    static async isUserAlreadyRegister (reqObj) {
         const where = { email: reqObj.email };
         return await User.findOne(where).lean();
     }
@@ -89,7 +89,7 @@ class SignUpService {
      * @param {Object} otp otp
      * @param {Integer} userType 1 = user 2 = Client
      */
-    static async saveOrUpdateRegistrationUser(reqObj, hash, otp, userType) {
+    static async saveOrUpdateRegistrationUser (reqObj, hash, otp, userType) {
         reqObj.password = hash;
         reqObj.isActive = CONSTANTS.STATUS.PENDING;
         reqObj.otp = otp;
@@ -107,7 +107,7 @@ class SignUpService {
      * @param {Object} req.body.email email
      * @param {Object} req.body.otp otp
      */
-    static async verifyAccount(req) {
+    static async verifyAccount (req) {
         const Validator = new SignUpValidator(req.body);
         Validator.otpValidate();
         req.body.email = req.body.email.toLowerCase();
@@ -136,7 +136,7 @@ class SignUpService {
      * @param {Object} req.body.email email
      * @param {Object} req.body.otp otp
      */
-    static async resentOTP(req) {
+    static async resentOTP (req) {
         const Validator = new SignUpValidator(req.body);
         Validator.email(req.body.email);
         req.body.email = req.body.email.toLowerCase();
@@ -166,7 +166,7 @@ class SignUpService {
      * @param {String} req.body.phoneNumber phoneNumber
      * @param {String} req.body.password password
      */
-    static async signUpMFA(req, locale) {
+    static async signUpMFA (req, locale) {
         const Validator = new SignUpValidator(req.body, locale);
         Validator.mfaValidate();
 
@@ -192,9 +192,9 @@ class SignUpService {
             });
             await newVerification.save();
 
-            const filePath = 'http://localhost:3000/verify-mfa';
-            const subject = 'Verify Your Email',
-                template = `<p>Verify your email to complete the signup.</p><p>This link expires in 1 hour.</p>
+            const filePath = `${process.env.BASE_URL}/verify-mfa`;
+            const subject = 'Verify Your Email';
+            const template = `<p>Verify your email to complete the signup.</p><p>This link expires in 1 hour.</p>
                 <p>Click <a href=${filePath + '/' + id + '/' + uniqueString}>here</a> to proceed.</p>`;
 
             const isMailSent = await Email.sendVerificationEmail(
@@ -207,7 +207,7 @@ class SignUpService {
             if (isMailSent && isSMSSent) {
                 return {
                     data: 'Email and SMS sent successfully.'
-                }
+                };
             }
         } else if (!user.isActive) {
             throw {
@@ -224,12 +224,12 @@ class SignUpService {
      * @author Growexx
      * @since 22/06/2022
      */
-    static async getTokenForSMS() {
+    static async getTokenForSMS () {
         const secret = Speakeasy.generateSecret({ length: 20 });
         return Speakeasy.totp({
             secret: secret.base32,
             encoding: 'base32',
-            window: 1,
+            window: 1
         });
     }
 
@@ -240,7 +240,7 @@ class SignUpService {
      * @param {String} userId, userId
      * @param {String} token token
      */
-    static async sendVerificationSMS(userId, token) {
+    static async sendVerificationSMS (userId, token) {
         const userDetails = await User.findOne({ _id: userId }).exec();
         return new Promise((resolve, reject) => {
             try {
@@ -275,7 +275,7 @@ class SignUpService {
      * @param {String} req.body.uniqueString uniqueString
      * @param {String} req.body.otp otp
      */
-    static async verifyMFA(req) {
+    static async verifyMFA (req) {
         const { userId, uniqueString } = req.body;
         const otp = req.body.otp;
         const userVerificationDetails = await UserVerification.findOne({ userid: userId }).exec();
@@ -309,7 +309,7 @@ class SignUpService {
                             })
                             .catch(() => {
                                 reject({ data: MESSAGES.ERROR_MSG });
-                            })
+                            });
                     } else {
                         reject({ data: MESSAGES.ENTER_VALID_OTP });
                     }
