@@ -16,8 +16,8 @@ class ForgotPasswordService {
      * @param {Object} req Request
      * @param {Object} req.body RequestBody
      */
-    static async forgotPassword (req) {
-        const Validator = new validation();
+    static async forgotPassword (req, locale) {
+        const Validator = new validation(locale);
         await Validator.email(req.body.email);
         const userEmail = req.body.email.toLowerCase();
         const userObj = await User.findOne({ email: userEmail }).exec();
@@ -74,7 +74,7 @@ class ForgotPasswordService {
      * @since 27/03/2021
      * @param {Object} req Request req.body RequestBody
      */
-    static async resetPassword (req) {
+    static async resetPassword (req, locale) {
         if (!req.body.token || !req.body.password) {
             throw {
                 message: MESSAGES.INVALID_REQUEST,
@@ -82,7 +82,7 @@ class ForgotPasswordService {
             };
         }
 
-        const Validator = new validation();
+        const Validator = new validation(locale);
         await Validator.password(req.body.password);
 
         const user = await User.findOne({
