@@ -16,7 +16,7 @@ class SignUpController {
      * @param {String} req.body.password password
      * @param {Object} res Response
      */
-    static async signUp(req, res) {
+    static async signUp (req, res) {
         try {
             req.body.userType = CONSTANTS.ROLE.USER;
             const data = await SignUpService.signUp(req);
@@ -36,7 +36,7 @@ class SignUpController {
      * @param {Object} req.body.token token
      * @param {Object} res Response
      */
-    static async verifyAccount(req, res) {
+    static async verifyAccount (req, res) {
         try {
             const data = await SignUpService.verifyAccount(req);
             Utils.sendResponse(null, data, res, MESSAGES.USER_VERIFY_SUCCESS);
@@ -46,7 +46,7 @@ class SignUpController {
     }
 
     /**
-     * @desc This function is being used to resendOTP to user user
+     * @desc This function is being used to resendOTP to user.
      * @author Growexx
      * @since 27/03/2021
      * @param {Object} req Request
@@ -54,7 +54,7 @@ class SignUpController {
      * @param {String} req.body.email email
      * @param {Object} res Response
      */
-    static async resendOTP(req, res) {
+    static async resendOTP (req, res) {
         try {
             const data = await SignUpService.resentOTP(req);
             Utils.sendResponse(null, data, res, MESSAGES.RESEND_OTP_SUCCESS);
@@ -63,7 +63,14 @@ class SignUpController {
         }
     }
 
-    static async signUpMFA(req, res) {
+    /**
+     * @desc This function is being used to Signup multifector Authentication user.
+     * @author Growexx
+     * @since 27/03/2021
+     * @param {Object} req Request
+     * @param {Object} res Response
+     */
+    static async signUpMFA (req, res) {
         try {
             const data = await SignUpService.signUpMFA(req, res);
             Utils.sendResponse(null, data, res, MESSAGES.REGISTER_SUCCESS);
@@ -72,7 +79,14 @@ class SignUpController {
         }
     }
 
-    static async verifyMFA(req, res) {
+    /**
+     * @desc This function is being used to verify multifectory authentication OTP.
+     * @author Growexx
+     * @since 27/03/2021
+     * @param {Object} req Request
+     * @param {Object} res Response
+     */
+    static async verifyMFA (req, res) {
         try {
             const data = await SignUpService.verifyMFA(req, res);
             Utils.sendResponse(null, data, res, '');
