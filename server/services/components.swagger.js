@@ -80,6 +80,17 @@
  *                  email: developer@mailinator.com
  *                  password: 8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267e
  *
+ *          OpenAiReq:
+ *              type: object
+ *              required:
+ *                  - prompt
+ *              properties:
+ *                  prompt:
+ *                      type: string
+ *                      description: user message
+ *              example:
+ *                  prompt: Once upon a time...
+ *
  *          AgencySignUp:
  *              type: object
  *              required:
@@ -104,6 +115,20 @@
  *              example:
  *                  status: 1
  *                  message: Success.
+ *
+ *          SuccessOpenAi:
+ *              allOf:
+ *                  - $ref: '#/components/errorProperties'
+ *                  - type: object
+ *                    properties:
+ *                      data:
+ *                           type: object
+ *                           description: Prompt generate
+ *              example:
+ *                  status: 1
+ *                  message: Success.
+ *                  data: Once upon a time, there was a magical land...
+ *
  *
  *          successAgencyrRegister:
  *              allOf:
@@ -343,4 +368,3 @@
  *                  status: true
  *                  message: Password changed successfully
  */
-
