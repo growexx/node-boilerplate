@@ -266,7 +266,7 @@ class SignUpService {
     }
 
     /**
-     * @desc This function is being used to verify user
+     * @desc This function is being used to verify user - MFA
      * @author Growexx
      * @since 22/06/2022
      * @param {Object} req Request

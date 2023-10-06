@@ -72,7 +72,7 @@ class SignUpController {
      */
     static async signUpMFA (req, res) {
         try {
-            const data = await SignUpService.signUpMFA(req, res);
+            const data = await SignUpService.signUpMFA(req, res.__);
             Utils.sendResponse(null, data, res, MESSAGES.REGISTER_SUCCESS);
         } catch (error) {
             Utils.sendResponse(error, null, res, '');

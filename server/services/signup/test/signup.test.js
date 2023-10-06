@@ -45,7 +45,7 @@ describe('Signup Account', () => {
                 email: 'johnsmith@mailinator.com',
                 password: '8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267e',
                 firstName: '    John   ',
-                lastName:'  smith',
+                lastName: '  smith',
                 otp: 123456
             };
             validRegistration = registerUser;
@@ -176,3 +176,30 @@ describe('Resend OTP', () => {
         CONSOLE_LOGGER.error(exception);
     }
 });
+
+describe('Signup Account MFA', () => {
+    try {
+        it('As a user, I Signup the user in MFA', (done) => {
+            // Password: 123456
+            const reqObj = {
+                'email': 'jaydev.vadachhak2@growexx.com',
+                'phoneNumber': '+919409805584',
+                'password': '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',
+                'userType': 1,
+                'isActive': CONSTANTS.STATUS.ACTIVE
+            };
+
+            request(process.env.BASE_URL)
+                .post('/auth/signup-mfa')
+                .send(reqObj)
+                .end((err, res) => {
+                    expect(res.body.status).to.be.status;
+                    assert.equal(res.statusCode, 200);
+                    done();
+                });
+        });
+    } catch (exception) {
+        CONSOLE_LOGGER.error(exception);
+    }
+});
+
