@@ -18,7 +18,7 @@ class ForgotPasswordController {
      */
     static async forgotPassword (req, res) {
         try {
-            const data = await ForgotPasswordService.forgotPassword(req, res);
+            const data = await ForgotPasswordService.forgotPassword(req, res.__);
             Utils.sendResponse(null, data, res, MESSAGES.FORGOT_PASSWORD_LINK_SENT_SUCCESS);
         } catch (error) {
             Utils.sendResponse(error, null, res, error.message);
@@ -54,7 +54,7 @@ class ForgotPasswordController {
      */
     static async resetPassword (req, res) {
         try {
-            const data = await ForgotPasswordService.resetPassword(req);
+            const data = await ForgotPasswordService.resetPassword(req, res.__);
             Utils.sendResponse(null, data, res, MESSAGES.RESET_PASSWORD_SUCCESS);
         } catch (error) {
             Utils.sendResponse(error, null, res, error.message);
