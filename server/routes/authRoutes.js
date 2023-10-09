@@ -8,6 +8,7 @@ const router = require('express').Router();
 const SignUpController = require('../services/signup/signUpController');
 const SignInController = require('../services/signin/signInController');
 const ForgotPasswordController = require('../services/forgotPassword/forgotPasswordController');
+const OpenaiController = require('../services/openai/openaiController');
 
 // Auth Routes
 router.post('/signup', SignUpController.signUp);
@@ -17,5 +18,6 @@ router.post('/signin', SignInController.login);
 router.post('/forgot-password', ForgotPasswordController.forgotPassword);
 router.post('/verify-token', ForgotPasswordController.verifyToken);
 router.post('/reset-password', ForgotPasswordController.resetPassword);
+router.post('/text-generator', OpenaiController.openai);
 
 module.exports = router;

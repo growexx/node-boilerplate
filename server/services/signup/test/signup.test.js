@@ -23,7 +23,7 @@ describe('Signup Account', () => {
             });
         });
 
-        it('As a user I should not able to register with existing passowrd', (done) => {
+        it('As a user I should validate if email is already registered and password is incorrect.', (done) => {
             const registerUser = {
                 email: 'super@mailinator.com',
                 password: '8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267d',
@@ -36,6 +36,26 @@ describe('Signup Account', () => {
                 .end((err, res) => {
                     expect(res.body.status).to.be.status;
                     assert.equal(res.statusCode, 422);
+                    done();
+                });
+        });
+
+        it('As a user I should register as user with leading and trailing white space containing firstName', (done) => {
+            const registerUser = {
+                email: 'johnsmith@mailinator.com',
+                password: '8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267e',
+                firstName: '    John   ',
+                lastName:'  smith',
+                otp: 123456
+            };
+            validRegistration = registerUser;
+            request(process.env.BASE_URL)
+                .post('/auth/signup')
+                .send(registerUser)
+                .end((err, res) => {
+                    expect(res.body.status).to.be.status;
+                    assert.equal(res.body.data.role, CONSTANTS.ROLE.USER);
+                    assert.equal(res.statusCode, 200);
                     done();
                 });
         });
