@@ -1,23 +1,20 @@
-const AWS = require('aws-sdk');
+const { SecretsManagerClient, GetSecretValueCommand } = require('@aws-sdk/client-secrets-manager');
 const { AWS_REGION, AWS_SECRET_NAME } = require('./constants');
 
-module.exports = () => {
+module.exports = async () => {
     const region = AWS_REGION;
-    const client = new AWS.SecretsManager({ region });
+    const client = new SecretsManagerClient({ region });
 
     const secretId = `${process.env.NODE_ENV}-${AWS_SECRET_NAME}`;
-    return new Promise((resolve, reject) => {
-        client.getSecretValue({ SecretId: secretId }, (err, data) => {
-            if (err) {
-                reject(err);
-            } else {
-                const secretsJSON = JSON.parse(data.SecretString);
-                let secretsString = '';
-                Object.keys(secretsJSON).forEach((key) => {
-                    secretsString += `${key}=${secretsJSON[key]}\n`;
-                });
-                resolve(secretsString);
-            }
-        });
+
+    const command = new GetSecretValueCommand({ SecretId: secretId });
+    const response = await client.send(command);
+    const secretsJSON = JSON.parse(response.SecretString);
+    let secretsString = '';
+
+    Object.keys(secretsJSON).forEach((key) => {
+        secretsString += `${key}=${secretsJSON[key]}\n`;
     });
+
+    return secretsString;
 };
