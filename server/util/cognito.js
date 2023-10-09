@@ -1,23 +1,42 @@
-const AWS = require('aws-sdk');
-AWS.config.credentials = new AWS.CognitoIdentityCredentials({ 'IdentityPoolId': 'us-east-1:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx' });
-AWS.config.region = process.env.AWS_API_REGION;
-AWS.config.accessKeyId = process.env.AWS_API_KEY;
-AWS.config.secretAccessKey = process.env.AWS_SECRET_KEY;
-AWS.config.credentials.accessKeyId = process.env.AWS_API_KEY;
-AWS.config.credentials.secretAccessKey = process.env.AWS_SECRET_KEY;
-const AmazonCognitoIdentity = require('amazon-cognito-identity-js');
+// const { CognitoIdentityClient } = require('@aws-sdk/client-cognito-identity');
+const {
+    CognitoIdentityProviderClient,
+    AdminGetUserCommand,
+    ChangePasswordCommand,
+    AdminUpdateUserAttributesCommand,
+    RevokeTokenCommand,
+    InitiateAuthCommand,
+    AdminSetUserPasswordCommand,
+    AdminCreateUserCommand
+} = require('@aws-sdk/client-cognito-identity-provider');
+const { CognitoUserPool, CognitoUser, AuthenticationDetails, CognitoUserAttribute } = require('amazon-cognito-identity-js');
+
 const { COGNITO_CUSTOM_ATTRIBUTES } = require('./constants');
-const { CognitoUserPool, CognitoUser, AuthenticationDetails, CognitoUserAttribute } = AmazonCognitoIdentity;
+
+const AWS_REGION = process.env.AWS_API_REGION;
+const IDENTITY_POOL_ID = 'us-east-1:xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx';
+const AWS_API_KEY = process.env.AWS_API_KEY;
+const AWS_SECRET_KEY = process.env.AWS_SECRET_KEY;
+const AWS_COGNITO_USER_POOL_ID = process.env.AWS_COGNITO_USER_POOL_ID;
+const AWS_COGNITO_CLIENT_ID = process.env.AWS_COGNITO_CLIENT_ID;
+
+// const cognitoIdentityClient = new CognitoIdentityClient({ region: AWS_REGION });
+const cognitoIdentityProviderClient = new CognitoIdentityProviderClient({
+    credentials: {
+        accessKeyId: AWS_API_KEY,
+        secretAccessKey: AWS_SECRET_KEY
+    },
+    region: AWS_REGION
+});
 
 let UserPoolId;
 let ClientId;
 let poolData;
 let UserPool;
-let cognitoIdentityServiceProvider;
 
 if (process.env.NODE_ENV !== 'testing') {
-    UserPoolId = process.env.AWS_COGNITO_USER_POOL_ID;
-    ClientId = process.env.AWS_COGNITO_CLIENT_ID;
+    UserPoolId = AWS_COGNITO_USER_POOL_ID;
+    ClientId = AWS_COGNITO_CLIENT_ID;
 
     poolData = {
         UserPoolId,
@@ -25,8 +44,6 @@ if (process.env.NODE_ENV !== 'testing') {
     };
 
     UserPool = new CognitoUserPool(poolData);
-
-    cognitoIdentityServiceProvider = new AWS.CognitoIdentityServiceProvider();
 }
 
 /**
@@ -41,17 +58,15 @@ class AwsCognitoService {
      * @param {Object} params.Username params.Username
      * @since 12/01/2022
      */
-    static checkEmailExistsOnCognito (params) {
+    static async checkEmailExistsOnCognito (params) {
         if (process.env.NODE_ENV !== 'testing') {
-            return new Promise((resolve) => {
-                cognitoIdentityServiceProvider.adminGetUser(params, (err, data)=> {
-                    if (err) {
-                        resolve(err);
-                    } else {
-                        resolve(data);
-                    }
-                });
-            });
+            try {
+                const command = new AdminGetUserCommand(params);
+                const response = await cognitoIdentityProviderClient.send(command);
+                return response;
+            } catch (error) {
+                return error;
+            }
         } else {
             return {};
         }
@@ -337,7 +352,9 @@ class AwsCognitoService {
                 MessageAction: 'SUPPRESS'
             };
 
-            const cognitoResponse = await cognitoIdentityServiceProvider.adminCreateUser(params).promise();
+            const command = new AdminCreateUserCommand(params);
+            const cognitoResponse = await cognitoIdentityProviderClient.send(command);
+
             if (cognitoResponse.code) {
                 return null;
             }
@@ -363,7 +380,9 @@ class AwsCognitoService {
                 Permanent: true
             };
 
-            const cognitoResponse = await cognitoIdentityServiceProvider.adminSetUserPassword(params).promise();
+            const command = new AdminSetUserPasswordCommand(params);
+            const cognitoResponse = await cognitoIdentityProviderClient.send(command);
+
             if (cognitoResponse.code) {
                 return null;
             }
@@ -388,7 +407,9 @@ class AwsCognitoService {
                     'REFRESH_TOKEN': refreshToken
                 }
             };
-            const cognitoResponse = await cognitoIdentityServiceProvider.initiateAuth(params).promise();
+            const command = new InitiateAuthCommand(params);
+            const cognitoResponse = await cognitoIdentityProviderClient.send(command);
+
             if (cognitoResponse.code) {
                 return null;
             }
@@ -411,7 +432,8 @@ class AwsCognitoService {
                 Token: refreshToken
             };
 
-            const cognitoResponse = await cognitoIdentityServiceProvider.revokeToken(params).promise();
+            const command = new RevokeTokenCommand(params);
+            const cognitoResponse = await cognitoIdentityProviderClient.send(command);
             if (cognitoResponse.code) {
                 return null;
             }
@@ -451,7 +473,10 @@ class AwsCognitoService {
                 UserAttributes: userAttributes,
                 Username: email
             };
-            const cognitoResponse = await cognitoIdentityServiceProvider.adminUpdateUserAttributes(params).promise();
+
+            const command = new AdminUpdateUserAttributesCommand(params);
+            const cognitoResponse = await cognitoIdentityProviderClient.send(command);
+
             if (cognitoResponse.code) {
                 return null;
             }
@@ -478,7 +503,9 @@ class AwsCognitoService {
                 ProposedPassword: newPassword
             };
 
-            const cognitoResponse = await cognitoIdentityServiceProvider.changePassword(params).promise();
+            const command = new ChangePasswordCommand(params);
+            const cognitoResponse = await cognitoIdentityProviderClient.send(command);
+
             if (cognitoResponse.code) {
                 return null;
             }
