@@ -2,11 +2,11 @@
  * @name user model
  * @author Growexx
  */
-const appMongoose = require('mongoose');
+const { Schema, model } = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 const aggregatePaginate = require('mongoose-aggregate-paginate-v2');
 
-const schema = new appMongoose.Schema({
+const schema = new Schema({
     email: {
         type: String,
         unique: true
@@ -90,4 +90,4 @@ schema.path('email').required(true, 'User email cannot be blank');
 schema.plugin(mongoosePaginate);
 schema.plugin(aggregatePaginate);
 
-module.exports = appMongoose.model('user', schema);
+module.exports = model('user', schema);
