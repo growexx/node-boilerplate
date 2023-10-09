@@ -20,8 +20,8 @@ class SignUpService {
      * @param {String} req.body.email email
      * @param {String} req.body.password password
      */
-    static async signUp (req,locale) {
-        const Validator = new SignUpValidator(req.body,locale);
+    static async signUp (req, locale) {
+        const Validator = new SignUpValidator(req.body, locale);
         Validator.validate();
 
         req.body.email = req.body.email.toLowerCase();
@@ -136,7 +136,7 @@ class SignUpService {
      * @since 21/09/2023
      * @param {Object} req Request
      * @param {Object} req.body RequestBody
-     * @param {Object} req.body.email email
+     * @param {Object} req.body.mobile mobile
      * @param {Object} req.body.otp otp
      */
     static async verifyMobile (req, locale) {
@@ -148,7 +148,7 @@ class SignUpService {
             await User.updateOne({ _id: user._id },
                 { $set:
                    {
-                     otpMobile: null
+                       otpMobile: null
                    }
                 });
             return crypt.getUserToken(user);
@@ -175,6 +175,12 @@ class SignUpService {
         req.body.email = req.body.email.toLowerCase();
         const user = await User.findOne({ email: req.body.email }).exec();
         if (user) {
+            const otp = UtilFunctions.generateOtp();
+            await User.updateOne({ _id: user._id }, {
+                $set: {
+                    otp
+                }
+            });
             const subject = 'Lets invent the future of work';
             const template = 'emailTemplates/verificationOtpMail.html';
             const appUrl = process.env.FRONTEND_URL;
@@ -203,8 +209,13 @@ class SignUpService {
         const { mobile } = req.body;
         const user = await User.findOne({ phoneNumber: mobile });
         if (user) {
-            const otp = user.otpMobile;
-            const msg = `OTP is: ${otp}.\n Use this to verify your mobile.`;
+            const otpMobile = UtilFunctions.generateOtp();
+            await User.updateOne({ _id: user._id }, {
+                $set: {
+                    otpMobile
+                }
+            });
+            const msg = `OTP is: ${otpMobile}.\n Use this to verify your mobile.`;
             await SmsService.sendSMS(req.body.mobile, msg);
             return { mobile: req.body.mobile };
         } else {
