@@ -22,13 +22,17 @@
 	"INVALID_PORTAL_ID": "Jira portal id is invalid.",
 	"PASSWORD_NOT_MATCH": "The passwords do not match",
 	"CHANGE_PASSWORD_SUCCESS": "Password changed successfully",
-	"FILE_NOT_FOUND":"File not found",
+	"FILE_NOT_FOUND": "File not found",
 	"TEMPLATE_NAME_REQUIRED": "Template name is required",
 	"TEMPLATE_SUBJECT_REQUIRED": "Template subject is required",
-	"FORGOT_PASSWORD_LINK_SENT_SUCCESS":"An email has been sent. Please follow instructions on it.",
-	"LINK_IS_VALID":"Link validated successfully.",
-    "RESET_PASSWORD_SUCCESS":"Your password has been reset successfully.",
-	"SIGNIN_SUCCESS":"User successfully logged in.",
+	"FORGOT_PASSWORD_LINK_SENT_SUCCESS": "An email has been sent. Please follow instructions on it.",
+	"LINK_IS_VALID": "Link validated successfully.",
+	"RESET_PASSWORD_SUCCESS": "Your password has been reset successfully.",
+	"SIGNIN_SUCCESS": "User successfully logged in.",
 	"FEEDBACK_SUCCESS": "Thanks for your valuable feedback.",
-	"FEEDBACK_NOT_FOUND":"Feedback not found"
+	"FEEDBACK_NOT_FOUND": "Feedback not found",
+	"FEEDBACK_DELETED_SUCCESS": "Feedback deleted successfully.",
+	"Feedback deleted successfully.": "Feedback deleted successfully.",
+	"FEEDBACK_INACTIVATED_SUCCESS": "Feedback inactivated successfully.",
+	"Feedback inactivated successfully.": "Feedback inactivated successfully."
 }

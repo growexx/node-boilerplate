@@ -25,15 +25,6 @@ const requestPayloadInvalid = {
     token: jwt.sign(invaliduser, process.env.JWT_SECRET, tokenOptionalInfo)
 };
 
-// Inactive
-const inactiveUser = {
-    id: '5f083c352a7908662c334535',
-    email: 'inactive@mailinator.com'
-};
-const requestPayloadInactive = {
-    token: jwt.sign(inactiveUser, process.env.JWT_SECRET, tokenOptionalInfo)
-};
-
 // User Token
 const user = {
     id: '5f083c352a7908662c334532',

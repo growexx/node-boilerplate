@@ -32,9 +32,9 @@ class UserFeedbackService {
      */
     static async getUserFeedback (data, user, locale) {
         const Validator = new UserFeedbackValidator(data, locale);
-        await Validator.checkValidMongoId(data.id, 'id');
+        Validator.checkValidMongoId(data.id, 'id');
         data.userId = user._id;
-        const queryObj = { _id: mongoose.Types.ObjectId(data.id), userId: mongoose.Types.ObjectId(user._id), isActive: 1 };
+        const queryObj = { _id: new mongoose.Types.ObjectId(data.id), userId: new mongoose.Types.ObjectId(user._id), isActive: 1 };
         const feedback = await Feedback.findOne(queryObj).lean();
         if (!feedback) {
             throw new GeneralError(MESSAGES.FEEDBACK_NOT_FOUND, 404);
@@ -51,7 +51,7 @@ class UserFeedbackService {
      * @param {Object} res Response
      */
     static async listUserFeedback (req, user) {
-        const query = { userId: mongoose.Types.ObjectId(user._id), isActive: 1 };
+        const query = { userId: new mongoose.Types.ObjectId(user._id), isActive: 1 };
 
         const isPaginate = req.query.isPaginate || 'true';
         const sortQuery = this.getSortingParams(req);
@@ -86,11 +86,11 @@ class UserFeedbackService {
      */
     static async deleteUserFeedback (data, user, locale) {
         const Validator = new UserFeedbackValidator(data, locale);
-        await Validator.checkValidMongoId(data.id, 'id');
+        Validator.checkValidMongoId(data.id, 'id');
         data.userId = user._id;
-        const queryObj = { _id: mongoose.Types.ObjectId(data.id), userId: mongoose.Types.ObjectId(user._id), isActive: 1 };
+        const queryObj = { _id: new mongoose.Types.ObjectId(data.id), userId: new mongoose.Types.ObjectId(user._id), isActive: 1 };
         const feedback = await Feedback.updateOne(queryObj, { $set: { isActive: 2 } });
-        if (!feedback.nModified) {
+        if (!feedback.modifiedCount) {
             throw new GeneralError(MESSAGES.FEEDBACK_NOT_FOUND, 404);
         }
         return;
@@ -106,11 +106,11 @@ class UserFeedbackService {
      */
     static async inActiveUserFeedback (data, user, locale) {
         const Validator = new UserFeedbackValidator(data, locale);
-        await Validator.checkValidMongoId(data.id, 'id');
+        Validator.checkValidMongoId(data.id, 'id');
         data.userId = user._id;
-        const queryObj = { _id: mongoose.Types.ObjectId(data.id), userId: mongoose.Types.ObjectId(user._id), isActive: 1 };
+        const queryObj = { _id: new mongoose.Types.ObjectId(data.id), userId: new mongoose.Types.ObjectId(user._id), isActive: 1 };
         const feedback = await Feedback.updateOne(queryObj, { $set: { isActive: 0 } });
-        if (!feedback.nModified) {
+        if (!feedback.modifiedCount) {
             throw new GeneralError(MESSAGES.FEEDBACK_NOT_FOUND, 404);
         }
         return;

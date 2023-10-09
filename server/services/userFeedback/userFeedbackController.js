@@ -73,7 +73,7 @@ class UserFeedbackController {
     static async deleteUserFeedback (req, res) {
         try {
             const data = await UserFeedbackService.deleteUserFeedback(req.params, res.locals.user, res.__);
-            Utils.sendResponse(null, data, res, res.__('SUCCESS'));
+            Utils.sendResponse(null, data, res, res.__(MESSAGES.FEEDBACK_DELETED_SUCCESS));
         } catch (error) {
             Utils.sendResponse(error, null, res, error.message);
         }
@@ -90,7 +90,7 @@ class UserFeedbackController {
     static async inActiveUserFeedback (req, res) {
         try {
             const data = await UserFeedbackService.inActiveUserFeedback(req.params, res.locals.user, res.__);
-            Utils.sendResponse(null, data, res, res.__('SUCCESS'));
+            Utils.sendResponse(null, data, res, res.__(MESSAGES.FEEDBACK_INACTIVATED_SUCCESS));
         } catch (error) {
             Utils.sendResponse(error, null, res, error.message);
         }
