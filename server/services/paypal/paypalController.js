@@ -17,7 +17,6 @@ class PaypalController {
             const data = await PaypalService.createOrder();
             Utils.sendResponse(null, data, res, res.__('SUCCESS'));
         } catch (error) {
-            console.log(error);
             Utils.sendResponse(error, null, res, error.message);
         }
     }
