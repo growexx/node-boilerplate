@@ -83,7 +83,8 @@
       "util/currency.js",
       "util/timeZone.js",
       "util/languageISO.js",
-      "util/http-status.js"
+      "util/http-status.js",
+      "**/components.swagger.js"
     ],
     "reporter": [
       "lcov",
