@@ -10,20 +10,9 @@ chai.use(chaiHttp);
 describe('Generate text', () => {
     try {
 
-        it('should not generate text if error occur', (done) => {;
+        it('should not generate text if error occur', (done) => {
             const prompt = {
                 'prompt': 'Once upon a time...'
-            }
-            const response = {
-                data: {
-                    choices: [
-                        {
-                            message: {
-                                content: 'Once upon a time, there was a magical land...',
-                            },
-                        },
-                    ],
-                },
             };
             const mockError = new Error('Error calling api');
             const createChatCompletionStub = sinon.stub(Openai.chat.completions, 'create').throws(mockError);
@@ -38,20 +27,20 @@ describe('Generate text', () => {
                 });
         });
 
-        it('should generate text successfully', (done) => {;
+        it('should generate text successfully', (done) => {
             const prompt = {
                 'prompt': 'Once upon a time...'
-            }
+            };
             const response = {
                 data: {
                     choices: [
                         {
                             message: {
-                                content: 'Once upon a time, there was a magical land...',
-                            },
-                        },
-                    ],
-                },
+                                content: 'Once upon a time, there was a magical land...'
+                            }
+                        }
+                    ]
+                }
             };
             const createChatCompletionStub = sinon.stub(Openai.chat.completions, 'create').returns(response);
             request(process.env.BASE_URL)
