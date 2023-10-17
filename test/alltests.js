@@ -20,6 +20,9 @@ require('../server/services/forgotPassword/test/forgotPassword.test');
 // User
 require('../server/services/userProfile/test/userProfile.test');
 
+//Utils
+require('../server/util/test/retrieveSecrets.test');
+
 // End Testing
 require('./end.test');
 
