@@ -26,6 +26,9 @@ require('../server/services/sesTemplate/test/sesTemplate.test');
 require('../server/services/userProfile/test/userProfile.test');
 
 
+// Utils
+require('../server/util/test/sendEmailWithNodeMailer.test');
+
 
 // End Testing
 require('./end.test');
