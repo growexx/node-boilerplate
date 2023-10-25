@@ -23,8 +23,14 @@ module.exports = {
         ALPHA_NUMARIC: /^[\w@ ]+$/,
         templateName: /^[ A-Za-z0-9_@./#&+-]*$/,
         SUBJECT: /^[ A-Za-z0-9_@./#&+-]*$/,
-        URL: /(http(s)?:\/\/www\.)?[-a-zA-Z0-9@:%.+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%+.~#?&//=]*)/
+        URL: /(http(s)?:\/\/www\.)?[-a-zA-Z0-9@:%.+~#=]{2,256}\.[a-z]{2,4}\b([-a-zA-Z0-9@:%+.~#?&//=]*)/,
+        PHONE: /^(\+\d{1,3}[- ]?)?\d{10}$/,
+        NUMERIC_ONLY: /^[0-9]+$/,
+        STRIPE_PRODUCT_ID: /^prod_[a-zA-Z0-9]{14}$/,
+        STRIPE_PRICE_ID: /^price_[a-zA-Z0-9]{24}$/
     },
+    STRIPE_RECURRING_INTERVALS: ['day', 'week', 'month', 'year'],
+    CURRENCY: 'inr',
     OTPLENGTH: 6,
     STATUS: {
         PENDING: 0,

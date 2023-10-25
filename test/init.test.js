@@ -7,6 +7,8 @@ const chaiHttp = require('chai-http');
 const User = require('../server/models/user.model');
 const UserSeed = require('./seed/user.seed');
 const Crypt = require('../server/util/crypt');
+const Product = require('../server/models/product.model');
+const productSeed = require('./seed/product.seed');
 const assert = chai.assert;
 const expect = chai.expect;
 chai.use(chaiHttp);
@@ -22,6 +24,7 @@ describe('Data seeding', () => {
                     return user;
                 }));
             await User.insertMany(user);
+            await Product.insertMany(productSeed.products)
         } catch (error) {
             assert.equal(null, error);
         }

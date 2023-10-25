@@ -28,5 +28,7 @@
 	"FORGOT_PASSWORD_LINK_SENT_SUCCESS":"An email has been sent. Please follow instructions on it.",
 	"LINK_IS_VALID":"Link validated successfully.",
     "RESET_PASSWORD_SUCCESS":"Your password has been reset successfully.",
-	"SIGNIN_SUCCESS":"User successfully logged in."
+	"SIGNIN_SUCCESS":"User successfully logged in.",
+	"PRODUCT_CREATE_SUCCESS":"New product created successfully",
+    "PRODUCT_UPDATE_SUCCESS":"The product updated successfully"
 }
