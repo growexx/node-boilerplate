@@ -26,6 +26,15 @@ require('../server/services/sesTemplate/test/sesTemplate.test');
 require('../server/services/userProfile/test/userProfile.test');
 
 
+// Products
+require('../server/services/product/test/product.test');
+
+// Webhooks
+require('../server/webhooks/test/webhook.test');
+
+// Stripe
+require('../server/util/test/stripe.test');
+
 
 // End Testing
 require('./end.test');
