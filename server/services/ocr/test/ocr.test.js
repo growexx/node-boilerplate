@@ -4,7 +4,7 @@ const assert = chai.assert;
 const request = require('supertest');
 chai.use(chaiHttp);
 
-describe('User Profile Picture', () => {
+describe('OCR extract text from bill', () => {
     try {
         it('As a user, I should not be able to upload bill', async () => {
             const res = await request(process.env.BASE_URL)

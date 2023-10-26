@@ -173,7 +173,8 @@
  *                  status: 1
  *                  message: OCR Extract Successfully.
  *                  data:
- *                      Total: ---$
+ *                      Pages: 1
+ *                      message: "Success"
  *
  *          unauthorisedAWSAccess:
  *              allOf:
