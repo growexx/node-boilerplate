@@ -7,7 +7,7 @@
     "prestart": "NODE_ENV=local node_modules/migrate-mongo/bin/migrate-mongo.js up",
     "up": "NODE_ENV=local migrate-mongo up",
     "start": "NODE_ENV=local nodemon .",
-    "test": "NODE_ENV=testing nyc mocha test/alltests.js --exit",
+    "test": "NODE_ENV=testing nyc mocha --timeout 90000 test/alltests.js --exit",
     "jsdoc": "./node_modules/.bin/jsdoc server/* -r  --destination jsdocs/jsdocs",
     "commit": "git-cz"
   },

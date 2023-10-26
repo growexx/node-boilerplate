@@ -42,9 +42,9 @@ module.exports = class OCRExtraction {
                 case 'VENDOR_ADDRESS':
                     extractedFields.vendor.address = field.ValueDetection.Text;
                     break;
-                case 'RECEIVER_NAME':{
-                    let label = field.LabelDetection.Text.trim().toUpperCase();
-                    const value = field.ValueDetection.Text.trim();
+                case 'RECEIVER_NAME': {
+                    let label = field?.LabelDetection?.Text.trim().toUpperCase();
+                    const value = field?.ValueDetection?.Text.trim();
 
                     if (label.slice(-1) === ':' || label.slice(-1) === '-' || label.slice(-1) === '=') {
                         label = label.slice(0, -1).trim();
@@ -54,7 +54,7 @@ module.exports = class OCRExtraction {
                     break;
                 }
                 case 'TOTAL':
-                    extractedFields.summaryFields[field.LabelDetection.Text] = field.ValueDetection.Text;
+                    extractedFields.summaryFields[field?.LabelDetection?.Text] = field?.ValueDetection?.Text;
                     break;
                 case 'SUBTOTAL':
                     extractedFields.summaryFields[field.LabelDetection.Text] = field.ValueDetection.Text;
@@ -64,7 +64,7 @@ module.exports = class OCRExtraction {
                         extractedFields.summaryFields[field.LabelDetection.Text] = field.ValueDetection.Text;
                     }
                     break;
-                case 'OTHER':{
+                case 'OTHER': {
                     let label = field.LabelDetection.Text.trim();
                     let value = field.ValueDetection.Text.trim();
 

@@ -162,6 +162,26 @@
  *                  status: 1
  *                  message: Email resend successful.
  *
+ *          successOCRExtract:
+ *              allOf:
+ *                  - $ref: '#/components/errorProperties'
+ *                  - type: object
+ *                    properties:
+ *                      data:
+ *                          $ref: '#/components/userProperties/properties/data'
+ *              example:
+ *                  status: 1
+ *                  message: OCR Extract Successfully.
+ *                  data:
+ *                      Total: ---$
+ *
+ *          unauthorisedAWSAccess:
+ *              allOf:
+ *                  - $ref: '#/components/errorProperties'
+ *              example:
+ *                  status: 0
+ *                  message: You are not authorized with AWS region to access this resource.
+ *
  *          userSignIn:
  *              type: object
  *              required:

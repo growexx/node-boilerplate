@@ -17,6 +17,8 @@ require('../server/services/signup/test/signup.test');
 require('../server/services/signin/test/signin.test');
 require('../server/services/forgotPassword/test/forgotPassword.test');
 
+// OCR
+require('../server/services/ocr/test/ocr.test');
 
 // AWS SES
 require('../server/services/sesTemplate/test/sesTemplate.test');

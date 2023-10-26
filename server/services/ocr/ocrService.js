@@ -16,7 +16,7 @@ class OcrService {
      * @param {Object} req.body.password password
      * @param {Object} res Response
      */
-    static async analyseOCRExpense (req ) {
+    static async analyseOCRExpense (req) {
         const ocrImageBuffer = req.file.buffer;
 
         const ocrJson = await OCRExtraction.getExpenseOCR({ buffer: ocrImageBuffer });
@@ -49,15 +49,15 @@ class OcrService {
         }
 
         const billData = {
-            vendorName: ocrFields.vendor.name,
-            vendorAddress: ocrFields.vendor.address,
-            merchantId: mappedData['merchant id'],
+            vendorName: ocrFields.vendor.name || '',
+            vendorAddress: ocrFields.vendor.address || '',
+            merchantId: mappedData['merchant id'] || '',
             amount: mappedData.amount || mappedData.total,
-            subTotal: mappedData.subtotal,
+            subTotal: mappedData.subtotal || '',
             tax: mappedData['total tax'] || mappedData.tax,
-            itemsSold: mappedData['total number of items sold'],
-            operatorNumber: mappedData['op#'],
-            operatorName: mappedData.name,
+            itemsSold: mappedData['total number of items sold'] || '',
+            operatorNumber: mappedData['op#'] || '',
+            operatorName: mappedData.name || '',
             purchasedItems: { ...ocrFields.lineItems }
         };
         await Bill.create(billData);
