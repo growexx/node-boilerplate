@@ -13,46 +13,46 @@ const schema = new db.Schema({
     },
     vendorAddress: {
         type: String,
-        required: true
+        required: false
     },
     merchantId: {
         type: String,
-        required: true
+        required: false
     },
     amount: {
         type: String,
-        required: true
+        required: false
     },
     subTotal: {
         type: String,
-        required: true
+        required: false
     },
     tax: {
         type: String,
-        required: true
+        required: false
     },
     itemsSold: {
         type: Number,
-        required: true
+        required: false
     },
     operatorNumber: {
         type: Number,
-        required: true
+        required: false
     },
     operatorName: {
         type: String,
-        required: true
+        required: false
     },
     purchasedItems: {
         type: Object,
         schema: {
             product: {
                 type: String,
-                required: true
+                required: false
             },
             price: {
                 type: String,
-                required: true
+                required: false
             }
         }
     }

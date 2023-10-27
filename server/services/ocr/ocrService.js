@@ -7,7 +7,7 @@ const OCRExtraction = require('../../util/ocrExtraction');
  */
 class OcrService {
     /**
-     * @desc This function is being used to sign in user
+     * @desc This function is being used to extract text from bill
      * @author Growexx
      * @since 01/03/2021
      * @param {Object} req Request

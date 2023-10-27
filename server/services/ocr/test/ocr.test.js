@@ -20,6 +20,13 @@ describe('OCR extract text from bill', () => {
                 .attach('photo', 'test/mock-data/bill.png');
             assert.equal(res.statusCode, 200);
         });
+
+        it('As a user, I should upload same vendor bill again', async () => {
+            const res = await request(process.env.BASE_URL)
+                .post('/ocr/extract')
+                .attach('photo', 'test/mock-data/bill.png');
+            assert.equal(res.statusCode, 200);
+        });
     } catch (exception) {
         CONSOLE_LOGGER.error(exception);
     }
