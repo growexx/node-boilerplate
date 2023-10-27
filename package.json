@@ -14,7 +14,7 @@
   "author": "Growexx",
   "license": "ISC",
   "dependencies": {
-    "@aws-sdk/client-ses": "^3.409.0",
+    "@aws-sdk/client-ses": "^3.436.0",
     "@aws-sdk/node-http-handler": "^3.374.0",
     "@aws-sdk/types": "^3.408.0",
     "@semantic-release/changelog": "^5.0.1",
@@ -29,6 +29,7 @@
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
+    "eslint": "^8.52.0",
     "express": "^4.18.2",
     "ftp": "^0.3.10",
     "helmet": "^7.0.0",

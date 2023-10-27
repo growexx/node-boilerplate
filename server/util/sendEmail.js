@@ -1,73 +1,89 @@
-const AWS = require('aws-sdk');
-const fs = require('fs');
-const { promisify } = require('util');
-const Constants = require('./constants');
-const readFileAsync = promisify(fs.readFile);
-const ses = new AWS.SES({ apiVersion: '2010-12-01' });
+const { SESClient, SendEmailCommand, SendRawEmailCommand } = require('@aws-sdk/client-ses');
 const MailComposer = require('nodemailer/lib/mail-composer');
+const fs = require('fs').promises;
+const CONSTANTS = require('./constants');
 
+/**
+ * This class represents common utilities for application
+ */
 class EmailService {
 
+    /**
+     * @desc This function is being used to send an email with html template
+     * @author Growexx
+     * @since 26/10/2023
+     */
     static async prepareAndSendEmail (email, subject, template, templateVariables) {
-        if (process.env.NODE_ENV !== 'testing') {
-            let htmlMessage = await readFileAsync(template, 'utf8');
-            templateVariables.year = MOMENT().year();
-            for (const [key, value] of Object.entries(templateVariables)) {
-                htmlMessage = htmlMessage.replace(new RegExp(`##${key.toUpperCase()}`, 'g'), value);
-            }
+        let htmlMessage = await fs.readFile(template, 'utf8');
+        templateVariables.year = MOMENT().year();
+        for (const [key, value] of Object.entries(templateVariables)) {
+            htmlMessage = htmlMessage.replace(new RegExp(`##${key.toUpperCase()}`, 'g'), value);
+        }
 
-            const params = {
-                Destination: {
-                    ToAddresses: email
-                },
-                Message: {
-                    Body: {
-                        Html: {
-                            Charset: 'UTF-8',
-                            Data: htmlMessage
-                        }
-                    },
-                    Subject: {
+        const params = {
+            Destination: {
+                ToAddresses: email
+            },
+            Message: {
+                Body: {
+                    Html: {
                         Charset: 'UTF-8',
-                        Data: subject
+                        Data: htmlMessage
                     }
                 },
-                ReturnPath: Constants.DEVELOPERS_EMAIL,
-                Source: Constants.DEVELOPERS_EMAIL
-            };
-            ses.sendEmail(params).promise();
-        }
+                Subject: {
+                    Charset: 'UTF-8',
+                    Data: subject
+                }
+            },
+            ReturnPath: CONSTANTS.DEVELOPERS_EMAIL,
+            Source: CONSTANTS.DEVELOPERS_EMAIL
+        };
+        const sesClient = new SESClient();
+        await sesClient.send(new SendEmailCommand(params));
     }
 
+    /**
+     * @desc This function is being used to send an email with attachment data
+     * For attachment format visit https://nodemailer.com/message/attachments/
+     * @author Growexx
+     * @since 26/10/2023
+     */
     static async prepareAndSendEmailWithAttachment (email, subject, template, templateVariables, attachments) {
-        if (process.env.NODE_ENV !== 'testing') {
-            let htmlMessage = await readFileAsync(template, 'utf8');
-            templateVariables.year = MOMENT().year();
-            for (const [key, value] of Object.entries(templateVariables)) {
-                htmlMessage = htmlMessage.replace(new RegExp(`##${key.toUpperCase()}`, 'g'), value);
-            }
-
-            const mailOptions = {
-                from: Constants.DEVELOPERS_EMAIL,
-                sender: Constants.DEVELOPERS_EMAIL,
-                to: email,
-                replyTo: Constants.DEVELOPERS_EMAIL,
-                html: htmlMessage,
-                subject,
-                attachments
-            };
-
-            const mail = new MailComposer(mailOptions);
-            mail.compile().build((err, message) => {
-                const params = {
-                    RawMessage: {
-                        Data: message
-                    },
-                    Source: Constants.DEVELOPERS_EMAIL
-                };
-                ses.sendRawEmail(params).promise();
-            });
+        let htmlMessage = await fs.readFile(template, 'utf8');
+        templateVariables.year = MOMENT().year();
+        for (const [key, value] of Object.entries(templateVariables)) {
+            htmlMessage = htmlMessage.replace(new RegExp(`##${key.toUpperCase()}`, 'g'), value);
         }
+
+        const mailOptions = {
+            from: CONSTANTS.DEVELOPERS_EMAIL,
+            sender: CONSTANTS.DEVELOPERS_EMAIL,
+            to: email,
+            replyTo: CONSTANTS.DEVELOPERS_EMAIL,
+            html: htmlMessage,
+            subject,
+            attachments
+        };
+
+        const mail = new MailComposer(mailOptions);
+        const message = await new Promise((resolve, reject) => {
+            mail.compile().build((err, message) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(message);
+                }
+            });
+        });
+        const params = {
+            RawMessage: {
+                Data: message
+            },
+            Source: CONSTANTS.DEVELOPERS_EMAIL
+        };
+        const sesClient = new SESClient();
+        await sesClient.send(new SendRawEmailCommand(params));
     }
 }
 

@@ -1,14 +1,23 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
+const sinon = require('sinon');
 const expect = chai.expect;
 const assert = chai.assert;
 const request = require('supertest');
 const TestCase = require('./testcaseSignup');
+const EmailService = require('../../../util/sendEmail');
 chai.use(chaiHttp);
 const trueDataStatus = 1;
 let validRegistration;
+let mailStub;
 
 describe('Signup Account', () => {
+    beforeEach(()=>{
+        mailStub = sinon.stub(EmailService, 'prepareAndSendEmail').resolves({});
+    });
+    afterEach(()=>{
+        mailStub.restore();
+    });
     try {
         TestCase.registerAccount.forEach((data) => {
             it(data.it, (done) => {
@@ -45,7 +54,7 @@ describe('Signup Account', () => {
                 email: 'johnsmith@mailinator.com',
                 password: '8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267e',
                 firstName: '    John   ',
-                lastName:'  smith',
+                lastName: '  smith',
                 otp: 123456
             };
             validRegistration = registerUser;
@@ -147,6 +156,12 @@ describe('Verify Account', () => {
 });
 
 describe('Resend OTP', () => {
+    beforeEach(()=>{
+        mailStub = sinon.stub(EmailService, 'prepareAndSendEmail').resolves({});
+    });
+    afterEach(()=>{
+        mailStub.restore();
+    });
     try {
         TestCase.resendOTP.forEach((data) => {
             it(data.it, (done) => {
