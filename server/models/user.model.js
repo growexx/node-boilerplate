@@ -2,11 +2,11 @@
  * @name user model
  * @author Growexx
  */
-const appMongoose = require('mongoose');
+const { Schema, model } = require('mongoose');
 const mongoosePaginate = require('mongoose-paginate-v2');
 const aggregatePaginate = require('mongoose-aggregate-paginate-v2');
 
-const schema = new appMongoose.Schema({
+const schema = new Schema({
     email: {
         type: String,
         unique: true
@@ -17,12 +17,15 @@ const schema = new appMongoose.Schema({
     firstName: {
         type: String,
         min: 2,
-        max: 30
+        max: 30,
+        // remove all leading and trailing space from field value
+        trim: true
     },
     lastName: {
         type: String,
         min: 2,
-        max: 30
+        max: 30,
+        trim: true
     },
     countryCode: {
         type: String
@@ -83,4 +86,4 @@ schema.path('email').required(true, 'User email cannot be blank');
 schema.plugin(mongoosePaginate);
 schema.plugin(aggregatePaginate);
 
-module.exports = appMongoose.model('user', schema);
+module.exports = model('user', schema);
