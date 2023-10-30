@@ -1,7 +1,7 @@
 const { Types } = require('mongoose');
 const User = require('../../models/user.model');
 const UserBasicProfileValidator = require('./userProfileValidator');
-const UploadService = require('../../util/uploadService');
+const StorageService = require('../../util/storageService');
 const crypt = require('../../util/crypt');
 const GeneralError = require('../../util/GeneralError');
 var Client = require('ftp');
@@ -34,11 +34,15 @@ class UserProfileService {
      * @param {Object} res Response
      */
     static async updateProfilePicture(req, user) {
-        const fileName = `${process.env.NODE_ENV}-proflie-pictures/${user._id}`;
         const Validator = new UserBasicProfileValidator(req.file);
         await Validator.validationProfilePicture();
-        await UploadService.uploadFile(req.file, fileName);
-        const filePath = `${CONSTANTS.AWS_S3_URL}${CONSTANTS.AWS_S3_PUBLIC_BUCKET}/${fileName}`;
+
+        const fileName = `${user._id}.${req.file.originalname.substring(
+            req.file.originalname.lastIndexOf('.') + 1
+        )}`;
+        const filePath = `${process.env.NODE_ENV}-${CONSTANTS.PROFILE_PICTURE_DIRECTORY}/${fileName}`;
+        await StorageService.uploadFile(req.file, filePath);
+
         const updateData = {
             profilePicture: filePath
         };
@@ -134,8 +138,8 @@ class UserProfileService {
      * @param {Object} res Response
      */
     static async deleteProfilePicture(user) {
-        const fileName = `${process.env.NODE_ENV}-proflie-pictures/${user._id}`;
-        await UploadService.deleteObject(fileName);
+        const fileName = user.profilePicture;
+        await StorageService.deleteFile(fileName);
         await User.updateOne({
             _id: new Types.ObjectId(user._id)
         }, {

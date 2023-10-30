@@ -27,6 +27,7 @@ require('../server/services/userProfile/test/userProfile.test');
 
 //Utils
 require('../server/util/test/retrieveSecrets.test');
+require('../server/util/test/storageService.test');
 
 // End Testing
 require('./end.test');
