@@ -41,5 +41,7 @@ module.exports = {
     ROLE: {
         USER: 1,
         ADMIN: 4
-    }
+    },
+    S3_PRESIGNED_URL_EXPIRY: 3600,
+    PROFILE_PICTURE_DIRECTORY: 'profile-picture'
 };

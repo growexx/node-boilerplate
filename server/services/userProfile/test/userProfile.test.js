@@ -1,15 +1,18 @@
 const chai = require('chai');
 const chaiHttp = require('chai-http');
+const sinon = require('sinon');
+const request = require('supertest');
+const jwt = require('jsonwebtoken');
+const TestCase = require('./userProfile');
+const StorageService = require('../../../util/storageService');
 const expect = chai.expect;
 const assert = chai.assert;
-const request = require('supertest');
-const TestCase = require('./userProfile');
 chai.use(chaiHttp);
-const jwt = require('jsonwebtoken');
 const tokenOptionalInfo = {
     algorithm: 'HS256',
     expiresIn: 86400
 };
+let storageMock;
 
 // Invalid Token
 const invalidToken = {
@@ -95,7 +98,13 @@ describe('User Profile get', () => {
     }
 });
 
-describe('User Profile Picture', () => {
+describe('User Profile Picture Upload', () => {
+    beforeEach(()=>{
+        storageMock = sinon.stub(StorageService, 'uploadFile').resolves({});
+    });
+    afterEach(()=>{
+        storageMock.restore();
+    });
     try {
         // Check all validation;
         TestCase.uploadProfilePicture.forEach((data) => {
@@ -148,7 +157,19 @@ describe('User Profile Picture', () => {
                 .attach('photo', 'test/mock-data/valid_profile_pic.jpg');
             assert.equal(res.statusCode, 200);
         });
+    } catch (exception) {
+        CONSOLE_LOGGER.error(exception);
+    }
+});
 
+describe('User Profile Picture Delete', () => {
+    beforeEach(()=>{
+        storageMock = sinon.stub(StorageService, 'deleteFile').resolves({});
+    });
+    afterEach(()=>{
+        storageMock.restore();
+    });
+    try {
         it('As a user, I should be able to delete uploaded file', async () => {
             const res = await request(process.env.BASE_URL)
                 .delete('/user/picture')

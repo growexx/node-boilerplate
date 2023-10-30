@@ -14,8 +14,10 @@
   "author": "Growexx",
   "license": "ISC",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.437.0",
     "@aws-sdk/client-ses": "^3.409.0",
     "@aws-sdk/node-http-handler": "^3.374.0",
+    "@aws-sdk/s3-request-presigner": "^3.437.0",
     "@aws-sdk/types": "^3.408.0",
     "@semantic-release/changelog": "^5.0.1",
     "@semantic-release/commit-analyzer": "^8.0.1",

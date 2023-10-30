@@ -26,6 +26,7 @@ require('../server/services/sesTemplate/test/sesTemplate.test');
 require('../server/services/userProfile/test/userProfile.test');
 
 
+require('../server/util/test/storageService.test');
 
 // End Testing
 require('./end.test');
