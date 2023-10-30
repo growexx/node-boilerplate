@@ -44,6 +44,5 @@ module.exports = {
     },
     S3_PRESIGNED_URL_EXPIRY: 3600,
     PROFILE_PICTURE_DIRECTORY: 'profile-picture',
-    AWS_REGION: 'us-east-1',
     AWS_SECRET_NAME: 'secret'
 };
