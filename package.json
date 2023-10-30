@@ -4,7 +4,7 @@
   "description": "Growexx node boiler plate for API",
   "main": "index.js",
   "scripts": {
-    "prestart": "NODE_ENV=local node getEnv.js && NODE_ENV=local node_modules/migrate-mongo/bin/migrate-mongo.js up",
+    "prestart": "NODE_ENV=local node_modules/migrate-mongo/bin/migrate-mongo.js up",
     "up": "NODE_ENV=local migrate-mongo up",
     "start": "NODE_ENV=local nodemon .",
     "test": "NODE_ENV=testing nyc mocha test/alltests.js --exit",
