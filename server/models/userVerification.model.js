@@ -17,10 +17,10 @@ const schema = new appMongoose.Schema({
         type: String
     },
     createdAt: {
-        type: Date,
+        type: Date
     },
     expiresAt: {
-        type: Date,
+        type: Date
     }
 });
 
