@@ -4,6 +4,7 @@ const UtilFunctions = require('../../util/utilFunctions');
 const Email = require('../../util/sendEmail');
 const User = require('../../models/user.model');
 const UserVerification = require('../../models/userVerification.model');
+const SMS = require('../../util/sendSMS');
 const { v4: uuidv4 } = require('uuid');
 const Speakeasy = require('speakeasy');
 
@@ -197,18 +198,15 @@ class SignUpService {
             const template = `<p>Verify your email to complete the signup.</p><p>This link expires in 1 hour.</p>
                 <p>Click <a href=${filePath + '/' + id + '/' + uniqueString}>here</a> to proceed.</p>`;
 
-            const isMailSent = await Email.sendVerificationEmail(
-                [req.body.email],
-                subject,
-                template
-            );
-            const isSMSSent = await SignUpService.sendVerificationSMS(id, token);
-
-            if (isMailSent && isSMSSent) {
+                await Email.sendVerificationEmail(
+                    [req.body.email],
+                    subject,
+                    template
+                );
+                await SignUpService.sendVerificationSMS(id, token);
                 return {
                     data: 'Email and SMS sent successfully.'
                 };
-            }
         } else if (!user.isActive) {
             throw {
                 message: MESSAGES.INACTIVE_USER,
@@ -242,27 +240,7 @@ class SignUpService {
      */
     static async sendVerificationSMS (userId, token) {
         const userDetails = await User.findOne({ _id: userId }).exec();
-        return new Promise((resolve, reject) => {
-            try {
-                const accountSid = process.env.TWILIO_ACCOUNT_ID;
-                const authToken = process.env.TWILIO_AUTH_TOKEN;
-                const client = require('twilio')(accountSid, authToken);
-                client.messages
-                    .create({
-                        body: `OTP: ${token}`,
-                        to: userDetails.phoneNumber,
-                        from: process.env.TWILIO_PHONE_NUMBER
-                    })
-                    .then(() => {
-                        resolve(true);
-                    })
-                    .catch(err => {
-                        reject(err.message);
-                    });
-            } catch (err) {
-                reject(err.message);
-            }
-        });
+        return await SMS.sendSMS(userDetails.phoneNumber, `OTP : ${token}`);
     }
 
     /**
@@ -276,48 +254,23 @@ class SignUpService {
      * @param {String} req.body.otp otp
      */
     static async verifyMFA (req) {
-        const { userId, uniqueString } = req.body;
-        const otp = req.body.otp;
+        const { userId, uniqueString,otp } = req.body;
         const userVerificationDetails = await UserVerification.findOne({ userid: userId }).exec();
-        return new Promise((resolve, reject) => {
-            try {
-                if (otp == null) {
-                    reject({ data: MESSAGES.ENTER_VALID_OTP });
-                }
-                if (userVerificationDetails) {
-                    if (userVerificationDetails.expiresAt < Date.now()) {
-                        UserVerification
-                            .deleteOne({ userid: userId })
-                            .then(() => {
-                                User.deleteOne({
-                                    _id: userId
-                                })
-                                    .then(() => {
-                                        resolve(MESSAGES.EMAIL_LINK_EXPIRED);
-                                    });
-                            });
-                    } else if ((userVerificationDetails.otp === otp) && (userVerificationDetails.uniqueString === uniqueString)) {
-                        User.updateOne({ _id: userId }, { isActive: CONSTANTS.STATUS.ACTIVE })
-                            .then(() => {
-                                UserVerification.deleteOne({ userid: userId })
-                                    .then(() => {
-                                        resolve(MESSAGES.USER_MFA_VERIFY_SUCCESS);
-                                    })
-                                    .catch(() => {
-                                        reject({ data: MESSAGES.ERROR_MSG });
-                                    });
-                            })
-                            .catch(() => {
-                                reject({ data: MESSAGES.ERROR_MSG });
-                            });
-                    } else {
-                        reject({ data: MESSAGES.ENTER_VALID_OTP });
-                    }
-                }
-            } catch (err) {
-                reject({ data: MESSAGES.USER_NOT_FOUND });
-            }
-        });
+        if (!otp) {
+            throw ({ data: MESSAGES.ENTER_VALID_OTP });
+        }
+        if (!userVerificationDetails) {
+            throw ({ data: MESSAGES.ENTER_VALID_OTP });
+        }
+        if (userVerificationDetails.expiresAt < Date.now()) {
+            await UserVerification.deleteOne( { userid: userId } );
+            throw { message: MESSAGES.EMAIL_LINK_EXPIRED, status: 400 };
+        } else if ((userVerificationDetails.otp === otp) && (userVerificationDetails.uniqueString === uniqueString)) {
+            await User.updateOne({ _id: userId }, { isActive: CONSTANTS.STATUS.ACTIVE });
+            await UserVerification.deleteOne({ userid: userId })
+        } else {
+            throw ({ data: MESSAGES.ENTER_VALID_OTP });
+        }
     }
 }
 

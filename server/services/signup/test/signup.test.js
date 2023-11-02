@@ -4,6 +4,11 @@ const expect = chai.expect;
 const assert = chai.assert;
 const request = require('supertest');
 const TestCase = require('./testcaseSignup');
+const sinon = require('sinon');
+const SMSService = require('../../../util/sendSMS');
+const User = require('../../../models/user.model');
+const UserVerification = require('../../../models/userVerification.model');
+const EmailService = require('../../../util/sendEmail');
 chai.use(chaiHttp);
 const trueDataStatus = 1;
 let validRegistration;
@@ -179,7 +184,40 @@ describe('Resend OTP', () => {
 
 describe('Signup Account MFA', () => {
     try {
+        let sendVerificationEmailSpy;
+        let smsStub;
+        before(() => {
+            sendVerificationEmailSpy = sinon.stub(EmailService, 'sendVerificationEmail').resolves(true);
+            smsStub = sinon.stub(SMSService, 'sendSMS');
+        });
+
+        after(() => {
+            sendVerificationEmailSpy.restore();
+            smsStub.restore();
+        });
+
         it('As a user, I Signup the user in MFA', (done) => {
+            // Password: 123456
+            const reqObj = {
+                'email': 'admin@growexx.com',
+                'phoneNumber': '+919409805584',
+                'password': '8d969eef6ecad3c29a3a629280e686cf0c3f5d5a86aff3ca12020c923adc6c92',
+                'userType': 1,
+                'firstName': 'admin',
+                'lastName': 'growexx'
+            };
+
+            request(process.env.BASE_URL)
+                .post('/auth/signup-mfa')
+                .send(reqObj)
+                .end((err, res) => {
+                    expect(res.body.status).to.be.status;
+                    assert.equal(res.statusCode, 200);
+                    done();
+                });
+        });
+
+        it('As a user, I Signup the user in MFA is not active', (done) => {
             // Password: 123456
             const reqObj = {
                 'email': 'admin@growexx.com',
@@ -193,9 +231,112 @@ describe('Signup Account MFA', () => {
                 .send(reqObj)
                 .end((err, res) => {
                     expect(res.body.status).to.be.status;
-                    assert.equal(res.statusCode, 200);
+                    assert.equal(res.statusCode, 400);
                     done();
                 });
+        });
+    } catch (exception) {
+        CONSOLE_LOGGER.error(exception);
+    }
+});
+
+describe('Verify MFA Account', async () => {
+    try {
+        it('As a user, i should validate the otp', async () => {
+            const reqObj = {
+                'userId': 'abc',
+                'uniqueString': 'pqr'
+            };
+
+            const res = await request(process.env.BASE_URL)
+                .post('/auth/verify-mfa')
+                .send(reqObj);
+            expect(res.body.status).to.be.status;
+            assert.equal(res.statusCode, 400);
+        });
+
+        it('As a user, i should validate the id', async () => {
+            const reqObj = {
+                'userId': 'abc',
+                'uniqueString': 'pqr',
+                'otp': 123
+            };
+
+            const res = await request(process.env.BASE_URL)
+                .post('/auth/verify-mfa')
+                .send(reqObj);
+            expect(res.body.status).to.be.status;
+            assert.equal(res.statusCode, 400);
+        });
+
+        it('As a user, i should check otp', async () => {
+            const user = await User.findOne({ email: 'admin@growexx.com' });
+            const userVer = await UserVerification.findOne({ userid: user._id });
+            const reqObj = {
+                'userId': user._id,
+                'uniqueString': userVer.uniqueString,
+                'otp': 123
+            };
+
+            const res = await request(process.env.BASE_URL)
+                .post('/auth/verify-mfa')
+                .send(reqObj);
+            expect(res.body.status).to.be.status;
+            assert.equal(res.statusCode, 400);
+        });
+
+        it('As a user, i should check validity of otp', async () => {
+            const user = await User.findOne({ email: 'admin@growexx.com' });
+            const userVer = await UserVerification.findOne( { userid: user.id });
+            await UserVerification.updateOne({ _id: userVer._id },{ expiresAt: (Date.now() - 3600000 ) });
+            const reqObj = {
+                'userId': user._id,
+                'uniqueString': userVer.uniqueString,
+                'otp': userVer.otp
+            };
+
+            const res = await request(process.env.BASE_URL)
+                .post('/auth/verify-mfa')
+                .send(reqObj);
+            expect(res.body.status).to.be.status;
+            assert.equal(res.statusCode, 400);
+        });
+
+        it('As a user, i should be able to login', async () => {
+            const user = await User.findOne({ email: 'admin@growexx.com' });
+            const userVer = await UserVerification.create({
+                uniqueString: 'str',
+                userid: user._id,
+                otp: 123456,
+                createdAt: Date.now(),
+                expiresAt: Date.now() + 3600000
+            });
+            const reqObj = {
+                'userId': user._id,
+                'uniqueString': userVer.uniqueString,
+                'otp': userVer.otp
+            };
+
+            const res = await request(process.env.BASE_URL)
+                .post('/auth/verify-mfa')
+                .send(reqObj);
+            expect(res.body.status).to.be.status;
+            assert.equal(res.statusCode, 200);
+        });
+
+        it('As a user, i should check the otp', async () => {
+            const user = await User.findOne( { email: 'admin@growexx.com' } );
+            const reqObj = {
+                'userId': user._id,
+                'uniqueString': 'pqr',
+                'otp': 'abc'
+            };
+
+            const res = await request(process.env.BASE_URL)
+                .post('/auth/verify-mfa')
+                .send(reqObj);
+            expect(res.body.status).to.be.status;
+            assert.equal(res.statusCode, 400);
         });
     } catch (exception) {
         CONSOLE_LOGGER.error(exception);
