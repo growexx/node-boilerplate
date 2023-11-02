@@ -4,6 +4,7 @@ const expect = chai.expect;
 const assert = chai.assert;
 const request = require('supertest');
 const TestCase = require('./testcaseSignin');
+const app = require('../../../server');
 chai.use(chaiHttp);
 const trueDataStatus = 1;
 
@@ -11,7 +12,7 @@ describe('Signin Account', () => {
     try {
         TestCase.signinAccount.forEach((data) => {
             it(data.it, (done) => {
-                request(process.env.BASE_URL)
+                request(app)
                     .post('/auth/signin')
                     .send(data.options)
                     .end((err, res) => {
@@ -27,7 +28,7 @@ describe('Signin Account', () => {
                 'email': 'john1@mailinator.com',
                 'password': '8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267d'
             };
-            request(process.env.BASE_URL)
+            request(app)
                 .post('/auth/signin')
                 .send(loginUser)
                 .end((err, res) => {
@@ -43,7 +44,7 @@ describe('Signin Account', () => {
                 'email': 'super@mailinator.com',
                 'password': '8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267d'
             };
-            request(process.env.BASE_URL)
+            request(app)
                 .post('/auth/signin')
                 .send(loginUser)
                 .end((err, res) => {
@@ -59,7 +60,7 @@ describe('Signin Account', () => {
                 'email': 'inactive@mailinator.com',
                 'password': '8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267e'
             };
-            request(process.env.BASE_URL)
+            request(app)
                 .post('/auth/signin')
                 .send(loginUser)
                 .end((err, res) => {
@@ -75,7 +76,7 @@ describe('Signin Account', () => {
                 'email': 'user@mailinator.com',
                 'password': '8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267e'
             };
-            request(process.env.BASE_URL)
+            request(app)
                 .post('/auth/signin')
                 .send(loginUser)
                 .end((err, res) => {
@@ -92,7 +93,7 @@ describe('Signin Account', () => {
                 email: 'super@mailinator.com',
                 password: '8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267e'
             };
-            request(process.env.BASE_URL)
+            request(app)
                 .post('/auth/signin')
                 .send(loginUser)
                 .end((err, res) => {

@@ -4,6 +4,7 @@ const expect = chai.expect;
 const assert = chai.assert;
 const request = require('supertest');
 const TestCase = require('./testcaseSignup');
+const app = require('../../../server');
 chai.use(chaiHttp);
 const trueDataStatus = 1;
 let validRegistration;
@@ -12,7 +13,7 @@ describe('Signup Account', () => {
     try {
         TestCase.registerAccount.forEach((data) => {
             it(data.it, (done) => {
-                request(process.env.BASE_URL)
+                request(app)
                     .post('/auth/signup')
                     .send(data.options)
                     .end((err, res) => {
@@ -30,7 +31,7 @@ describe('Signup Account', () => {
                 otp: 123456
             };
             validRegistration = registerUser;
-            request(process.env.BASE_URL)
+            request(app)
                 .post('/auth/signup')
                 .send(registerUser)
                 .end((err, res) => {
@@ -45,11 +46,11 @@ describe('Signup Account', () => {
                 email: 'johnsmith@mailinator.com',
                 password: '8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267e',
                 firstName: '    John   ',
-                lastName:'  smith',
+                lastName: '  smith',
                 otp: 123456
             };
             validRegistration = registerUser;
-            request(process.env.BASE_URL)
+            request(app)
                 .post('/auth/signup')
                 .send(registerUser)
                 .end((err, res) => {
@@ -67,7 +68,7 @@ describe('Signup Account', () => {
                 otp: 123456
             };
             validRegistration = registerUser;
-            request(process.env.BASE_URL)
+            request(app)
                 .post('/auth/signup')
                 .send(registerUser)
                 .end((err, res) => {
@@ -83,7 +84,7 @@ describe('Signup Account', () => {
                 email: 'john@mailinator.com',
                 password: '8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267e'
             };
-            request(process.env.BASE_URL)
+            request(app)
                 .post('/auth/signup')
                 .send(registerUser)
                 .end((err, res) => {
@@ -98,7 +99,7 @@ describe('Signup Account', () => {
                 email: 'super@mailinator.com',
                 password: '8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267e'
             };
-            request(process.env.BASE_URL)
+            request(app)
                 .post('/auth/signup')
                 .send(registerUser)
                 .end((err, res) => {
@@ -118,7 +119,7 @@ describe('Verify Account', () => {
     try {
         TestCase.verifyAccount.forEach((data) => {
             it(data.it, (done) => {
-                request(process.env.BASE_URL)
+                request(app)
                     .post('/auth/verify-account')
                     .send(data.options)
                     .end((err, res) => {
@@ -130,7 +131,7 @@ describe('Verify Account', () => {
         });
 
         it('As a user, I should verify existing user user', (done) => {
-            request(process.env.BASE_URL)
+            request(app)
                 .post('/auth/verify-account')
                 .send({ email: validRegistration.email, otp: validRegistration.otp })
                 .end((err, res) => {
@@ -150,7 +151,7 @@ describe('Resend OTP', () => {
     try {
         TestCase.resendOTP.forEach((data) => {
             it(data.it, (done) => {
-                request(process.env.BASE_URL)
+                request(app)
                     .post('/auth/resend-otp')
                     .send(data.options)
                     .end((err, res) => {
@@ -162,7 +163,7 @@ describe('Resend OTP', () => {
         });
 
         it('As a user, I should send resend OTP to user', (done) => {
-            request(process.env.BASE_URL)
+            request(app)
                 .post('/auth/resend-otp')
                 .send({ email: validRegistration.email })
                 .end((err, res) => {
