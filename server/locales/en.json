@@ -22,6 +22,7 @@
 	"INVALID_PORTAL_ID": "Jira portal id is invalid.",
 	"USER_MFA_VERIFY_PENDING": "Please activate your user by verify email and OTP that has sent.",
 	"USER_MFA_VERIFY_SUCCESS": "User verified successfully",
+	"OTP_REQUIRED": "OTP is required",
 	"ENTER_VALID_OTP": "Please enter valid OTP",
 	"EMAIL_LINK_EXPIRED": "Link is expired",
 	"PASSWORD_NOT_MATCH": "The passwords do not match",

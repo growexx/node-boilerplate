@@ -43,6 +43,15 @@
  *              asswor:
  *                  type: string
  *                  description: encrypted password
+ *              phoneNumber:
+ *                  type: string
+ *                  description: user phone number.
+ *              uniqueString:
+ *                  type: string
+ *                  description: Unique string for verify MFA account
+ *              userId:
+ *                  type: string
+ *                  description: User Id.
  *
  *      schemas:
  *          errorBadRequest:
@@ -79,6 +88,24 @@
  *              example:
  *                  email: developer@mailinator.com
  *                  password: 8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267e
+ *
+ *          userMFASignUp:
+ *              type: object
+ *              required:
+ *                  - email
+ *                  - password
+ *                  - phoneNumber
+ *              properties:
+ *                  email:
+ *                      $ref: '#/components/userProperties/properties/email'
+ *                  password:
+ *                      $ref: '#/components/userProperties/properties/password'
+ *                  phoneNumber:
+ *                      $ref: '#/components/userProperties/properties/phoneNumber'
+ *              example:
+ *                  email: developer@mailinator.com
+ *                  password: 8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267e
+ *                  phoneNumber: 1234567890
  *
  *          AgencySignUp:
  *              type: object
@@ -136,6 +163,24 @@
  *                      $ref: '#/components/userProperties/properties/otp'
  *              example:
  *                  email: developer@mailinator.com
+ *                  otp: 123456
+ *
+  *          userMFAVerify:
+ *              type: object
+ *              required:
+ *                  - userId
+ *                  - uniqueString
+ *                  - otp
+ *              properties:
+ *                  userId:
+ *                      $ref: '#/components/userProperties/properties/userId'
+ *                  uniqueString:
+ *                      $ref: '#/components/userProperties/properties/uniqueString'
+ *                  otp:
+ *                      $ref: '#/components/userProperties/properties/otp'
+ *              example:
+ *                  userId: 1234
+ *                  uniqueString: abcd12345njnwefk
  *                  otp: 123456
  *
  *          successVerifyUser:

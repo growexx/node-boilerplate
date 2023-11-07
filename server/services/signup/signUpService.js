@@ -198,15 +198,15 @@ class SignUpService {
             const template = `<p>Verify your email to complete the signup.</p><p>This link expires in 1 hour.</p>
                 <p>Click <a href=${filePath + '/' + id + '/' + uniqueString}>here</a> to proceed.</p>`;
 
-                await Email.sendVerificationEmail(
-                    [req.body.email],
-                    subject,
-                    template
-                );
-                await SignUpService.sendVerificationSMS(id, token);
-                return {
-                    data: 'Email and SMS sent successfully.'
-                };
+            await Email.sendVerificationEmail(
+                [req.body.email],
+                subject,
+                template
+            );
+            await SignUpService.sendVerificationSMS(id, token);
+            return {
+                data: 'Email and SMS sent successfully.'
+            };
         } else if (!user.isActive) {
             throw {
                 message: MESSAGES.INACTIVE_USER,
@@ -254,10 +254,10 @@ class SignUpService {
      * @param {String} req.body.otp otp
      */
     static async verifyMFA (req) {
-        const { userId, uniqueString,otp } = req.body;
+        const { userId, uniqueString, otp } = req.body;
         const userVerificationDetails = await UserVerification.findOne({ userid: userId }).exec();
         if (!otp) {
-            throw ({ data: MESSAGES.ENTER_VALID_OTP });
+            throw ({ data: MESSAGES.OTP_REQUIRED });
         }
         if (!userVerificationDetails) {
             throw ({ data: MESSAGES.ENTER_VALID_OTP });
@@ -267,7 +267,7 @@ class SignUpService {
             throw { message: MESSAGES.EMAIL_LINK_EXPIRED, status: 400 };
         } else if ((userVerificationDetails.otp === otp) && (userVerificationDetails.uniqueString === uniqueString)) {
             await User.updateOne({ _id: userId }, { isActive: CONSTANTS.STATUS.ACTIVE });
-            await UserVerification.deleteOne({ userid: userId })
+            await UserVerification.deleteOne({ userid: userId });
         } else {
             throw ({ data: MESSAGES.ENTER_VALID_OTP });
         }

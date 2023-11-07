@@ -105,3 +105,77 @@
  *                              $ref: '#/components/schemas/unexpectedError'
  *
  */
+
+/**
+ * @openapi
+ * /auth/signup-mfa:
+ *      post:
+ *          tags: [Authentication]
+ *          summary: User MFA SignUp
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/userMFASignUp'
+ *          responses:
+ *              200:
+ *                  description: success
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/successUserRegister'
+ *              400:
+ *                  description: Validation Error
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/errorBadRequest'
+ *              422:
+ *                  description: User Duplicate
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/errorUserRegister'
+ *              500:
+ *                  description: Internal Server Error
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/unexpectedError'
+ *
+ */
+
+/**
+ * @openapi
+ * /auth/verify-mfa:
+ *      post:
+ *          tags: [Authentication]
+ *          summary: Verify User by OTP.
+ *          requestBody:
+ *              required: true
+ *              content:
+ *                  application/json:
+ *                      schema:
+ *                          $ref: '#/components/schemas/userMFAVerify'
+ *          responses:
+ *              200:
+ *                  description: success
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/successVerifyUser'
+ *              400:
+ *                  description: Validation Error
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/errorBadRequest'
+ *              500:
+ *                  description: Internal Server Error
+ *                  content:
+ *                      application/json:
+ *                          schema:
+ *                              $ref: '#/components/schemas/unexpectedError'
+ *
+ */
