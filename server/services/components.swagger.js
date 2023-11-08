@@ -104,6 +104,16 @@
  *              example:
  *                  status: 1
  *                  message: Success.
+ *              data:
+ *                  first_name: Same
+ *                  last_name: Jones
+ *                  role: 1
+ *                  token: TOKEN,
+ *                  social_id: id,
+ *                  social_token: social token,
+ *                  social_platform: platform,
+ *                  profile_url: url,
+ *                  refreshToken: TOKEN
  *
  *          successAgencyrRegister:
  *              allOf:

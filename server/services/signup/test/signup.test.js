@@ -125,8 +125,13 @@ describe('Signup Account with facebook account', () => {
             };
             axiosGetStub.withArgs(`${constants.FACEBOOK_AUTH_URL}${token}`).resolves(response);
             const payload = {
+                token,
                 platform: 'facebook',
-                token
+                id: 'id',
+                email: 'example@example.com',
+                first_name: 'fakeFirstName',
+                last_name: 'fakeLastName',
+                picture: 'https://image-url.com'
             };
             request(process.env.BASE_URL)
                 .post('/auth/social-signup')
@@ -154,8 +159,13 @@ describe('Signup Account with facebook account', () => {
             };
             axiosGetStub.withArgs(`${constants.FACEBOOK_AUTH_URL}${token}`).resolves(response);
             const payload = {
+                token,
                 platform: 'facebook',
-                token
+                id: 'id',
+                email: 'example@example.com',
+                first_name: 'fakeFirstName',
+                last_name: 'fakeLastName',
+                picture: 'https://image-url.com'
             };
             request(process.env.BASE_URL)
                 .post('/auth/social-signup')

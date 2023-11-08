@@ -18,14 +18,7 @@ const facebookVerify = (req, res, next) =>{
     const token = req.body.token;
     const url = `${constant.FACEBOOK_AUTH_URL}${token}`;
     axios.get(url)
-        .then(response=>{
-            const { data } = response;
-            req.body.id = data.id;
-            req.body.email = decodeURI(data.email);
-            req.body.firstName = data.first_name;
-            req.body.lastName = data.last_name;
-            req.body.picture = data.picture.data.url ? data.picture.data.url : null;
-            req.body.verified = true;
+        .then(()=>{
             next();
         })
         .catch(err=>{
@@ -41,19 +34,13 @@ const googleVerify = (req, res, next) => {
             version: 'v2'
         });
         oauth2.userinfo.get(
-            (err, response) => {
+            (err) => {
                 if (err) {
                     const responseObject = Utils.errorResponse();
                     responseObject.message = res.__('ACCESS_DENIED');
                     res.status(HTTPStatus.UNAUTHORIZED).send(responseObject);
                     return;
                 } else {
-                    req.body.id = response.data.id;
-                    req.body.email = response.data.email;
-                    req.body.firstName = response.data.given_name;
-                    req.body.lastName = response.data.family_name;
-                    req.body.picture = response.data.picture;
-                    req.body.verified = response.data.verified_email ? response.data.verified_email : false;
                     next();
                 }
             });
@@ -74,10 +61,7 @@ const appleVerify = async (req, res, next)=>{
         });
         client.getSigningKey(kid).then(key=>{
             const publicKey = key.getPublicKey();
-            const { sub, email, email_verified } = jwt.verify(req.body.token, publicKey);
-            req.body.id = sub;
-            req.body.email = email;
-            req.body.verified = email_verified;
+            jwt.verify(req.body.token, publicKey);
             next();
         }).catch(err=>{
             handleError(err, res);

@@ -82,7 +82,7 @@ class SignUpService {
                 socialPlatform: platform
             });
         }
-        const loginToken = await crypt.getUserToken(user);
+        const loginToken = await crypt.getUserAccessToken(user);
         delete user.password;
         delete user.__v;
         _.merge(user, loginToken, {});
@@ -98,10 +98,11 @@ class SignUpService {
                 statusCode: 422
             };
         } else {
-            const token = await crypt.getUserToken(user);
-            delete user.password;
-            delete user.__v;
+            const token = await crypt.getUserAccessToken(user);
+            const refreshToken = await crypt.getUserRefreshToken(user);
+            user.password = null;
             _.merge(user, token, otherDetails);
+            _.merge(user, { refreshToken: refreshToken.token } );
         }
 
         return user;
@@ -158,7 +159,9 @@ class SignUpService {
                     isActive: CONSTANTS.STATUS.ACTIVE
                 }
             });
-            return crypt.getUserToken(user);
+            const token = await crypt.getUserAccessToken(user);
+            const refreshToken = await crypt.getUserRefreshToken(user);
+            return { token: token.token, refreshToken: refreshToken.token };
         } else {
             throw {
                 message: MESSAGES.INVALID_OTP,

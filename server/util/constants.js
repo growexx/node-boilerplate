@@ -42,6 +42,7 @@ module.exports = {
         USER: 1,
         ADMIN: 4
     },
+    SALT_ROUNDS: 10,
     APPLE_AUTH_URL: 'https://appleid.apple.com/auth/keys',
     FACEBOOK_AUTH_URL: 'https://graph.facebook.com/me?fields=name,first_name,last_name,email,verified,picture&access_token=',
     SOCIAL_ACCOUNT: {

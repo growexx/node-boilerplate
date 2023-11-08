@@ -35,7 +35,7 @@ class SignInService {
      * @param {function} next exceptionHandler Calls exceptionHandler
      */
     static async userLogin (userEmail, password) {
-        let user = await User.findOne({ email: userEmail }).lean();
+        const user = await User.findOne({ email: userEmail }).lean();
 
         // Wrong username
         if (!user) {
@@ -53,11 +53,14 @@ class SignInService {
                     statusCode: 401
                 };
             } else {
-                const token = await crypt.getUserToken(user);
-                delete user.password;
-                delete user.__v;
-                user = _.merge(user, token);
-                return user;
+                const token = await crypt.getUserAccessToken(user);
+                const refreshToken = await crypt.getUserRefreshToken(user);
+                let returnObj = user.dataValues;
+                delete returnObj.password;
+                delete returnObj.otp;
+                returnObj = _.merge(returnObj, token);
+                returnObj = _.merge(returnObj, { refreshToken: refreshToken.token });
+                return returnObj;
             }
         } else {
             throw {
