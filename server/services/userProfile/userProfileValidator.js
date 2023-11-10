@@ -15,8 +15,8 @@ class UserProfileValidator extends validation {
      * @since 01/03/2021
      */
     async validationProfilePicture () {
-        await this.fileType(this.body.mimetype);
-        await this.fileSize(this.body.size);
+        await this.fileType(this?.body?.mimetype);
+        await this.fileSize(this?.body?.size);
     }
 
     /**

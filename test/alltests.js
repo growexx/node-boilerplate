@@ -25,8 +25,10 @@ require('../server/services/sesTemplate/test/sesTemplate.test');
 // User
 require('../server/services/userProfile/test/userProfile.test');
 
-
 // Utils
+require('../server/util/test/retrieveSecrets.test');
+require('../server/util/test/storageService.test');// Utils
+require('../server/util/test/sendEmail.test');
 require('../server/util/test/sendEmailWithNodeMailer.test');
 
 
