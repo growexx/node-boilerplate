@@ -7,6 +7,7 @@ const EmailService = require('../../../util/sendEmail');
 const TestCase = require('./testcaseForgotPassword');
 const expect = chai.expect;
 const assert = chai.assert;
+const app = require('../../../server');
 chai.use(chaiHttp);
 let mailStub;
 
@@ -20,7 +21,7 @@ describe('Forgot Password', () => {
     try {
         TestCase.forgotPassword.forEach((data) => {
             it(data.it, (done) => {
-                request(process.env.BASE_URL)
+                request(app)
                     .post('/auth/forgot-password')
                     .send(data.options)
                     .end((err, res) => {
@@ -36,7 +37,7 @@ describe('Forgot Password', () => {
                 email: 'john@mailinator.com'
             };
 
-            request(process.env.BASE_URL)
+            request(app)
                 .post('/auth/forgot-password')
                 .send(data)
                 .end((err, res) => {
@@ -51,7 +52,7 @@ describe('Forgot Password', () => {
                 email: 'client@mailinator.com'
             };
 
-            request(process.env.BASE_URL)
+            request(app)
                 .post('/auth/forgot-password')
                 .send(data)
                 .end((err, res) => {
@@ -63,7 +64,7 @@ describe('Forgot Password', () => {
 
         TestCase.verifyToken.forEach((data) => {
             it(data.it, (done) => {
-                request(process.env.BASE_URL)
+                request(app)
                     .post('/auth/verify-token')
                     .send(data.options)
                     .end((err, res) => {
@@ -86,7 +87,7 @@ describe('Forgot Password', () => {
                     token: tokenData.resetToken
                 };
 
-                const res = await request(process.env.BASE_URL)
+                const res = await request(app)
                     .post('/auth/verify-token')
                     .send(data);
                 expect(res.body.status).to.be.status;
@@ -106,7 +107,7 @@ describe('Forgot Password', () => {
                     token: tokenData.resetToken
                 };
 
-                const res = await request(process.env.BASE_URL)
+                const res = await request(app)
                     .post('/auth/verify-token')
                     .send(data);
                 expect(res.body.status).to.be.status;
@@ -115,7 +116,7 @@ describe('Forgot Password', () => {
 
         TestCase.resetPassword.forEach((data) => {
             it(data.it, (done) => {
-                request(process.env.BASE_URL)
+                request(app)
                     .post('/auth/reset-password')
                     .send(data.options)
                     .end((err, res) => {
@@ -138,7 +139,7 @@ describe('Forgot Password', () => {
                     token: tokenData.resetToken,
                     password: '8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267d'
                 };
-                const res = await request(process.env.BASE_URL)
+                const res = await request(app)
                     .post('/auth/reset-password')
                     .send(data);
                 expect(res.body.status).to.be.status;
@@ -158,7 +159,7 @@ describe('Forgot Password', () => {
                     password: '8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267e'
                 };
 
-                const res = await request(process.env.BASE_URL)
+                const res = await request(app)
                     .post('/auth/reset-password')
                     .send(data);
                 expect(res.body.status).to.be.status;

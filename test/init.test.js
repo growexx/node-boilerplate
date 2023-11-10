@@ -29,7 +29,7 @@ describe('Data seeding', () => {
 
     it('Check server root url', async () => {
         try {
-            request(process.env.BASE_URL)
+            request(app)
                 .get('/')
                 .end((err, res) => {
                     expect(res.body.status).to.be.status;

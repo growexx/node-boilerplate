@@ -4,6 +4,7 @@ const expect = chai.expect;
 const assert = chai.assert;
 const request = require('supertest');
 const TestCase = require('./testcaseSesTemplate');
+const app = require('../../../server');
 const sinon = require('sinon');
 const SES = require('../../../util/ses');
 chai.use(chaiHttp);
@@ -22,7 +23,7 @@ describe('Retrieving Template', () => {
 
         TestCase.retrievingTemplate.forEach((data) => {
             it(data.it, (done) => {
-                request(process.env.BASE_URL)
+                request(app)
                     .get('/template/')
                     .query(data.options)
                     .end((err, res) => {
@@ -40,7 +41,7 @@ describe('Retrieving Template', () => {
                 templateName: 'myFile'
             };
 
-            request(process.env.BASE_URL)
+            request(app)
                 .get('/template/')
                 .query(template)
                 .end((err, res) => {
@@ -56,7 +57,7 @@ describe('Retrieving Template', () => {
                 templateName: 'myFile'
             };
 
-            request(process.env.BASE_URL)
+            request(app)
                 .get('/template/')
                 .query(template)
                 .end((err, res) => {
@@ -83,7 +84,7 @@ describe('Update Template', () => {
 
         TestCase.updateTemplate.forEach((data) => {
             it(data.it, (done) => {
-                request(process.env.BASE_URL)
+                request(app)
                     .put('/template/')
                     .send(data.options)
                     .end((err, res) => {
@@ -102,7 +103,7 @@ describe('Update Template', () => {
                 subject: 'abc'
             };
 
-            request(process.env.BASE_URL)
+            request(app)
                 .put('/template/')
                 .send(template)
                 .end((err, res) => {
@@ -117,7 +118,7 @@ describe('Update Template', () => {
                 templateName: 'myFile'
             };
 
-            request(process.env.BASE_URL)
+            request(app)
                 .put('/template/')
                 .query(template)
                 .end((err, res) => {
@@ -144,7 +145,7 @@ describe('Create Template', () => {
 
         TestCase.createTemplate.forEach((data) => {
             it('Template Created ', (done) => {
-                request(process.env.BASE_URL)
+                request(app)
                     .post('/template/')
                     .send(data.options)
                     .end((err, res) => {
@@ -162,7 +163,7 @@ describe('Create Template', () => {
                 subject: 'abc'
             };
 
-            request(process.env.BASE_URL)
+            request(app)
                 .post('/template/')
                 .send(template)
                 .end((err, res) => {
@@ -178,7 +179,7 @@ describe('Create Template', () => {
                 subject: 'abc'
             };
 
-            request(process.env.BASE_URL)
+            request(app)
                 .post('/template/')
                 .send(template)
                 .end((err, res) => {
@@ -205,7 +206,7 @@ describe('Delete Template', () => {
 
         TestCase.deleteTemplate.forEach((data) => {
             it(data.it, (done) => {
-                request(process.env.BASE_URL)
+                request(app)
                     .delete('/template/')
                     .query(data.options)
                     .end((err, res) => {
@@ -223,7 +224,7 @@ describe('Delete Template', () => {
                 templateName: 'myFile'
             };
 
-            request(process.env.BASE_URL)
+            request(app)
                 .delete('/template/')
                 .query(template)
                 .end((err, res) => {
@@ -238,7 +239,7 @@ describe('Delete Template', () => {
                 templateName: 'myFile'
             };
 
-            request(process.env.BASE_URL)
+            request(app)
                 .delete('/template/')
                 .query(template)
                 .end((err, res) => {

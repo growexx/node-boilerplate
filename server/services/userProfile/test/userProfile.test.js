@@ -7,6 +7,7 @@ const TestCase = require('./userProfile');
 const StorageService = require('../../../util/storageService');
 const expect = chai.expect;
 const assert = chai.assert;
+const app = require('../../../server');
 chai.use(chaiHttp);
 const tokenOptionalInfo = {
     algorithm: 'HS256',
@@ -50,7 +51,7 @@ const requestPayloadUser = {
 describe('User Profile get', () => {
     try {
         it('Check invalid token ', (done) => {
-            request(process.env.BASE_URL)
+            request(app)
                 .get('/user/details')
                 .set({ Authorization: invalidToken.token })
                 .end((err, res) => {
@@ -60,7 +61,7 @@ describe('User Profile get', () => {
                 });
         });
         it('Check invalid user', (done) => {
-            request(process.env.BASE_URL)
+            request(app)
                 .get('/user/details')
                 .set({ Authorization: requestPayloadInvalid.token })
                 .end((err, res) => {
@@ -72,7 +73,7 @@ describe('User Profile get', () => {
         });
 
         it('Get inactive user details', (done) => {
-            request(process.env.BASE_URL)
+            request(app)
                 .get('/user/details')
                 .set({ Authorization: requestPayloadInactive.token })
                 .end((err, res) => {
@@ -83,7 +84,7 @@ describe('User Profile get', () => {
         });
 
         it('Get user details', (done) => {
-            request(process.env.BASE_URL)
+            request(app)
                 .get('/user/details')
                 .set({ Authorization: requestPayloadUser.token })
                 .end((err, res) => {
@@ -109,7 +110,7 @@ describe('User Profile Picture Upload', () => {
         // Check all validation;
         TestCase.uploadProfilePicture.forEach((data) => {
             it(data.it, (done) => {
-                request(process.env.BASE_URL)
+                request(app)
                     .put('/user/picture')
                     .set({ Authorization: requestPayloadUser.token })
                     .attach('doc', data.options.doc)
@@ -122,7 +123,7 @@ describe('User Profile Picture Upload', () => {
         });
 
         it('As a user, I should not be able to invalid profile picture', async () => {
-            const res = await request(process.env.BASE_URL)
+            const res = await request(app)
                 .put('/user/picture')
                 .set({ Authorization: requestPayloadUser.token })
                 .attach('photo', 'test/mock-data/TEST.pdf');
@@ -131,7 +132,7 @@ describe('User Profile Picture Upload', () => {
         });
 
         it('As a user, I should not be upload valid file with less than 5 kb', async () => {
-            const res = await request(process.env.BASE_URL)
+            const res = await request(app)
                 .put('/user/picture')
                 .set({ Authorization: requestPayloadUser.token })
                 .attach('photo', 'test/mock-data/3kb_file.png');
@@ -142,7 +143,7 @@ describe('User Profile Picture Upload', () => {
 
 
         it('As a user, I should not be upload valid file with more than 5 mb', async () => {
-            const res = await request(process.env.BASE_URL)
+            const res = await request(app)
                 .put('/user/picture')
                 .set({ Authorization: requestPayloadUser.token })
                 .attach('photo', 'test/mock-data/5_8mb_file.jpeg');
@@ -151,7 +152,7 @@ describe('User Profile Picture Upload', () => {
         });
 
         it('As a user, I should upload valid file for user profile', async () => {
-            const res = await request(process.env.BASE_URL)
+            const res = await request(app)
                 .put('/user/picture')
                 .set({ Authorization: requestPayloadUser.token })
                 .attach('photo', 'test/mock-data/valid_profile_pic.jpg');
@@ -171,7 +172,7 @@ describe('User Profile Picture Delete', () => {
     });
     try {
         it('As a user, I should be able to delete uploaded file', async () => {
-            const res = await request(process.env.BASE_URL)
+            const res = await request(app)
                 .delete('/user/picture')
                 .set({ Authorization: requestPayloadUser.token });
             assert.equal(res.statusCode, 200);
@@ -186,7 +187,7 @@ describe('User Profile password change', () => {
         // Check all validation;
         TestCase.changePassword.forEach((data) => {
             it(data.it, (done) => {
-                request(process.env.BASE_URL)
+                request(app)
                     .put('/user/password')
                     .set({ Authorization: requestPayloadUser.token })
                     .attach('doc', data.options.doc)
@@ -203,7 +204,7 @@ describe('User Profile password change', () => {
                 oldPassword: '8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267d',
                 newPassword: '8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267e'
             };
-            const res = await request(process.env.BASE_URL)
+            const res = await request(app)
                 .put('/user/password')
                 .set({ Authorization: requestPayloadUser.token })
                 .send(data);
@@ -217,7 +218,7 @@ describe('User Profile password change', () => {
                 oldPassword: '8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267e',
                 newPassword: '8776f108e247ab1e2b323042c049c266407c81fbad41bde1e8dfc1bb66fd267e'
             };
-            const res = await request(process.env.BASE_URL)
+            const res = await request(app)
                 .put('/user/password')
                 .set({ Authorization: requestPayloadUser.token })
                 .send(data);
