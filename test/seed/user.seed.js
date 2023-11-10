@@ -1,4 +1,4 @@
-const { Types, } = require('mongoose');
+const { Types } = require('mongoose');
 module.exports = {
     users: [{
         _id: new Types.ObjectId('5f083c352a7908662c334532'),
@@ -26,5 +26,14 @@ module.exports = {
         isActive: 1,
         firstName: 'Test',
         lastName: 'Admin'
+    },
+    {
+        _id: new Types.ObjectId('5f5f2cd2f1472c3303b6b862'),
+        email: 'noaccess@mailinator.com',
+        employeeId: 3,
+        role: 3,
+        isActive: 1,
+        firstName: 'No access',
+        lastName: 'User'
     }]
 };

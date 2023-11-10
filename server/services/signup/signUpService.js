@@ -18,8 +18,8 @@ class SignUpService {
      * @param {String} req.body.email email
      * @param {String} req.body.password password
      */
-    static async signUp (req,locale) {
-        const Validator = new SignUpValidator(req.body,locale);
+    static async signUp (req, locale) {
+        const Validator = new SignUpValidator(req.body, locale);
         Validator.validate();
 
         req.body.email = req.body.email.toLowerCase();
@@ -109,7 +109,7 @@ class SignUpService {
         Validator.otpValidate();
         req.body.email = req.body.email.toLowerCase();
         const user = await User.findOne({ email: req.body.email }).exec();
-        if (user && user.otp === req.body.otp) {
+        if (user && user.otp === Number(req.body.otp)) {
             await User.updateOne({ _id: user._id }, {
                 $set: {
                     isActive: CONSTANTS.STATUS.ACTIVE
