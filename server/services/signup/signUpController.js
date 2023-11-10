@@ -57,7 +57,7 @@ class SignUpController {
     static async resendOTP (req, res) {
         try {
             const data = await SignUpService.resentOTP(req);
-            Utils.sendResponse(null, data, res, MESSAGES.REGISTER_SUCCESS);
+            Utils.sendResponse(null, data, res, MESSAGES.RESEND_OTP_SUCCESS);
         } catch (error) {
             Utils.sendResponse(error, null, res, '');
         }
