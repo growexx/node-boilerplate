@@ -19,7 +19,7 @@ class SignUpController {
     static async signUp (req, res) {
         try {
             req.body.userType = CONSTANTS.ROLE.USER;
-            const data = await SignUpService.signUp(req);
+            const data = await SignUpService.signUp(req, res.__);
             Utils.sendResponse(null, data, res, MESSAGES.REGISTER_SUCCESS);
         } catch (error) {
             Utils.sendResponse(error, null, res, '');

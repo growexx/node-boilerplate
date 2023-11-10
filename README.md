@@ -65,3 +65,9 @@ Create an environment file with extension ```.env```.
 ## AWS SES 
 
 - You can perform the CRUD operations on AWS SES template.
+
+## SendGrid
+
+- You can send email via SendGrid
+- add your SendGrid API key to env variable ```SENDGRID_API_KEY```
+- use ```sendEmailWithSendGrid.js``` file while calling APIs
