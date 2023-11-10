@@ -46,6 +46,14 @@ const requestPayloadUser = {
     token: jwt.sign(user, process.env.JWT_SECRET, tokenOptionalInfo)
 };
 
+// User Token
+const noAccessUser = {
+    id: '5f5f2cd2f1472c3303b6b862',
+    email: 'noaccess@mailinator.com'
+};
+const requestPayloadNoAccessUser = {
+    token: jwt.sign(noAccessUser, process.env.JWT_SECRET, tokenOptionalInfo)
+};
 
 describe('User Profile get', () => {
     try {
@@ -89,6 +97,17 @@ describe('User Profile get', () => {
                 .end((err, res) => {
                     expect(res.body.status).to.be.status;
                     assert.equal(res.statusCode, 200);
+                    done();
+                });
+        });
+
+        it('Get user details error for no access user', (done) => {
+            request(process.env.BASE_URL)
+                .get('/user/details')
+                .set({ Authorization: requestPayloadNoAccessUser.token })
+                .end((err, res) => {
+                    expect(res.body.status).to.be.status;
+                    assert.equal(res.statusCode, 406);
                     done();
                 });
         });
