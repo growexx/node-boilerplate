@@ -44,5 +44,11 @@ module.exports = {
     },
     S3_PRESIGNED_URL_EXPIRY: 3600,
     PROFILE_PICTURE_DIRECTORY: 'profile-picture',
-    AWS_SECRET_NAME: 'secret'
+    AWS_SECRET_NAME: 'secret',
+    DATE_FORMAT: [
+        'DD/MM/YYYY', 'D/M/YYYY', 'DD/MMM/YYYY', 'D/MMM/YYYY', 'D/M/YY', 'D/MMM/YY',
+        'DD-MM-YYYY', 'D-M-YYYY', 'DD-MMM-YYYY', 'D-MMM-YYYY', 'D-M-YY', 'D-MMM-YY',
+        'YYYY/MM/DD', 'YYYY/M/D', 'YYYY/MMM/DD', 'YYYY/MMM/D',
+        'YYYY-MM-DD', 'YYYY-M-D', 'YYYY-MMM-DD', 'YYYY-MMM-D'
+    ]
 };
